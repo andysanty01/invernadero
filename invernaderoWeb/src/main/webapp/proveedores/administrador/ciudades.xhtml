@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head></h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+		<p:staticMessage severity="info" summary="NUEVA CIUDAD">
+		</p:staticMessage>
+	</h:form>
+
+
+	<div>
+
+		<h:form>
+			<p:panelGrid columns="2">
+				<h:outputText value="Nombre de Ciudad: " />
+				<p:inputText
+					value="#{beanProvAdministrador.nuevaCiudad.provCiuNombre}"
+					required="true" requiredMessage="Debe poner un nombre" />
+				<p:commandButton value="Guardar" icon="pi pi-disk"
+					update="@form,:FormCiudades"
+					actionListener="#{beanProvAdministrador.actionListenerInsertarCiudad()}" />
+			</p:panelGrid>
+		</h:form>
+
+		<p:staticMessage severity="info"
+			summary="LISTA DE CIUDADES - ADMINISTRADOR">
+		</p:staticMessage>
+		<h:form id="FormCiudades" style="width:700px">
+			<p:dataTable value="#{beanProvAdministrador.listaCiudades}" var="c">
+
+				<p:column headerText="ID" style="width:40px">
+					<h:outputText value="#{c.provCiuId}" />
+				</p:column>
+
+				<p:column headerText="CIUDAD">
+					<h:outputText value="#{c.provCiuNombre}" />
+				</p:column>
+
+				<p:column headerText="OPCIONES">
+					<p:commandButton title="Actualizar" value="Actualizar"
+						icon="pi pi-pencil" />
+					<!--  actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" />-->
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</div>
+</body>
+</html>

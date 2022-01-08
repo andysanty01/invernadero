@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head></h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
+			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanProvAdministrador.actionCargarAgregarProveedores()}" />
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+		<p:staticMessage severity="info"
+			summary="LISTA DE PROVEEDORES - ADMINISTRADOR"></p:staticMessage>
+	</h:form>
+
+
+	<div>
+		<h:form id="FormProveedores">
+			<p:dataTable value="#{beanProvAdministrador.listaProveedores}" var="p">
+			
+				<p:column headerText="ID" style="width:40px">
+					<h:outputText value="#{p.provProveId}" />
+				</p:column>
+
+				<p:column headerText="NOMBRE">
+					<h:outputText value="#{p.provProveNombre}"/>
+				</p:column>
+				
+				<p:column headerText="DIRECCION">
+					<h:outputText value="#{p.provProveDireccion}"/>
+				</p:column>
+				
+				<p:column headerText="TELEFONO">
+					<h:outputText value="#{p.provProveTelefono}"/>
+				</p:column>
+				
+				<p:column headerText="NOMBRE COMERCIAL">
+					<h:outputText value="#{p.provProveNomcomercial}"/>
+				</p:column>
+				
+				<p:column headerText="ENCARGADO">
+					<h:outputText value="#{p.segUsuario.correo}"/>
+				</p:column>
+				
+				<p:column headerText="CIUDAD">
+					<h:outputText value="#{p.provCiudad.provCiuNombre}"/>
+				</p:column>
+
+				<p:column headerText="OPCIONES">
+					<p:commandButton title="Actualizar" value="Editar" icon="pi pi-pencil" actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" styleClass="ui-button-raised ui-button-info" />
+					<p:commandButton title="Solicitar" value="Solicitar" icon="pi pi-pencil" actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" styleClass="ui-button-raised ui-button-success" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</div>
+</body>
+</html>
