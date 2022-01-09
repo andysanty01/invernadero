@@ -27,7 +27,7 @@ public class SegModulo implements Serializable {
 	private String nombreModulo;
 
 	//bi-directional many-to-one association to SegPerfil
-	@OneToMany(mappedBy="segModulo")
+	@OneToMany(mappedBy="segModulo",fetch = FetchType.EAGER)
 	private List<SegPerfil> segPerfils;
 
 	public SegModulo() {
