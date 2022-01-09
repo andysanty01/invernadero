@@ -22,43 +22,44 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info" summary="NUEVA CIUDAD">
-		</p:staticMessage>
 	</h:form>
-
-
+	
+	
+	
+	<p:staticMessage severity="info" summary="NUEVA CIUDAD"></p:staticMessage>
 	<div>
-
 		<h:form>
 			<p:panelGrid columns="2">
 				<h:outputText value="Nombre de Ciudad: " />
 				<p:inputText
-					value="#{beanProvAdministrador.nuevaCiudad.provCiuNombre}"
+					value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
 					required="true" requiredMessage="Debe poner un nombre" />
 				<p:commandButton value="Guardar" icon="pi pi-disk"
 					update="@form,:FormCiudades"
-					actionListener="#{beanProvAdministrador.actionListenerInsertarCiudad()}" />
+					actionListener="#{beanCompAdministrador.actionListenerInsertarCiudad()}" />
 			</p:panelGrid>
 		</h:form>
-
+		
+		
+		
 		<p:staticMessage severity="info"
 			summary="LISTA DE CIUDADES - ADMINISTRADOR">
 		</p:staticMessage>
 		<h:form id="FormCiudades" style="width:700px">
-			<p:dataTable value="#{beanProvAdministrador.listaCiudades}" var="c">
+			<p:dataTable value="#{beanCompAdministrador.listaCiudades}" var="c">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{c.provCiuId}" />
+					<h:outputText value="#{c.ciuId}" />
 				</p:column>
 
 				<p:column headerText="CIUDAD">
-					<h:outputText value="#{c.provCiuNombre}" />
+					<h:outputText value="#{c.ciuNombre}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
 					<p:commandButton title="Actualizar" value="Actualizar"
-						icon="pi pi-pencil" />
-					<!--  actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" />-->
+						icon="pi pi-pencil" 
+						actionListener="#{beanCompAdministrador.actionListenerActualizarCiudad(c)}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

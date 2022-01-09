@@ -14,7 +14,7 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
 			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
-			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanProvAdministrador.actionCargarAgregarProveedores()}" />
+			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -31,39 +31,39 @@
 
 	<div>
 		<h:form id="FormProveedores">
-			<p:dataTable value="#{beanProvAdministrador.listaProveedores}" var="p">
+			<p:dataTable value="#{beanCompAdministrador.listaProveedores}" var="p">
 			
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.provProveId}" />
+					<h:outputText value="#{p.proveId}" />
 				</p:column>
-
+				
+				<p:column headerText="RUC">
+					<h:outputText value="#{p.proveRuc}"/>
+				</p:column>
+				
 				<p:column headerText="NOMBRE">
-					<h:outputText value="#{p.provProveNombre}"/>
-				</p:column>
-				
-				<p:column headerText="DIRECCION">
-					<h:outputText value="#{p.provProveDireccion}"/>
-				</p:column>
-				
-				<p:column headerText="TELEFONO">
-					<h:outputText value="#{p.provProveTelefono}"/>
+					<h:outputText value="#{p.proveNombre}"/>
 				</p:column>
 				
 				<p:column headerText="NOMBRE COMERCIAL">
-					<h:outputText value="#{p.provProveNomcomercial}"/>
+					<h:outputText value="#{p.proveNomcomercial}"/>
 				</p:column>
 				
-				<p:column headerText="ENCARGADO">
-					<h:outputText value="#{p.segUsuario.correo}"/>
+				<p:column headerText="DIRECCION">
+					<h:outputText value="#{p.proveDireccion}"/>
+				</p:column>
+				
+				<p:column headerText="TELEFONO">
+					<h:outputText value="#{p.proveTelefono}"/>
 				</p:column>
 				
 				<p:column headerText="CIUDAD">
-					<h:outputText value="#{p.provCiudad.provCiuNombre}"/>
+					<h:outputText value="#{p.ciudad.ciuNombre}"/>
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Actualizar" value="Editar" icon="pi pi-pencil" actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" styleClass="ui-button-raised ui-button-info" />
-					<p:commandButton title="Solicitar" value="Solicitar" icon="pi pi-pencil" actionListener="#{beanPryAnalista.actionListenerActualizarAvance(t)}" styleClass="ui-button-raised ui-button-success" />
+					<p:commandButton title="Actualizar" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="ui-button-raised ui-button-info" />
+					<p:commandButton title="Eliminar" value="Eliminacion" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="ui-button-raised ui-button-success" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

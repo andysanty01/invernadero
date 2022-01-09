@@ -38,9 +38,9 @@ public class SegUsuario implements Serializable {
 	@Column(nullable=false, length=50)
 	private String nombres;
 
-	//bi-directional many-to-one association to ProvProveedor
+	//bi-directional many-to-one association to Despacho
 	@OneToMany(mappedBy="segUsuario")
-	private List<ProvProveedor> provProveedors;
+	private List<Despacho> despachos;
 
 	//bi-directional many-to-one association to SegAsignacion
 	@OneToMany(mappedBy="segUsuario")
@@ -109,26 +109,26 @@ public class SegUsuario implements Serializable {
 		this.nombres = nombres;
 	}
 
-	public List<ProvProveedor> getProvProveedors() {
-		return this.provProveedors;
+	public List<Despacho> getDespachos() {
+		return this.despachos;
 	}
 
-	public void setProvProveedors(List<ProvProveedor> provProveedors) {
-		this.provProveedors = provProveedors;
+	public void setDespachos(List<Despacho> despachos) {
+		this.despachos = despachos;
 	}
 
-	public ProvProveedor addProvProveedor(ProvProveedor provProveedor) {
-		getProvProveedors().add(provProveedor);
-		provProveedor.setSegUsuario(this);
+	public Despacho addDespacho(Despacho despacho) {
+		getDespachos().add(despacho);
+		despacho.setSegUsuario(this);
 
-		return provProveedor;
+		return despacho;
 	}
 
-	public ProvProveedor removeProvProveedor(ProvProveedor provProveedor) {
-		getProvProveedors().remove(provProveedor);
-		provProveedor.setSegUsuario(null);
+	public Despacho removeDespacho(Despacho despacho) {
+		getDespachos().remove(despacho);
+		despacho.setSegUsuario(null);
 
-		return provProveedor;
+		return despacho;
 	}
 
 	public List<SegAsignacion> getSegAsignacions() {

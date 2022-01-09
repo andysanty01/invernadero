@@ -1,4 +1,4 @@
-package invernadero.model.proveedores.managers;
+package invernadero.model.compras.managers;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import invernadero.model.auditoria.managers.ManagerAuditoria;
-import invernadero.model.core.entities.ProvCiudad;
-import invernadero.model.core.entities.ProvProveedor;
+import invernadero.model.core.entities.Ciudad;
+import invernadero.model.core.entities.Proveedor;
 import invernadero.model.core.entities.SegUsuario;
 import invernadero.model.core.managers.ManagerDAO;
 import invernadero.model.seguridades.dtos.LoginDTO;
@@ -19,7 +19,7 @@ import invernadero.model.seguridades.managers.ManagerSeguridades;
  */
 @Stateless
 @LocalBean
-public class ManagerProveedores {
+public class ManagerCompras {
 
 	//Nuevo codigo auditoria
 	@EJB
@@ -34,58 +34,56 @@ public class ManagerProveedores {
 	
 	
 
-	public ManagerProveedores() {
+	public ManagerCompras() {
 	}
 
 	// Inicializadores
 	// Ciudad
-	public ProvCiudad inicializarCiudad() {
-		ProvCiudad ciudad = new ProvCiudad();
-		ciudad.setProvCiuNombre("");
+	public Ciudad inicializarCiudad() {
+		Ciudad ciudad = new Ciudad();
+		ciudad.setCiuNombre("");
 		return ciudad;
 	}
 
 	// Proveedor
-	public ProvProveedor inicializarProveedor() {
-		ProvProveedor proveedor = new ProvProveedor();
-		proveedor.setProvProveNombre("");
-		proveedor.setProvProveDireccion("");
-		proveedor.setProvProveTelefono("");
-		proveedor.setProvProveNomcomercial("");
-		proveedor.setSegUsuario(null);
-		proveedor.setProvCiudad(null);
+	public Proveedor inicializarProveedor() {
+		Proveedor proveedor = new Proveedor();
+		proveedor.setProveRuc("");
+		proveedor.setProveNombre("");
+		proveedor.setProveNomcomercial("");
+		proveedor.setProveDireccion("");
+		proveedor.setProveTelefono("");
+		proveedor.setCiudad(null);
 		return proveedor;
 	}
 
 	// Funciones del Administrador de proveedores
 	// Listar ciudades
-	public List<ProvCiudad> findAllCiudades() {
-		return mDAO.findAll(ProvCiudad.class);
+	public List<Ciudad> findAllCiudades() {
+		return mDAO.findAll(Ciudad.class);
 	}
 
 	// Listar proveedores
-	public List<ProvProveedor> findAllProveedores() {
-		return mDAO.findAll(ProvProveedor.class);
+	public List<Proveedor> findAllProveedores() {
+		return mDAO.findAll(Proveedor.class);
 	}
 
 	// Insercion
 	// Ciudades
-	public void insertarCiudad(LoginDTO loginDTO, ProvCiudad nuevaCiudad) throws Exception {
+	public void insertarCiudad(LoginDTO loginDTO, Ciudad nuevaCiudad) throws Exception {
 		mDAO.insertar(nuevaCiudad); 
 		//Nuevo codigo auditoria
 		//Forma simple
 		// mostrarLog(getClass(), "insertar Ciudad", "Ciudad: "+nuevaCiudad.getProvCiuNombre()+ " agregada con éxito"); Usar reflexion para ingreso automatico
 		//Forma compuesta
-		mAuditoria.mostrarLog(loginDTO, getClass(), "insertarCiudad", "Ciudad: "+nuevaCiudad.getProvCiuNombre()+ " agregada con éxito");
+		mAuditoria.mostrarLog(loginDTO, getClass(), "insertarCiudad", "Ciudad: "+nuevaCiudad.getCiuNombre()+ " agregada con éxito");
 		
 	}
 
 	// Proveedores
-	public void insertarProveedor(ProvProveedor nuevoProveedor, int idSegUsuario, int provCiuId) throws Exception {
-		SegUsuario usuario = (SegUsuario) mDAO.findById(SegUsuario.class, idSegUsuario);// buscamos el usuario
-		ProvCiudad ciudad = (ProvCiudad) mDAO.findById(ProvCiudad.class, provCiuId);// buscamos la ciudad
-		nuevoProveedor.setSegUsuario(usuario);// asignamos al usuario a la tarea
-		nuevoProveedor.setProvCiudad(ciudad);// asignamos al usuario a la tarea
+	public void insertarProveedor(Proveedor nuevoProveedor, int CiuId) throws Exception {
+		Ciudad ciudad = (Ciudad) mDAO.findById(Ciudad.class, CiuId);// buscamos la ciudad
+		nuevoProveedor.setCiudad(ciudad);// asignamos al usuario a la tarea
 		mDAO.insertar(nuevoProveedor);
 	}
 

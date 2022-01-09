@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-	<persistence-unit name="invernaderoEJB" transaction-type="JTA">
-		<jta-data-source>java:/invernaderoDS</jta-data-source>
+	<persistence-unit name="aslescanobDS" transaction-type="JTA">
+		<jta-data-source>java:/aslescanobDS</jta-data-source>
 		<class>invernadero.model.core.entities.AudBitacora</class>
-		<class>invernadero.model.core.entities.ProvCiudad</class>
-		<class>invernadero.model.core.entities.ProvProveedor</class>
+		<class>invernadero.model.core.entities.Ciudad</class>
+		<class>invernadero.model.core.entities.Cliente</class>
+		<class>invernadero.model.core.entities.ComprasCab</class>
+		<class>invernadero.model.core.entities.ComprasDet</class>
+		<class>invernadero.model.core.entities.Despacho</class>
+		<class>invernadero.model.core.entities.OrdenTrabajo</class>
+		<class>invernadero.model.core.entities.Producto</class>
+		<class>invernadero.model.core.entities.ProformasCab</class>
+		<class>invernadero.model.core.entities.ProformasDet</class>
+		<class>invernadero.model.core.entities.Proveedor</class>
 		<class>invernadero.model.core.entities.SegAsignacion</class>
 		<class>invernadero.model.core.entities.SegModulo</class>
 		<class>invernadero.model.core.entities.SegPerfil</class>
