@@ -62,8 +62,8 @@
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Actualizar" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="ui-button-raised ui-button-info" />
-					<p:commandButton title="Eliminar" value="Eliminacion" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="ui-button-raised ui-button-success" />
+					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="ui-button-raised ui-button-info" />
+					<p:commandButton title="Eliminar #{p.proveNomcomercial} de la lista de proveedores" value="Eliminar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="ui-button-raised ui-button-success" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
