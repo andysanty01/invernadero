@@ -16,8 +16,9 @@
 			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
 			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
 			<f:facet name="options">
+			
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
-					icon="pi pi-user">
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
 					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
 					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
 						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
@@ -62,8 +63,8 @@
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="ui-button-raised ui-button-info" />
-					<p:commandButton title="Eliminar #{p.proveNomcomercial} de la lista de proveedores" value="Eliminar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="ui-button-raised ui-button-success" />
+					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="rounded-button ui-button-secondary" />
+					<p:commandButton title="Eliminar #{p.proveNomcomercial} de la lista de proveedores" value="Eliminar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="rounded-button ui-button-danger" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

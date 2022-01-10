@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head></h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Nueva Proforma" icon="pi pi-briefcase"
+				action="proformas_nuevo" />
+
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+	<div>
+		<p:staticMessage severity="info"
+			summary="LISTA DE PROFORMAS - ADMINISTRADOR"></p:staticMessage>
+
+		<h:form id="FormOrdenes">
+			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
+				var="p">
+
+				<p:column headerText="ID" style="width:40px">
+					<h:outputText value="#{p.proveId}" />
+				</p:column>
+
+				<p:column headerText="CLIENTE">
+					<h:outputText value="#{p.proveRuc}" />
+				</p:column>
+
+				<p:column headerText="FECHA">
+					<h:outputText value="#{p.proveNombre}" />
+				</p:column>
+
+				<p:column headerText="EXTENSIÓN">
+					<h:outputText value="#{p.proveNomcomercial}" />
+				</p:column>
+
+				<p:column headerText="SUBTOTAL">
+					<h:outputText value="#{p.proveNomcomercial}" />
+				</p:column>
+				
+				<p:column headerText="IVA">
+					<h:outputText value="#{p.proveNomcomercial}" />
+				</p:column>
+
+				<p:column headerText="TOTAL">
+					<h:outputText value="#{p.proveDireccion}" />
+				</p:column>
+
+				<p:column headerText="OPCIONES">
+					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}"
+						value="Editar" icon="pi pi-pencil"
+						actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}"
+						styleClass="rounded-button ui-button-secondary" />
+					<p:commandButton
+						title="Eliminar #{p.proveNomcomercial} de la lista de proveedores"
+						value="Eliminar" icon="pi pi-pencil"
+						actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}"
+						styleClass="rounded-button ui-button-danger" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</div>
+</body>
+</html>
