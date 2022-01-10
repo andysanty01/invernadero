@@ -23,25 +23,25 @@
 			</f:facet>
 		</p:menubar>
 	</h:form>
-	
-	
-	
-	<p:staticMessage severity="info" summary="NUEVA CIUDAD"></p:staticMessage>
+
+
+
+
 	<div>
+		<p:staticMessage severity="info" summary="NUEVA CIUDAD"></p:staticMessage>
 		<h:form>
 			<p:panelGrid columns="2">
 				<h:outputText value="Nombre de Ciudad: " />
-				<p:inputText
-					value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
+				<p:inputText value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
 					required="true" requiredMessage="Debe poner un nombre" />
 				<p:commandButton value="Guardar" icon="pi pi-disk"
 					update="@form,:FormCiudades"
 					actionListener="#{beanCompAdministrador.actionListenerInsertarCiudad()}" />
 			</p:panelGrid>
 		</h:form>
-		
-		
-		
+
+
+
 		<p:staticMessage severity="info"
 			summary="LISTA DE CIUDADES - ADMINISTRADOR">
 		</p:staticMessage>
@@ -58,7 +58,7 @@
 
 				<p:column headerText="OPCIONES">
 					<p:commandButton title="Actualizar" value="Actualizar"
-						icon="pi pi-pencil" 
+						icon="pi pi-pencil"
 						actionListener="#{beanCompAdministrador.actionListenerActualizarCiudad(c)}" />
 				</p:column>
 			</p:dataTable>

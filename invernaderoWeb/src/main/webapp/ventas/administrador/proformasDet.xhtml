@@ -12,9 +12,8 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
-			<p:menuitem value="Nueva Proforma" icon="pi pi-briefcase"
-				action="proformas_nuevo" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="proformas" />
+
 
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -28,8 +27,33 @@
 	</h:form>
 
 	<div>
+
+
+		<p:staticMessage severity="info" summary="AGREGAR PRODUCTO"></p:staticMessage>
+		<h:form>
+			<p:panelGrid columns="2">
+
+				<h:outputText value="Producto: " />
+				<p:inputText value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
+					required="true" requiredMessage="Debe poner un nombre" />
+
+				<h:outputText value="Cantidad: " />
+				<p:inputText value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
+					required="true" requiredMessage="Debe poner un nombre" />
+
+				<h:outputText value="Precio: " />
+				<p:inputText value="#{beanCompAdministrador.nuevaCiudad.ciuNombre}"
+					required="true" requiredMessage="Debe poner un nombre" />
+
+				<p:commandButton value="Agregar a Lista" icon="pi pi-disk"
+					update="@form,:FormOrdenes"
+					actionListener="#{beanCompAdministrador.actionListenerInsertarCiudad()}" />
+			</p:panelGrid>
+		</h:form>
+
+
 		<p:staticMessage severity="info"
-			summary="LISTA DE PROFORMAS - ADMINISTRADOR"></p:staticMessage>
+			summary="DETALLES DE PROFORMA X - ADMINISTRADOR"></p:staticMessage>
 
 		<h:form id="FormOrdenes">
 			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
@@ -39,28 +63,20 @@
 					<h:outputText value="#{p.proveId}" />
 				</p:column>
 
-				<p:column headerText="CLIENTE">
+				<p:column headerText="PRODUCTO">
 					<h:outputText value="#{p.proveRuc}" />
 				</p:column>
 
-				<p:column headerText="FECHA">
+				<p:column headerText="CANTIDAD">
 					<h:outputText value="#{p.proveNombre}" />
 				</p:column>
 
-				<p:column headerText="EXTENSIÓN">
+				<p:column headerText="PRECIO">
 					<h:outputText value="#{p.proveNomcomercial}" />
 				</p:column>
 
 				<p:column headerText="SUBTOTAL">
 					<h:outputText value="#{p.proveNomcomercial}" />
-				</p:column>
-
-				<p:column headerText="IVA">
-					<h:outputText value="#{p.proveNomcomercial}" />
-				</p:column>
-
-				<p:column headerText="TOTAL">
-					<h:outputText value="#{p.proveDireccion}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
@@ -73,11 +89,6 @@
 						value="Eliminar" icon="pi pi-pencil"
 						actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}"
 						styleClass="rounded-button ui-button-danger" />
-					<p:commandButton
-						title="Lista de productos de Proforma #{p.proveNomcomercial}"
-						value="Productos" icon="pi pi-pencil"
-						action="proformasDet"
-						styleClass="rounded-button ui-button-success" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
