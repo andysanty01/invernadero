@@ -19,16 +19,22 @@ public class Cliente implements Serializable {
 	@Column(name="cli_cedula", unique=true, nullable=false, length=13)
 	private String cliCedula;
 
-	@Column(name="cli_categoria", nullable=false, length=30)
+	@Column(name="cli_apellido", nullable=false, length=50)
+	private String cliApellido;
+
+	@Column(name="cli_categoria", nullable=false, length=20)
 	private String cliCategoria;
 
-	@Column(name="cli_correo", nullable=false, length=100)
+	@Column(name="cli_correo", nullable=false, length=50)
 	private String cliCorreo;
 
 	@Column(name="cli_direccion", nullable=false, length=100)
 	private String cliDireccion;
 
-	@Column(name="cli_nombre", nullable=false, length=100)
+	@Column(name="cli_estado", nullable=false)
+	private Boolean cliEstado;
+
+	@Column(name="cli_nombre", nullable=false, length=50)
 	private String cliNombre;
 
 	@Column(name="cli_telefono", nullable=false, length=10)
@@ -47,6 +53,14 @@ public class Cliente implements Serializable {
 
 	public void setCliCedula(String cliCedula) {
 		this.cliCedula = cliCedula;
+	}
+
+	public String getCliApellido() {
+		return this.cliApellido;
+	}
+
+	public void setCliApellido(String cliApellido) {
+		this.cliApellido = cliApellido;
 	}
 
 	public String getCliCategoria() {
@@ -71,6 +85,14 @@ public class Cliente implements Serializable {
 
 	public void setCliDireccion(String cliDireccion) {
 		this.cliDireccion = cliDireccion;
+	}
+
+	public Boolean getCliEstado() {
+		return this.cliEstado;
+	}
+
+	public void setCliEstado(Boolean cliEstado) {
+		this.cliEstado = cliEstado;
 	}
 
 	public String getCliNombre() {

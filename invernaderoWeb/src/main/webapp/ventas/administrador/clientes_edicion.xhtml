@@ -9,7 +9,7 @@
 		type="preRenderView"></f:event>
 </f:metadata>
 <h:head>
-	<title>Clientes</title>
+	<title>Usuarios</title>
 </h:head>
 <body>
 	<p:growl>
@@ -31,38 +31,40 @@
 	<p:panel>
 		<h:form>
 			<p:panelGrid columns="2">
-			
-			
-				<h:outputText value="Cédula" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliCedula}"
-					required="true" requiredMessage="Ingrese los apellidos" />
 
 				<h:outputText value="Apellidos:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliApellido}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliApellido}"
 					required="true" requiredMessage="Ingrese los apellidos" />
 
 				<h:outputText value="Nombres:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliNombre}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliNombre}"
 					required="true" requiredMessage="Ingrese los nombres" />
 
 				<h:outputText value="Correo:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliCorreo}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliCorreo}"
 					required="true" requiredMessage="Ingrese el correo" />
-					
+
 				<h:outputText value="Teléfono:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliTelefono}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliTelefono}"
 					required="true" requiredMessage="Ingrese el correo" />
-					
+
 				<h:outputText value="Dirección:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliDireccion}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliDireccion}"
 					required="true" requiredMessage="Ingrese el correo" />
-					
+
 				<h:outputText value="Categoría:" />
-				<p:inputText value="#{beanVenAdministrador.nuevaCliente.cliCategoria}"
+				<p:inputText
+					value="#{beanVenAdministrador.edicionCliente.cliCategoria}"
 					required="true" requiredMessage="Ingrese el correo" />
-					
-				<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
-					actionListener="#{beanVenAdministrador.actionListenerInsertarCliente()}"></p:commandButton>
+
+
+				<p:commandButton value="Actualizar" icon="pi pi-save" update="@form"
+					actionListener="#{beanVenAdministrador.actionListenerActualizarEdicionCliente()}"></p:commandButton>
 			</p:panelGrid>
 		</h:form>
 	</p:panel>

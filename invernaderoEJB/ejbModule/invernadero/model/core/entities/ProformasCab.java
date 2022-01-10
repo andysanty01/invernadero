@@ -22,7 +22,10 @@ public class ProformasCab implements Serializable {
 	@Column(name="pro_cab_id", unique=true, nullable=false)
 	private Integer proCabId;
 
-	@Column(name="pro_cab_fecha")
+	@Column(name="pro_cab_extension", nullable=false, precision=7, scale=2)
+	private BigDecimal proCabExtension;
+
+	@Column(name="pro_cab_fecha", nullable=false)
 	private Timestamp proCabFecha;
 
 	@Column(name="pro_cab_iva", nullable=false, precision=7, scale=2)
@@ -56,6 +59,14 @@ public class ProformasCab implements Serializable {
 
 	public void setProCabId(Integer proCabId) {
 		this.proCabId = proCabId;
+	}
+
+	public BigDecimal getProCabExtension() {
+		return this.proCabExtension;
+	}
+
+	public void setProCabExtension(BigDecimal proCabExtension) {
+		this.proCabExtension = proCabExtension;
 	}
 
 	public Timestamp getProCabFecha() {
