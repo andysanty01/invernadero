@@ -1,50 +1,72 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:f="http://java.sun.com/jsf/core">
+	<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+</h:head>
+
 
 <h:head>
-	<title>Login</title>
+
+	<title>Login - Constructores FGL ERP</title>
+
+	<!--JQUERY-->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- FRAMEWORK BOOTSTRAP para el estilo de la pagina-->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet"
+		href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css"></link>
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="static/css/index.css"
+		th:href="@{/css/index.css}"></link>
+
 </h:head>
-<body>
-	<div align="center">
-		<p:messages>
-			<p:autoUpdate />
-		</p:messages>
-		<h:form>
-			<p:panel>
-				<p:panelGrid columns="2">
-					<h:outputText value="Id de usuario:" />
-					<p:inputText value="#{beanSegLogin.idSegUsuario}" />
-					<h:outputText value="Clave:" />
-					<p:password value="#{beanSegLogin.clave}" />
-					<p:commandButton value="Login"
-						action="#{beanSegLogin.actionLogin()}" icon="pi pi-key"></p:commandButton>
-				</p:panelGrid>
-			</p:panel>
-		</h:form>
-		<h:form>
-			<p:panel>
-				<p:panelGrid columns="2">
-					<h:outputText value="Inicializar datos" />
-					<p:commandButton value="Inicializar"
-						actionListener="#{beanSegLogin.actionListenerInicialiarDemo()}"
-						icon="pi pi-cog">
-						<p:confirm type="popup" header="Confirmation"
-							message="Desea inicializar datos?"
-							icon="pi pi-exclamation-triangle" />
-					</p:commandButton>
-				</p:panelGrid>
-			</p:panel>
-		</h:form>
+
+<h:body>
+	<div class="modal-dialog text-center">
+		<div class="col-sm-8 main-section">
+			<div class="modal-content">
+				<div class="col-12 user-img">
+					<img src="static/img/user.png" th:src="@{/img/user.png}" />
+				</div>
+
+				<h:form class="col-12" method="get">
+
+					<div class="form-group" id="user-group">
+						<p:inputText required="true" value="#{beanSegLogin.idSegUsuario}"
+							maxlength="10" placeholder="Ingresa el Usuario"
+							requiredMessage="Debe ingresar su usuario." />
+
+					</div>
+					<div class="form-group" id="contrasena-group">
+						<p:password required="true" value="#{beanSegLogin.clave}"
+							placeholder="Ingresa la contraseña"
+							requiredMessage="Debe ingresar su contraseña." />
+					</div>
+
+					<p:commandButton value="Ingresar"
+						action="#{beanSegLogin.actionLogin()}" class="btn btn-primary"
+						icon="fas fa-sign-in-alt" />
+				</h:form>
+				<br></br>
+
+				<p:messages>
+					<p:autoUpdate />
+				</p:messages>
+
+			</div>
+		</div>
 	</div>
-	<p:confirmPopup global="true">
-		<p:commandButton value="No" type="button"
-			styleClass="ui-confirm-popup-no ui-button-flat" />
-		<p:commandButton value="Sí" type="button"
-			styleClass="ui-confirm-popup-yes" />
-	</p:confirmPopup>
-</body>
+</h:body>
 </html>
