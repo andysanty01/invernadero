@@ -99,6 +99,7 @@ public class ManagerVentas {
 		mDAO.eliminar(Cliente.class, cliente.getCliCedula());
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
+<<<<<<< HEAD
 
 
 //// Proforma Cabecera
@@ -115,4 +116,9 @@ public class ManagerVentas {
 	
 	
 	
+=======
+	
+/////////ENUNCIADO
+	//LISTAR PROFORMAS CAB Y DET Y ORDENES DE TRABAJO
+>>>>>>> 4c5181dca88170f1b305cb0b9b6c52d0779a8702
 }
