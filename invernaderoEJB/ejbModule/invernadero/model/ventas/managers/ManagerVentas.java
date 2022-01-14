@@ -98,39 +98,12 @@ public class ManagerVentas {
 		mDAO.eliminar(Cliente.class, cliente.getCliCedula());
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
-
-	/*
-	 * 
-	 * // Inicializar tareas public PryTarea inicializarTarea(PryProyecto proyecto)
-	 * { PryTarea tarea = new PryTarea(); tarea.setAvance(0);
-	 * tarea.setFechaInicio(proyecto.getFechaInicio());
-	 * tarea.setFechaFin(proyecto.getFechaFin()); tarea.setPryProyecto(proyecto); //
-	 * relacion one to many(relacion) return tarea; }
-	 * 
-	 * // Inserccion de tarea public void insertarTarea(PryTarea nuevaTarea, int
-	 * idSegUsuario) throws Exception { SegUsuario usuario = (SegUsuario)
-	 * mDAO.findById(SegUsuario.class, idSegUsuario);// buscamos el usuario
-	 * nuevaTarea.setSegUsuario(usuario);// asignamos al usuario a la tarea
-	 * mDAO.insertar(nuevaTarea); }
-	 * 
-	 * // ROL: ANALISTA // TAREAS // Visualizar tareas asignadas a un determinado
-	 * analista public List<PryTarea> findTareasByUsuario(int idSegUsuario) { return
-	 * mDAO.findWhere(PryTarea.class, "o.segUsuario.idSegUsuario=" + idSegUsuario,
-	 * "o.fechaInicio"); }
-	 * 
-	 * 
-	 * 
-	 * // suma de avances del proyecto List<PryTarea> listaTareas =
-	 * findTareasByProyecto(tarea.getPryProyecto().getIdPryProyecto()); int suma =
-	 * 0; for (PryTarea t : listaTareas) { suma += t.getAvance(); }
-	 * 
-	 * int promedio = suma / listaTareas.size(); // promedio de avances del proyecto
-	 * PryProyecto proyecto = (PryProyecto) mDAO.findById(PryProyecto.class,
-	 * tarea.getPryProyecto().getIdPryProyecto()); proyecto.setAvance(promedio); if
-	 * (promedio > 0 && promedio < 100) { proyecto.setEstado("D"); } else { if
-	 * (promedio == 100) { proyecto.setEstado("F"); } } // actualizar avance del
-	 * proyecto mDAO.actualizar(proyecto); }
-	 * 
-	 */
+	
+	
+	
+	
+	
+	//////////// PROFORMAS CABECERA
+	
 
 }
