@@ -87,6 +87,10 @@ public class ManagerCompras {
 		mDAO.insertar(nuevoProveedor);
 	}
 
+	
+	
+	//prueba git
+	
 	/*
 	 * // TAREAS // Consulta de tareas por proyecto public List<PryTarea>
 	 * findTareasByProyecto(int idPryProyecto) { return

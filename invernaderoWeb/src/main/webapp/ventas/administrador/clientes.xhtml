@@ -91,6 +91,7 @@
 					<p:commandButton icon="pi pi-times-circle" title="Eliminar"
 						styleClass="ui-button-danger" update="@form"
 						actionListener="#{beanVenAdministrador.actionListenerEliminarCliente(c.cliCedula)}">
+						
 						<p:confirm header="Confirmación"
 							message="Desea borrar este usuario?" icon="pi pi-info-circle" />
 					</p:commandButton>
