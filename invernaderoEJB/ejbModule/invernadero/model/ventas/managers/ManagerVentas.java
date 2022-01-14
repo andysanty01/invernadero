@@ -66,7 +66,6 @@ public class ManagerVentas {
 		// Forma compuesta
 		mAuditoria.mostrarLog(loginDTO, getClass(), "insertarCliente", "Cliente: " + nuevaCliente.getCliApellido() + " "
 				+ nuevaCliente.getCliNombre() + " agregada con éxito");
-
 	}
 
 	// Actualizacion de Clientes
