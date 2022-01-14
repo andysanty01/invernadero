@@ -99,11 +99,6 @@ public class ManagerVentas {
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
 	
-	
-	
-	
-	
-	//////////// PROFORMAS CABECERA
-	
-
+/////////ENUNCIADO
+	//LISTAR PROFORMAS CAB Y DET Y ORDENES DE TRABAJO
 }
