@@ -19,7 +19,7 @@ import invernadero.model.ventas.managers.ManagerVentas;
 
 @Named
 @SessionScoped
-public class BeanVenAdministrador implements Serializable {
+public class BeanVenVendedor implements Serializable {
 
 	@EJB
 	private ManagerSeguridades mSeg;
@@ -34,7 +34,7 @@ public class BeanVenAdministrador implements Serializable {
 	@Inject
 	private BeanSegLogin beanSegLogin;
 
-	public BeanVenAdministrador() {
+	public BeanVenVendedor() {
 	}
 
 	@PostConstruct
@@ -43,6 +43,14 @@ public class BeanVenAdministrador implements Serializable {
 		nuevaCliente = mVentas.inicializarCliente();
 	}
 
+	//////////ENUNCIADO
+	//Listar proformasCab, proformasDet, Ordenes de trabajo
+	
+	
+	
+	
+	
+	
 	// ----------------Inserccion
 	//Agregar Cliente
 	public void actionListenerInsertarCliente() {
@@ -134,6 +142,6 @@ public class BeanVenAdministrador implements Serializable {
 		this.edicionCliente = edicionCliente;
 	}
 	
-	// haz rapido// 
+	
 	
 }

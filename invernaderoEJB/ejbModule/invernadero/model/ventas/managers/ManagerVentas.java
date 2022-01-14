@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import invernadero.model.auditoria.managers.ManagerAuditoria;
 import invernadero.model.core.entities.Cliente;
+import invernadero.model.core.entities.ProformasCab;
 import invernadero.model.core.entities.Proveedor;
 import invernadero.model.core.entities.SegUsuario;
 import invernadero.model.core.managers.ManagerDAO;
@@ -98,12 +99,9 @@ public class ManagerVentas {
 		mDAO.eliminar(Cliente.class, cliente.getCliCedula());
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
+
 	
-	
-	
-	
-	
-	//////////// PROFORMAS CABECERA
-	
+/////////ENUNCIADO
+	//LISTAR PROFORMAS CAB Y DET Y ORDENES DE TRABAJO
 
 }
