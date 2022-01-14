@@ -99,26 +99,9 @@ public class ManagerVentas {
 		mDAO.eliminar(Cliente.class, cliente.getCliCedula());
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
-<<<<<<< HEAD
 
-
-//// Proforma Cabecera
-	
-	public ProformasCab inicializarProformasCab() {
-		ProformasCab proformascab = new ProformasCab();
-		proformascab.setProCabExtension(null);
-		proformascab.setProCabIva(null);;
-		proformascab.setProCabSubtotal(null);
-		proformascab.setProCabTotal(null);
-		
-		return proformascab;
-	}
-	
-	
-	
-=======
 	
 /////////ENUNCIADO
 	//LISTAR PROFORMAS CAB Y DET Y ORDENES DE TRABAJO
->>>>>>> 4c5181dca88170f1b305cb0b9b6c52d0779a8702
+
 }

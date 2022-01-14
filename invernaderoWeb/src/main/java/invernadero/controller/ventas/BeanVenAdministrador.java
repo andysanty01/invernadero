@@ -134,6 +134,6 @@ public class BeanVenAdministrador implements Serializable {
 		this.edicionCliente = edicionCliente;
 	}
 	
-	// esto es un simulacro//
+	// haz rapido// 
 	
 }
