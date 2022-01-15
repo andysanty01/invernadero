@@ -30,7 +30,7 @@
 			style="width: 256px; margin-bottom: 10px"></img>
 		<h:form>
 			<p:panel style="width:50%;">
-				<p:staticMessage severity="info" summary="Bienvenido Administrador"
+				<p:staticMessage severity="info" summary="Bienvenido #{beanSegUsuarios.beanSegLogin.loginDTO.correo}"
 					style="width: 50%; margin-bottom: 15px" />
 				<p:dataView value="#{beanSegLogin.loginDTO.listaPerfiles}"
 					var="perfil" layout="grid" gridIcon="pi pi-th-large"
