@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ModelUtil {
 
+	
 	/**
 	 * Verifica si una cadena es igual a null o tiene longitud igual a cero.
 	 * @param cadena Cadena que va a verificarse.
