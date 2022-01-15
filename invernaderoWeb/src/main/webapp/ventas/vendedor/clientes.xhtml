@@ -19,7 +19,7 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 			<p:menuitem value="Nuevo cliente" icon="pi pi-user-plus"
-				action="#{beanVenAdministrador.actionCargarAgregarClientes()}" />
+				action="#{beanVenVendedor.actionCargarAgregarClientes()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -37,7 +37,7 @@
 			summary="LISTA DE CLIENTES - ADMINISTRADOR"></p:staticMessage>
 		<h:form>
 		
-			<p:dataTable value="#{beanVenAdministrador.listaClientes}" var="c"
+			<p:dataTable value="#{beanVenVendedor.listaClientes}" var="c"
 				paginator="true" rows="5">
 				
 				<p:column headerText="CEDULA" style="width:50px" filterBy="#{c.cliCedula}">
@@ -83,14 +83,14 @@
 					<p:commandButton icon="pi pi-check-circle"
 						title="activar/desactivar" styleClass="ui-button-warning"
 						update="@form"
-						actionListener="#{beanVenAdministrador.actionListenerActivarDesactivarCliente(c.cliCedula)}" />
+						actionListener="#{beanVenVendedor.actionListenerActivarDesactivarCliente(c.cliCedula)}" />
 						
 					<p:commandButton icon="pi pi-pencil" title="Editar"
-						action="#{beanVenAdministrador.actionSeleccionarEdicionCliente(c)}" />
+						action="#{beanVenVendedor.actionSeleccionarEdicionCliente(c)}" />
 						
 					<p:commandButton icon="pi pi-times-circle" title="Eliminar"
 						styleClass="ui-button-danger" update="@form"
-						actionListener="#{beanVenAdministrador.actionListenerEliminarCliente(c.cliCedula)}">
+						actionListener="#{beanVenVendedor.actionListenerEliminarCliente(c.cliCedula)}">
 						
 						<p:confirm header="Confirmación"
 							message="Desea borrar este usuario?" icon="pi pi-info-circle" />

@@ -1,5 +1,8 @@
 package invernadero.model.ventas.managers;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -35,6 +38,7 @@ public class ManagerVentas {
 	public ManagerVentas() {
 	}
 
+/////////--------------------------CLIENTES---------------------------------------------------------
 	// Inicializadores
 	// Cliente
 	public Cliente inicializarCliente() {
@@ -101,7 +105,63 @@ public class ManagerVentas {
 	}
 
 	
-/////////ENUNCIADO
-	//LISTAR PROFORMAS CAB Y DET Y ORDENES DE TRABAJO
+/////////--------------------PROFORMAS CABECERA---------------------------------------------------------
 
+
+	//Inicializar proformas cab
+	
+	public ProformasCab inicializarProformasCab() {
+		ProformasCab proformasCab = new ProformasCab();
+		proformasCab.setCliente(new Cliente()); //prueba
+		proformasCab.setProCabFecha(new Timestamp(System.currentTimeMillis()));
+		proformasCab.setProCabExtension(new BigDecimal(0));
+		proformasCab.setProCabSubtotal(new BigDecimal(0));
+		proformasCab.setProCabIva(new BigDecimal(0));
+		proformasCab.setProCabTotal(new BigDecimal(0));
+		return proformasCab;
+	}
+	
+	//Listar proformas cab
+	public List<ProformasCab> findAllProformasCab() {
+		return mDAO.findAll(ProformasCab.class);
+	}
+	
+	// Insercion de Proformas Cab
+		public void insertarProformasCab(LoginDTO loginDTO, ProformasCab nuevaProformasCab, String clienteSeleccionado) throws Exception {
+			
+			Cliente cliente = (Cliente) mDAO.findById(Cliente.class, clienteSeleccionado); //Encontrar el cliente
+			nuevaProformasCab.setCliente(cliente);
+			
+			mDAO.insertar(nuevaProformasCab);
+			// Nuevo codigo auditoria
+			// Forma simple
+			// mostrarLog(getClass(), "insertar Cliente", "Cliente:
+			// "+nuevaCliente.getProvCiuNombre()+ " agregada con éxito"); Usar reflexion
+			// para ingreso automatico
+			// Forma compuesta
+			mAuditoria.mostrarLog(loginDTO, getClass(), "insertarProformasCab", "ProformasCab: " + nuevaProformasCab.getProCabId() + " agregada con éxito");
+		}
+		
+		
+		// Actualizacion de  ProformasCab
+		public void actualizarProformasCab(LoginDTO loginDTO, ProformasCab edicionProformasCab) throws Exception {
+			ProformasCab proformasCab = (ProformasCab) mDAO.findById(ProformasCab.class, edicionProformasCab.getProCabId()); // Buscar el cliente a	editar																					// editar
+			
+			proformasCab.setCliente(edicionProformasCab.getCliente());
+			proformasCab.setProCabExtension(edicionProformasCab.getProCabExtension());
+			mDAO.actualizar(proformasCab);
+			mAuditoria.mostrarLog(loginDTO, getClass(), "actualizarProformasCab",
+					"se actualizó a ProformasCab " + edicionProformasCab.getProCabId());
+		}
+		
+		
+		// Borracion de ProformasCab
+		public void eliminarProformasCab(int ProformasCabId) throws Exception {
+			ProformasCab proformasCab = (ProformasCab) mDAO.findById(ProformasCab.class, ProformasCabId); //Encontrar el cliente a eliminar
+			if (proformasCab.getProformasDets().size()>0)
+				throw new Exception("No se puede elimininar la proforma porque tiene productos registrados.");
+			mDAO.eliminar(ProformasCab.class, proformasCab.getProCabId());
+			// TODO agregar uso de LoginDTO para auditar metodo.
+		}
+	
 }
