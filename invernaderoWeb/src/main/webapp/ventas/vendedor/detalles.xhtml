@@ -26,10 +26,39 @@
 	</h:form>
 
 	<div>
+	
+	
+	<p:staticMessage severity="info"
+			summary="AGREGAR PRODUCTO A PROFORMA #{beanVenVendedor.proformaCabSeleccionada.proCabId}"></p:staticMessage>
+	<h:form>
+			<p:panelGrid columns="2">
+			
+			<h:outputText value="Producto:" />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.productoSeleccionado}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaProductos}"
+						var="p" itemLabel="#{p.producNombre}" itemValue="#{p.producId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+			
+				<h:outputText value="Cantidad:" />
+				<p:inputText value="#{beanVenVendedor.nuevaProformaDet.proDetCantidad}" />
+				 
+				<p:commandButton value="Insertar" icon="pi pi-save"
+					update="@form,:formDetalles"
+					action="#{beanVenVendedor.actionListenerInsertarProformaDet()}"></p:commandButton>
+			</p:panelGrid>
+		</h:form>
+		
+		
+		
+		
+		
 		<p:staticMessage severity="info"
 			summary="LISTA DE DETALLES DE PROFORMA #{beanVenVendedor.proformaCabSeleccionada.proCabId} - ADMINISTRADOR"></p:staticMessage>
 
-		<h:form id="FormDetalles">
+		<h:form id="formDetalles">
 			<p:dataTable value="#{beanVenVendedor.listaProformasDet}"
 				var="pd">
 
