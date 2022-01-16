@@ -81,6 +81,7 @@ public class BeanCompAdministrador implements Serializable {
 		listaCiudades= mCompras.findAllCiudades();
 		return "agregarProveedor";
 
+		
 	}
 
 	
