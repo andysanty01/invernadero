@@ -12,7 +12,9 @@ import javax.inject.Named;
 import invernadero.controller.JSFUtil;
 import invernadero.controller.seguridades.BeanSegLogin;
 import invernadero.model.core.entities.Cliente;
+import invernadero.model.core.entities.Producto;
 import invernadero.model.core.entities.ProformasCab;
+import invernadero.model.core.entities.ProformasDet;
 import invernadero.model.core.entities.Proveedor;
 import invernadero.model.core.entities.SegUsuario;
 import invernadero.model.seguridades.managers.ManagerSeguridades;
@@ -28,6 +30,8 @@ public class BeanVenVendedor implements Serializable {
 	private ManagerVentas mVentas;
 	private List<Cliente> listaClientes;
 	private List<ProformasCab> listaProformasCab;
+	private List<ProformasDet> listaProformasDet;
+	private List<Producto> listaProductos;
 
 	// Variables Cliente
 	private Cliente nuevaCliente;
@@ -37,6 +41,13 @@ public class BeanVenVendedor implements Serializable {
 	private String clienteSeleccionado;
 	private ProformasCab nuevaProformaCab;
 	private ProformasCab edicionProformaCab;
+
+	// Variables ProformasDet
+	private ProformasCab proformaCabSeleccionada;
+	private int productoSeleccionado;
+	
+	private ProformasDet nuevaProformaDet;
+	private ProformasDet edicionProformaDet;
 
 	@Inject
 	private BeanSegLogin beanSegLogin;
@@ -162,26 +173,51 @@ public class BeanVenVendedor implements Serializable {
 		edicionProformaCab = proformasCab;
 		return "proformasCab_edicion";
 	}
-	
+
 	// ---------------- Borracion
 
-		public void actionListenerEliminarProformasCab(int proformasCabId) {
-			try {
-				mVentas.eliminarProformasCab(proformasCabId);
-				listaProformasCab = mVentas.findAllProformasCab();
-				JSFUtil.crearMensajeINFO("Proforma eliminada.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
+	public void actionListenerEliminarProformasCab(int proformasCabId) {
+		try {
+			mVentas.eliminarProformasCab(proformasCabId);
+			listaProformasCab = mVentas.findAllProformasCab();
+			JSFUtil.crearMensajeINFO("Proforma eliminada.");
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+//----------------------------- PROFORMAS-DETALLE---------------------------------------------------------------------
+	// Cargar pagina de ingreso de Proformas Detalle
+	
+		public String actionCargarProformasDet(ProformasCab proformaCab) {
+			listaProductos=mVentas.findAllProductos();
+			proformaCabSeleccionada=proformaCab;
+			listaProformasDet=mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
+			nuevaProformaDet=mVentas.inicializarProformasDet(proformaCabSeleccionada);
+			return "detalles?faces-redirect=true";
 		}
 		
-//----------------------------- PROFORMAS-DETALLE---------------------------------------------------------------------
-		
+	// ----------------Inserccion
+	// Agregar
+	public void actionListenerInsertarProformaDet() {
+		try {
+			mVentas.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet,productoSeleccionado);
+			JSFUtil.crearMensajeINFO("Detalle agregado agregada con éxito");
+			nuevaProformaDet=mVentas.inicializarProformasDet(proformaCabSeleccionada);
+			listaProformasDet=mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 
 	// ACCESORES
 
-	//Clientes
+	// Clientes
 	public Cliente getNuevaCliente() {
 		return nuevaCliente;
 	}
@@ -205,8 +241,8 @@ public class BeanVenVendedor implements Serializable {
 	public void setEdicionCliente(Cliente edicionCliente) {
 		this.edicionCliente = edicionCliente;
 	}
-	
-	//ProformasCab
+
+	// ProformasCab
 
 	public List<ProformasCab> getListaProformasCab() {
 		return listaProformasCab;
@@ -240,7 +276,53 @@ public class BeanVenVendedor implements Serializable {
 		this.clienteSeleccionado = clienteSeleccionado;
 	}
 
-	
+	public List<ProformasDet> getListaProformasDet() {
+		return listaProformasDet;
+	}
+
+	public void setListaProformasDet(List<ProformasDet> listaProformasDet) {
+		this.listaProformasDet = listaProformasDet;
+	}
+
+	public List<Producto> getListaProductos() {
+		return listaProductos;
+	}
+
+	public void setListaProductos(List<Producto> listaProductos) {
+		this.listaProductos = listaProductos;
+	}
+
+	public ProformasCab getProformaCabSeleccionada() {
+		return proformaCabSeleccionada;
+	}
+
+	public void setProformaCabSeleccionada(ProformasCab proformaCabSeleccionada) {
+		this.proformaCabSeleccionada = proformaCabSeleccionada;
+	}
+
+	public int getProductoSeleccionado() {
+		return productoSeleccionado;
+	}
+
+	public void setProductoSeleccionado(int productoSeleccionado) {
+		this.productoSeleccionado = productoSeleccionado;
+	}
+
+	public ProformasDet getNuevaProformaDet() {
+		return nuevaProformaDet;
+	}
+
+	public void setNuevaProformaDet(ProformasDet nuevaProformaDet) {
+		this.nuevaProformaDet = nuevaProformaDet;
+	}
+
+	public ProformasDet getEdicionProformaDet() {
+		return edicionProformaDet;
+	}
+
+	public void setEdicionProformaDet(ProformasDet edicionProformaDet) {
+		this.edicionProformaDet = edicionProformaDet;
+	}
 	
 	
 

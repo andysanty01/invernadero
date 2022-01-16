@@ -13,8 +13,6 @@
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
-			<p:menuitem value="Nueva Proforma" icon="pi pi-briefcase"
-				action="#{beanVenVendedor.actionCargarAgregarProformasCab()}" />
 
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -29,38 +27,30 @@
 
 	<div>
 		<p:staticMessage severity="info"
-			summary="LISTA DE PROFORMAS - ADMINISTRADOR"></p:staticMessage>
+			summary="LISTA DE DETALLES DE PROFORMA #{beanVenVendedor.proformaCabSeleccionada.proCabId} - ADMINISTRADOR"></p:staticMessage>
 
-		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanVenVendedor.listaProformasCab}"
-				var="p">
+		<h:form id="FormDetalles">
+			<p:dataTable value="#{beanVenVendedor.listaProformasDet}"
+				var="pd">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proCabId}" />
+					<h:outputText value="#{pd.proDetId}" />
 				</p:column>
 
-				<p:column headerText="CLIENTE">
-					<h:outputText value="#{p.cliente.cliCedula}" />
+				<p:column headerText="PRODUCTO">
+					<h:outputText value="#{pd.producto.producId}" />
 				</p:column>
 
-				<p:column headerText="FECHA">
-					<h:outputText value="#{p.proCabFecha}" />
+				<p:column headerText="CANTIDAD">
+					<h:outputText value="#{pd.proDetCantidad}" />
 				</p:column>
 
-				<p:column headerText="EXTENSIÓN">
-					<h:outputText value="#{p.proCabExtension}" />
+				<p:column headerText="PRECIO UNITARIO">
+					<h:outputText value="#{pd.proDetPrecio}" />
 				</p:column>
 
 				<p:column headerText="SUBTOTAL">
-					<h:outputText value="#{p.proCabSubtotal}" />
-				</p:column>
-
-				<p:column headerText="IVA">
-					<h:outputText value="#{p.proCabIva}" />
-				</p:column>
-
-				<p:column headerText="TOTAL">
-					<h:outputText value="#{p.proCabTotal}" />
+					<h:outputText value="#{pd.proDetPreciototal}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
@@ -73,11 +63,6 @@
 						value="Eliminar" icon="pi pi-pencil"
 						actionListener="#{beanVenVendedor.actionListenerEliminarProformasCab(p)}"
 						styleClass="rounded-button ui-button-danger" />
-					<p:commandButton
-						title="Listar productos de Proforma #{p.proCabId}"
-						value="Productos" icon="pi pi-pencil"
-						action="#{beanVenVendedor.actionCargarProformasDet(p)}"
-						styleClass="rounded-button ui-button-success" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
