@@ -198,6 +198,7 @@ public class BeanVenVendedor implements Serializable {
 			return "detalles?faces-redirect=true";
 		}
 		
+		//Actualizar lista del boton Regresar
 		public String cargarPaginaProformas() {
 			listaProformasCab=mVentas.findAllProformasCab();
 			return "proformas";

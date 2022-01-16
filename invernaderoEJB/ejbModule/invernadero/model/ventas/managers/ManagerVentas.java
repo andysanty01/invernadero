@@ -236,7 +236,6 @@ public class ManagerVentas {
     	mDAO.actualizar(proformaCab);
     }
 	
-
 	public BigDecimal calculoPrecioTotal(BigDecimal precioU, int cant) {
 		double precio_unitario = precioU.doubleValue();
 		double precioTotal = precio_unitario * cant;
