@@ -198,8 +198,14 @@ public class BeanVenVendedor implements Serializable {
 			return "detalles?faces-redirect=true";
 		}
 		
+		public String cargarPaginaProformas() {
+			listaProformasCab=mVentas.findAllProformasCab();
+			return "proformas";
+		}
+		
 	// ----------------Inserccion
 	// Agregar
+		
 	public void actionListenerInsertarProformaDet() {
 		try {
 			mVentas.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet,productoSeleccionado);
