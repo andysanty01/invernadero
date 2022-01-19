@@ -8,11 +8,26 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Auditoría</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+</h:head>
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
 			<p:menuitem value="Ver bitácora" icon="pi pi-book"
 				action="#{beanAudBitacora.actionCargarMenuBitacora()}" />
 			<f:facet name="options">
@@ -24,8 +39,22 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info" summary="Módulo de auditoría"></p:staticMessage>
+		<div id="menu" align="center">
+			<p:panel style="width:50%;">
+				<p:staticMessage severity="info" summary="Módulo Auditoría"
+					style="width: 50%; margin-bottom: 15px ; margin-top: 15px" />
+				<p:panelGrid columns="3">
+					<f:facet name="header">
+						<p:graphicImage url="../../static/img/auditoria.jpg"
+							style="width: 256px" />
+					</f:facet>
+					<i class="pi pi-book" style="font-size: 2rem; text-align: center"></i>
+					<p:commandLink value="Ver bitácora" icon="pi pi-book"
+						action="#{beanAudBitacora.actionCargarMenuBitacora()}"
+						styleClass="rounded-button ui-button-secondary"></p:commandLink>
+				</p:panelGrid>
+			</p:panel>
+		</div>
 	</h:form>
-	<div></div>
 </body>
 </html>

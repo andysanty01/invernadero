@@ -8,12 +8,32 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Construcción</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+</h:head>
 <body>
 	<h:form>
 		<p:menubar>
+<<<<<<< HEAD
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
 
+=======
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
+			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
+			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
+>>>>>>> ff3166e3734421bbc63bfe0e8174376d759673e8
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
