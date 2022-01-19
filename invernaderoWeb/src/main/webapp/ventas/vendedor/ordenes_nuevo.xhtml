@@ -56,6 +56,17 @@
 				<p:inputText value="#{beanVenVendedor.nuevaOrden.ordenObservaciones}"
 					required="true" requiredMessage="Ingrese los nombres" />
 					
+					
+				<h:outputText value="Cliente" />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.clienteSeleccionado}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaClientes}"
+						var="c" itemLabel="#{c.cliNombre} #{c.cliApellido}" itemValue="#{c.cliCedula}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+					
 				<h:outputText value="Estado de Pago: " />
 				<p:selectOneMenu
 					value="#{beanVenVendedor.nuevaOrden.ordenEstadopago}">

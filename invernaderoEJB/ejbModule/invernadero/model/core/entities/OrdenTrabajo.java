@@ -48,6 +48,11 @@ public class OrdenTrabajo implements Serializable {
 	@OneToMany(mappedBy="ordenTrabajo")
 	private List<Despacho> despachos;
 
+	//bi-directional many-to-one association to Cliente
+	@ManyToOne
+	@JoinColumn(name="cli_cedula")
+	private Cliente cliente;
+
 	//bi-directional many-to-one association to ProformasCab
 	@ManyToOne
 	@JoinColumn(name="pro_cab_id")
@@ -145,6 +150,14 @@ public class OrdenTrabajo implements Serializable {
 		despacho.setOrdenTrabajo(null);
 
 		return despacho;
+	}
+
+	public Cliente getCliente() {
+		return this.cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public ProformasCab getProformasCab() {

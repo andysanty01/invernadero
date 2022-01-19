@@ -44,6 +44,10 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy="cliente")
 	private List<FacturaCab> facturaCabs;
 
+	//bi-directional many-to-one association to OrdenTrabajo
+	@OneToMany(mappedBy="cliente")
+	private List<OrdenTrabajo> ordenTrabajos;
+
 	public Cliente() {
 	}
 
@@ -131,6 +135,28 @@ public class Cliente implements Serializable {
 		facturaCab.setCliente(null);
 
 		return facturaCab;
+	}
+
+	public List<OrdenTrabajo> getOrdenTrabajos() {
+		return this.ordenTrabajos;
+	}
+
+	public void setOrdenTrabajos(List<OrdenTrabajo> ordenTrabajos) {
+		this.ordenTrabajos = ordenTrabajos;
+	}
+
+	public OrdenTrabajo addOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+		getOrdenTrabajos().add(ordenTrabajo);
+		ordenTrabajo.setCliente(this);
+
+		return ordenTrabajo;
+	}
+
+	public OrdenTrabajo removeOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+		getOrdenTrabajos().remove(ordenTrabajo);
+		ordenTrabajo.setCliente(null);
+
+		return ordenTrabajo;
 	}
 
 }

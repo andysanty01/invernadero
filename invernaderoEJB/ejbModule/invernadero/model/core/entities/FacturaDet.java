@@ -29,13 +29,15 @@ public class FacturaDet implements Serializable {
 	@Column(name="fac_det_preciototal", precision=131089)
 	private BigDecimal facDetPreciototal;
 
-	@Column(name="produc_id")
-	private Integer producId;
-
 	//bi-directional many-to-one association to FacturaCab
 	@ManyToOne
 	@JoinColumn(name="fac_cab_id")
 	private FacturaCab facturaCab;
+
+	//bi-directional many-to-one association to Producto
+	@ManyToOne
+	@JoinColumn(name="produc_id")
+	private Producto producto;
 
 	public FacturaDet() {
 	}
@@ -72,20 +74,20 @@ public class FacturaDet implements Serializable {
 		this.facDetPreciototal = facDetPreciototal;
 	}
 
-	public Integer getProducId() {
-		return this.producId;
-	}
-
-	public void setProducId(Integer producId) {
-		this.producId = producId;
-	}
-
 	public FacturaCab getFacturaCab() {
 		return this.facturaCab;
 	}
 
 	public void setFacturaCab(FacturaCab facturaCab) {
 		this.facturaCab = facturaCab;
+	}
+
+	public Producto getProducto() {
+		return this.producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
 	}
 
 }

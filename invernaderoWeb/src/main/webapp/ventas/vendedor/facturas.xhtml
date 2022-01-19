@@ -13,9 +13,6 @@
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
-			<p:menuitem value="Nueva Proforma" icon="pi pi-briefcase"
-				action="#{beanVenVendedor.actionCargarAgregarProformasCab()}" />
-
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
@@ -29,14 +26,14 @@
 
 	<div>
 		<p:staticMessage severity="info"
-			summary="LISTA DE PROFORMAS - ADMINISTRADOR"></p:staticMessage>
+			summary="LISTA DE FACTURAS - VENDEDOR"></p:staticMessage>
 
 		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanVenVendedor.listaProformasCab}"
+			<p:dataTable value="#{beanVenVendedor.listaFacturasCab}"
 				var="p">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proCabId}" />
+					<h:outputText value="#{p.facCabId}" />
 				</p:column>
 
 				<p:column headerText="CLIENTE">
@@ -44,39 +41,26 @@
 				</p:column>
 
 				<p:column headerText="FECHA">
-					<h:outputText value="#{p.proCabFecha}" />
-				</p:column>
-
-				<p:column headerText="EXTENSIÓN">
-					<h:outputText value="#{p.proCabExtension}" />
+					<h:outputText value="#{p.facCabFecha}" />
 				</p:column>
 
 				<p:column headerText="SUBTOTAL">
-					<h:outputText value="#{p.proCabSubtotal}" />
+					<h:outputText value="#{p.facCabSubtotal}" />
 				</p:column>
 
 				<p:column headerText="IVA">
-					<h:outputText value="#{p.proCabIva}" />
+					<h:outputText value="#{p.facCabIva}" />
 				</p:column>
 
 				<p:column headerText="TOTAL">
-					<h:outputText value="#{p.proCabTotal}" />
+					<h:outputText value="#{p.facCabTotal}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de proforma #{p.proCabId}"
-						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerActualizarEdicionProformasCab(p)}"
-						styleClass="rounded-button ui-button-secondary" />
 					<p:commandButton
-						title="Eliminar proforma #{p.proCabId} de la lista de proformas"
-						value="Eliminar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerEliminarProformasCab(p)}"
-						styleClass="rounded-button ui-button-danger" />
-					<p:commandButton
-						title="Listar productos de Proforma #{p.proCabId}"
+						title="Listar productos de factura #{p.facCabId}"
 						value="Productos" icon="pi pi-pencil"
-						action="#{beanVenVendedor.actionCargarProformasDet(p)}"
+						action="#{beanVenVendedor.actionCargarFacturasDet(p)}"
 						styleClass="rounded-button ui-button-success" />
 				</p:column>
 			</p:dataTable>

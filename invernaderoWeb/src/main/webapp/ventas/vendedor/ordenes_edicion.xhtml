@@ -9,7 +9,7 @@
 		type="preRenderView"></f:event>
 </f:metadata>
 <h:head>
-	<title>Usuarios</title>
+	<title>Ordenes</title>
 </h:head>
 <body>
 	<p:growl>
@@ -17,7 +17,7 @@
 	</p:growl>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="clientes" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -32,39 +32,51 @@
 		<h:form>
 			<p:panelGrid columns="2">
 
-				<h:outputText value="Apellidos:" />
-				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliApellido}"
-					required="true" requiredMessage="Ingrese los apellidos" />
+				<h:outputText value="Proforma" />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.edicionOrden.proformasCab.proCabId}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaProformasCab}"
+						var="c" itemLabel="#{c.proCabId}" itemValue="#{c.proCabId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				
+				<h:outputText value="Asignado" />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.edicionOrden.segUsuario.idSegUsuario}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaUsuarios}"
+						var="c" itemLabel="#{c.correo}" itemValue="#{c.idSegUsuario}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
 
-				<h:outputText value="Nombres:" />
+				<h:outputText value="Observaciones: " />
 				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliNombre}"
+					value="#{beanVenVendedor.edicionOrden.ordenObservaciones}"
 					required="true" requiredMessage="Ingrese los nombres" />
-
-				<h:outputText value="Correo:" />
-				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliCorreo}"
-					required="true" requiredMessage="Ingrese el correo" />
-
-				<h:outputText value="Teléfono:" />
-				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliTelefono}"
-					required="true" requiredMessage="Ingrese el correo" />
-
-				<h:outputText value="Dirección:" />
-				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliDireccion}"
-					required="true" requiredMessage="Ingrese el correo" />
-
-				<h:outputText value="Categoría:" />
-				<p:inputText
-					value="#{beanVenVendedor.edicionCliente.cliCategoria}"
-					required="true" requiredMessage="Ingrese el correo" />
-
+					
+					
+				<h:outputText value="Cliente" />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.edicionOrden.cliente.cliCedula}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaClientes}"
+						var="c" itemLabel="#{c.cliNombre} #{c.cliApellido}" itemValue="#{c.cliCedula}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				<h:outputText value="Estado de Pago: " />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.edicionOrden.ordenEstadopago}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItem itemLabel="50%" itemValue="50%" />
+					<f:selectItem itemLabel="PAGADO" itemValue="PAGADO" />
+				</p:selectOneMenu>
 
 				<p:commandButton value="Actualizar" icon="pi pi-save" update="@form"
-					actionListener="#{beanVenVendedor.actionListenerActualizarEdicionCliente()}"></p:commandButton>
+					actionListener="#{beanVenVendedor.actionListenerActualizarEdicionOrden()}"></p:commandButton>
 			</p:panelGrid>
 		</h:form>
 	</p:panel>

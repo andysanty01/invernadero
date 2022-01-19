@@ -16,6 +16,7 @@
 			<p:menuitem value="Clientes" icon="pi pi-briefcase" action="clientes" />
 			<p:menuitem value="Proformas" icon="pi pi-briefcase"
 				action="proformas" />
+			<p:menuitem value="Facturas" icon="pi pi-briefcase" action="facturas" />
 			<p:menuitem value="Nueva Orden" icon="pi pi-briefcase"
 				action="#{beanVenVendedor.actionCargarOrdenes()}" />
 
@@ -49,6 +50,10 @@
 					<h:outputText value="#{p.ordenObservaciones}" />
 				</p:column>
 
+				<p:column headerText="CLIENTE">
+					<h:outputText value="#{p.cliente.cliCorreo}" />
+				</p:column>
+
 				<p:column headerText="ASIGNADO">
 					<h:outputText value="#{p.segUsuario.correo}" />
 				</p:column>
@@ -78,19 +83,40 @@
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton
-						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
-						value="Editar" icon="pi pi-pencil"
+
+					<p:commandButton title="Eliminar orden #{p.ordenId} de la lista"
+						value="Entregar y Facturar" icon="pi pi-pencil"
+						actionListener="#{beanVenVendedor.actionListenerEliminarOrden(p.ordenId)}"
+						styleClass="rounded-button ui-button-success" />
+					<p:commandButton title="Editar orden #{p.ordenId}" value="Editar"
+						icon="pi pi-pencil"
+						action="#{beanVenVendedor.actionSeleccionarEdicionOrden(p)}"
 						styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton
-						title="Eliminar orden #{p.ordenId} de la lista"
+
+					<p:commandButton title="Eliminar orden #{p.ordenId} de la lista"
 						value="Eliminar" icon="pi pi-pencil"
 						actionListener="#{beanVenVendedor.actionListenerEliminarOrden(p.ordenId)}"
-						styleClass="rounded-button ui-button-danger" />
+						styleClass="rounded-button ui-button-danger">
+						
+						<p:confirm header="Confirmación"
+							message="Desea borrar esta orden" icon="pi pi-info-circle" />
+							
+					</p:commandButton>
+
 				</p:column>
 
 			</p:dataTable>
 		</h:form>
 	</div>
+	
+	
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+		responsive="true" width="350">
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no ui-button-flat" />
+		<p:commandButton value="Sí" type="button"
+			styleClass="ui-confirmdialog-yes" />
+	</p:confirmDialog>
+	
 </body>
 </html>
