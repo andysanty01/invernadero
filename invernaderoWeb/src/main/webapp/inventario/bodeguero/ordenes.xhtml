@@ -12,7 +12,7 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -30,7 +30,7 @@
 			summary="LISTA DE ORDENES - CONSTRUCTOR"></p:staticMessage>
 
 		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanConConstructor.listaOrdenes}" var="p">
+			<p:dataTable value="#{beanInvBodeguero.listaOrdenes}" var="p">
 
 				<p:column headerText="ID" style="width:40px">
 					<h:outputText value="#{p.ordenId}" />
@@ -44,24 +44,8 @@
 					<h:outputText value="#{p.ordenObservaciones}" />
 				</p:column>
 
-				<p:column headerText="ESTADO DE PAGO">
-					<h:outputText value="#{p.ordenEstadopago}" />
-				</p:column>
-
-				<p:column headerText="FECHA INICIO">
-					<h:outputText value="#{p.ordenFechaini}" />
-				</p:column>
-
-				<p:column headerText="FECHA FIN">
-					<h:outputText value="#{p.ordenFechafin}" />
-				</p:column>
-
 				<p:column headerText="ESTADO DE ORDEN">
 					<h:outputText value="#{p.ordenEstado}" />
-				</p:column>
-				
-				<p:column headerText="AVANCE">
-					<p:spinner value="#{p.ordenAvance}" min="0" max="100" />
 				</p:column>
 
 				<p:column headerText="DESPACHADO">
@@ -70,14 +54,14 @@
 
 				<p:column headerText="OPCIONES">
 					<p:commandButton
-						title="Actualizar avance de orden #{p.ordenId}"
-						value="Actualizar Avance" icon="pi pi-pencil"
-						action="#{beanConConstructor.actionListenerActualizarAvance(p)}"
+						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
+						value="Despachar" icon="pi pi-pencil"
+						action="#{beanInvBodeguero.actionListenerActualizarAvance(p)}"
 						styleClass="ui-button-raised ui-button-success" />
 					<p:commandButton
 						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
 						value="Detalles de Proforma" icon="pi pi-pencil"
-						action="#{beanConConstructor.actionCargarProformasDet(p.proformasCab.proCabId)}"
+						action="#{beanInvBodeguero.actionCargarProformasDet(p.proformasCab.proCabId)}"
 						styleClass="ui-button-raised ui-button-secondary" />
 				</p:column>
 

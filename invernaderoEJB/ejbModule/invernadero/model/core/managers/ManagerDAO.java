@@ -48,6 +48,23 @@ public class ManagerDAO {
      * @return
      * 			Listado resultante
      */
+    
+    
+    public List findWhere2(Class clase, String pClausulaWhere, String pClausula2Where, String pOrderBy) {
+		Query q;
+		List listado;
+		String sentenciaJPQL;
+		if (pOrderBy == null || pOrderBy.length() == 0)
+			sentenciaJPQL = "SELECT o FROM " + clase.getSimpleName() + " o WHERE " + pClausulaWhere+ "o AND "+pClausula2Where;
+		else
+			sentenciaJPQL = "SELECT o FROM " + clase.getSimpleName() + " o WHERE " + pClausulaWhere + "o AND "+pClausula2Where+" ORDER BY " + pOrderBy;
+		q = em.createQuery(sentenciaJPQL);
+		listado = q.getResultList();
+		return listado;
+	}
+    
+    
+    
     public List findAll(Class clase,String propiedadOrderBy,boolean ascendente) {
     	Query q;
     	List listado;

@@ -1,4 +1,4 @@
-package invernadero.model.ventas.managers;
+package invernadero.model.inventario.managers;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -26,7 +26,7 @@ import invernadero.model.seguridades.managers.ManagerSeguridades;
  */
 @Stateless
 @LocalBean
-public class ManagerVentas {
+public class ManagerInventario {
 
 	// Nuevo codigo auditoria
 	@EJB
@@ -38,7 +38,7 @@ public class ManagerVentas {
 	@EJB
 	private ManagerSeguridades mSeg;
 
-	public ManagerVentas() {
+	public ManagerInventario() {
 	}
 
 /////////--------------------------CLIENTES---------------------------------------------------------
@@ -114,6 +114,7 @@ public class ManagerVentas {
 
 	public ProformasCab inicializarProformasCab() {
 		ProformasCab proformasCab = new ProformasCab();
+		proformasCab.setCliente(new Cliente()); // prueba
 		proformasCab.setProCabFecha(new Timestamp(System.currentTimeMillis()));
 		proformasCab.setProCabExtension(new BigDecimal(0));
 		proformasCab.setProCabSubtotal(new BigDecimal(0));
@@ -128,8 +129,11 @@ public class ManagerVentas {
 	}
 
 	// Insercion de Proformas Cab
-	public void insertarProformasCab(LoginDTO loginDTO, ProformasCab nuevaProformasCab)
+	public void insertarProformasCab(LoginDTO loginDTO, ProformasCab nuevaProformasCab, String clienteSeleccionado)
 			throws Exception {
+
+		Cliente cliente = (Cliente) mDAO.findById(Cliente.class, clienteSeleccionado); // Encontrar el cliente
+		nuevaProformasCab.setCliente(cliente);
 
 		mDAO.insertar(nuevaProformasCab);
 		// Nuevo codigo auditoria
@@ -146,6 +150,7 @@ public class ManagerVentas {
 	public void actualizarProformasCab(LoginDTO loginDTO, ProformasCab edicionProformasCab) throws Exception {
 		ProformasCab proformasCab = (ProformasCab) mDAO.findById(ProformasCab.class, edicionProformasCab.getProCabId()); // Buscar el cliente
 
+		proformasCab.setCliente(edicionProformasCab.getCliente());
 		proformasCab.setProCabExtension(edicionProformasCab.getProCabExtension());
 		mDAO.actualizar(proformasCab);
 		mAuditoria.mostrarLog(loginDTO, getClass(), "actualizarProformasCab",
@@ -171,6 +176,7 @@ public class ManagerVentas {
 	}
 	
 	// -------------------------------------PROFORMAS-DETALLE---------------------------
+
 
 	//Listar detalles segun proforma
 	public List<ProformasDet> findDetalleByProforma(int proformaId){
@@ -214,11 +220,9 @@ public class ManagerVentas {
     	//Agregar a una lista los detalles de dicha proforma
     	List<ProformasDet> detalles=findDetalleByProforma(proformaId);
     	double suma=0;
-    	
     	for(ProformasDet d:detalles) {
     		suma+=d.getProDetPreciototal().doubleValue();
     	}
-    	
     	double iva = suma*0.12;
     	double TotalFinal = suma + iva;
     	
@@ -254,6 +258,10 @@ public class ManagerVentas {
 			return mDAO.findAll(SegUsuario.class);
 		}
 		
+		 public List<OrdenTrabajo> findOrdenesByUsuario(int idSegUsuario){
+		    	return mDAO.findWhere(OrdenTrabajo.class, "o.segUsuario.idSegUsuario="+idSegUsuario, null);
+		    }
+		
 	//Inicializar
 		public OrdenTrabajo inicializarOrdenTrabajo() {
 			OrdenTrabajo ordenTrabajo = new OrdenTrabajo();
@@ -263,7 +271,7 @@ public class ManagerVentas {
 			ordenTrabajo.setOrdenEstadopago("");
 			ordenTrabajo.setOrdenFechaini(new Timestamp(System.currentTimeMillis()));
 			ordenTrabajo.setOrdenFechafin(new Date());
-			ordenTrabajo.setOrdenEstado("SOLICITADO");
+			ordenTrabajo.setOrdenEstado("INICIADO");
 			ordenTrabajo.setOrdenAvance(0);
 			ordenTrabajo.setOrdenDespacho(false);
 			ordenTrabajo.setSegUsuario(new SegUsuario());
@@ -285,137 +293,21 @@ public class ManagerVentas {
 			mAuditoria.mostrarLog(loginDTO, getClass(), "insertarOrden",	"Orden: " + nuevaOrden.getOrdenId() + " agregada con éxito");
 		}
 		
-		//Eliminar orden
-		public void eliminarOrden(int ordenId) throws Exception {
-			OrdenTrabajo orden = (OrdenTrabajo) mDAO.findById(OrdenTrabajo.class, ordenId); // Encontrar el cliente a																				// eliminar
-			if (orden.getDespachos().size() > 0)
-				throw new Exception("No se puede elimininar la orden porque ya empezó su construcción.");
-			mDAO.eliminar(ProformasCab.class, orden.getOrdenId());
-			// TODO agregar uso de LoginDTO para auditar metodo.
-		}
-		
-		
-		
-		/////////////////// ------------- FACTURAS-CABECERA----------------------------------------------------------------------
-		
-		//Inicializar
-		public ProformasCab inicializarFacturasCab() {
-			ProformasCab proformasCab = new ProformasCab();
-			proformasCab.setCliente(new Cliente()); // prueba
-			proformasCab.setProCabFecha(new Timestamp(System.currentTimeMillis()));
-			proformasCab.setProCabExtension(new BigDecimal(0));
-			proformasCab.setProCabSubtotal(new BigDecimal(0));
-			proformasCab.setProCabIva(new BigDecimal(0));
-			proformasCab.setProCabTotal(new BigDecimal(0));
-			return proformasCab;
-		}
-
-		// Listar proformas cab
-		public List<ProformasCab> findAllFacturasCab() {
-			return mDAO.findAll(ProformasCab.class);
-		}
-
-		// Insercion de Proformas Cab
-		public void insertarFacturasCab(LoginDTO loginDTO, ProformasCab nuevaProformasCab, String clienteSeleccionado)
-				throws Exception {
-
-			Cliente cliente = (Cliente) mDAO.findById(Cliente.class, clienteSeleccionado); // Encontrar el cliente
-			nuevaProformasCab.setCliente(cliente);
-
-			mDAO.insertar(nuevaProformasCab);
-			// Nuevo codigo auditoria
-			// Forma simple
-			// mostrarLog(getClass(), "insertar Cliente", "Cliente:
-			// "+nuevaCliente.getProvCiuNombre()+ " agregada con éxito"); Usar reflexion
-			// para ingreso automatico
-			// Forma compuesta
-			mAuditoria.mostrarLog(loginDTO, getClass(), "insertarProformasCab",
-					"ProformasCab: " + nuevaProformasCab.getProCabId() + " agregada con éxito");
-		}
-
-		// Actualizacion de ProformasCab
-		public void actualizarFacturasCab(LoginDTO loginDTO, ProformasCab edicionProformasCab) throws Exception {
-			ProformasCab proformasCab = (ProformasCab) mDAO.findById(ProformasCab.class, edicionProformasCab.getProCabId()); // Buscar el cliente
-
-			proformasCab.setCliente(edicionProformasCab.getCliente());
-			proformasCab.setProCabExtension(edicionProformasCab.getProCabExtension());
-			mDAO.actualizar(proformasCab);
-			mAuditoria.mostrarLog(loginDTO, getClass(), "actualizarProformasCab",
-					"se actualizó a ProformasCab " + edicionProformasCab.getProCabId());
-		}
-
-		// Borracion de ProformasCab
-		public void eliminarFacturasCab(int ProformasCabId) throws Exception {
-			ProformasCab proformasCab = (ProformasCab) mDAO.findById(ProformasCab.class, ProformasCabId); // Encontrar el
-																											// cliente a
-																											// eliminar
-			if (proformasCab.getProformasDets().size() > 0)
-				throw new Exception("No se puede elimininar la proforma porque tiene productos registrados.");
-			mDAO.eliminar(ProformasCab.class, proformasCab.getProCabId());
-			// TODO agregar uso de LoginDTO para auditar metodo.
-		}
-		
-		
-		//------------------------------ FACTURAS DETALLE ---------------------------------------------------------------
-
-		//Listar detalles segun proforma
-		public List<ProformasDet> findDetalleByFactura(int proformaId){
-	    	return mDAO.findWhere(ProformasDet.class, "o.proformasCab.proCabId="+proformaId, "o.proDetId");
-	    }
-		
-		// Inicializar
-		public ProformasDet inicializarFacturasDet(ProformasCab proformasCab) {
-			ProformasDet proformasDet = new ProformasDet();
-
-			proformasDet.setProformasCab(proformasCab); // Inicializamos con el ID de la proforma Cab
-			proformasDet.setProducto(new Producto());
-			proformasDet.setProDetCantidad(0);
-			proformasDet.setProDetPrecio(new BigDecimal(0));
-			proformasDet.setProDetPreciototal(new BigDecimal(0));
-			return proformasDet;
-		}
-
-		// Insercion de Proformas Cab
-		public void insertarFacturasDet(LoginDTO loginDTO, ProformasDet nuevaProformasDet,int productoSeleccionado) throws Exception {
-
-			Producto producto = (Producto) mDAO.findById(Producto.class, productoSeleccionado); // Encontrar la proforma
-			nuevaProformasDet.setProducto(producto);
-			nuevaProformasDet.setProDetPrecio(producto.getProducPreciou());
-			nuevaProformasDet.setProDetPreciototal(
-					calculoPrecioTotal(producto.getProducPreciou(), nuevaProformasDet.getProDetCantidad()));
-
-			mDAO.insertar(nuevaProformasDet);
-			// Forma compuesta
-			mAuditoria.mostrarLog(loginDTO, getClass(), "insertarProformasDet",	"Detalle: " + nuevaProformasDet.getProDetId() + " agregada con éxito");
-			//Actualizar total de proforma cabecera
-			calcularTotalProforma(nuevaProformasDet.getProformasCab().getProCabId());
-		}
-		
-		
-		//Metodo para actualizar Total de ProformasCabecera
-		public void calcularTotalFactura(int proformaId) throws Exception {
-			
-			//Buscar proforma
-	    	ProformasCab proformaCab=(ProformasCab) mDAO.findById(ProformasCab.class, proformaId);
-	    	//Agregar a una lista los detalles de dicha proforma
-	    	List<ProformasDet> detalles=findDetalleByProforma(proformaId);
-	    	double suma=0;
-	    	for(ProformasDet d:detalles) {
-	    		suma+=d.getProDetPreciototal().doubleValue();
+		//Actualizar avance
+		public void actualizarAvance(OrdenTrabajo orden) throws Exception {
+	    	if(orden.getOrdenAvance()<0 || orden.getOrdenAvance()>100)
+	    		throw new Exception("Avance incorrecto.");
+	    	
+	    	if(orden.getOrdenAvance() ==100) {
+	    		orden.setOrdenEstado("TERMINADO");
+	    		mDAO.actualizar(orden);
+	    	}else {
+	    		if(orden.getOrdenAvance()<100 && orden.getOrdenAvance()>0) {
+	    			orden.setOrdenEstado("EN CONSTRUCCION");
+		    		mDAO.actualizar(orden);
+	    		}
 	    	}
-	    	double iva = suma*0.12;
-	    	double TotalFinal = suma + iva;
 	    	
-	    	BigDecimal sumaT = new BigDecimal(suma);
-	    	BigDecimal ivaT = new BigDecimal(iva);
-	    	BigDecimal TotalFinalT = new BigDecimal(TotalFinal);
-	    	System.out.println("suma total:"+sumaT);
-	    	proformaCab.setProCabSubtotal(sumaT);
-	    	proformaCab.setProCabIva(ivaT);
-	    	proformaCab.setProCabTotal(TotalFinalT);
-	    	
-	    	mDAO.actualizar(proformaCab);
 	    }
-		
 		
 }

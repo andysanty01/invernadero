@@ -14,9 +14,11 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
 			<p:menuitem value="Clientes" icon="pi pi-briefcase" action="clientes" />
-			<p:menuitem value="Proformas" icon="pi pi-briefcase" action="proformas" />
-			<p:menuitem value="Nueva Orden" icon="pi pi-briefcase" action="ordenes_nuevo" />
-			
+			<p:menuitem value="Proformas" icon="pi pi-briefcase"
+				action="proformas" />
+			<p:menuitem value="Nueva Orden" icon="pi pi-briefcase"
+				action="#{beanVenVendedor.actionCargarOrdenes()}" />
+
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
@@ -31,50 +33,62 @@
 	<div>
 		<p:staticMessage severity="info"
 			summary="LISTA DE ORDENES - ADMINISTRADOR"></p:staticMessage>
-			
+
 		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
-				var="p">
+			<p:dataTable value="#{beanVenVendedor.listaOrdenes}" var="p">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proveId}" />
+					<h:outputText value="#{p.ordenId}" />
 				</p:column>
 
 				<p:column headerText="PROFORMA">
-					<h:outputText value="#{p.proveRuc}" />
+					<h:outputText value="#{p.proformasCab.proCabId}" />
 				</p:column>
 
-				<p:column headerText="OBSERVACION">
-					<h:outputText value="#{p.proveNombre}" />
+				<p:column headerText="OBSERVACIONES">
+					<h:outputText value="#{p.ordenObservaciones}" />
+				</p:column>
+
+				<p:column headerText="ASIGNADO">
+					<h:outputText value="#{p.segUsuario.correo}" />
 				</p:column>
 
 				<p:column headerText="ESTADO DE PAGO">
-					<h:outputText value="#{p.proveNomcomercial}" />
+					<h:outputText value="#{p.ordenEstadopago}" />
 				</p:column>
 
 				<p:column headerText="FECHA INICIO">
-					<h:outputText value="#{p.proveDireccion}" />
+					<h:outputText value="#{p.ordenFechaini}" />
 				</p:column>
 
 				<p:column headerText="FECHA FIN">
-					<h:outputText value="#{p.proveTelefono}" />
+					<h:outputText value="#{p.ordenFechafin}" />
 				</p:column>
 
 				<p:column headerText="ESTADO DE ORDEN">
-					<h:outputText value="#{p.ciudad.ciuNombre}" />
+					<h:outputText value="#{p.ordenEstado}" />
+				</p:column>
+
+				<p:column headerText="AVANCE">
+					<h:outputText value="#{p.ordenAvance}%" />
+				</p:column>
+
+				<p:column headerText="DESPACHADO">
+					<h:outputText value="#{p.ordenDespacho}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}"
+					<p:commandButton
+						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
 						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}"
 						styleClass="rounded-button ui-button-secondary" />
 					<p:commandButton
-						title="Eliminar #{p.proveNomcomercial} de la lista de proveedores"
+						title="Eliminar orden #{p.ordenId} de la lista"
 						value="Eliminar" icon="pi pi-pencil"
-						action="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}"
+						actionListener="#{beanVenVendedor.actionListenerEliminarOrden(p.ordenId)}"
 						styleClass="rounded-button ui-button-danger" />
 				</p:column>
+
 			</p:dataTable>
 		</h:form>
 	</div>

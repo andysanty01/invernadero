@@ -1,4 +1,4 @@
-package invernadero.controller.ventas;
+package invernadero.controller.inventario;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +11,7 @@ import javax.inject.Named;
 
 import invernadero.controller.JSFUtil;
 import invernadero.controller.seguridades.BeanSegLogin;
+import invernadero.model.construccion.managers.ManagerConstruccion;
 import invernadero.model.core.entities.Cliente;
 import invernadero.model.core.entities.OrdenTrabajo;
 import invernadero.model.core.entities.Producto;
@@ -18,17 +19,19 @@ import invernadero.model.core.entities.ProformasCab;
 import invernadero.model.core.entities.ProformasDet;
 import invernadero.model.core.entities.Proveedor;
 import invernadero.model.core.entities.SegUsuario;
+import invernadero.model.inventario.managers.ManagerInventario;
 import invernadero.model.seguridades.managers.ManagerSeguridades;
 import invernadero.model.ventas.managers.ManagerVentas;
 
 @Named
 @SessionScoped
-public class BeanVenVendedor implements Serializable {
+public class BeanInvBodeguero implements Serializable {
 
 	@EJB
 	private ManagerSeguridades mSeg;
 	@EJB
-	private ManagerVentas mVentas;
+	private ManagerInventario mInventario;
+	
 	private List<Cliente> listaClientes;
 	private List<ProformasCab> listaProformasCab;
 	private List<ProformasDet> listaProformasDet;
@@ -57,23 +60,24 @@ public class BeanVenVendedor implements Serializable {
 	private OrdenTrabajo nuevaOrden;
 	private OrdenTrabajo edicionOrden;
 	private int usuarioSeleccionado;
+	
+	private int ordenProformaSeleccionada;
 
 	@Inject
 	private BeanSegLogin beanSegLogin;
 
-	public BeanVenVendedor() {
+	public BeanInvBodeguero() {
 	}
 
 	@PostConstruct
 	public void inicializar() {
-		listaClientes = mVentas.findAllClientes();
-		nuevaCliente = mVentas.inicializarCliente();
+		listaClientes = mInventario.findAllClientes();
+		nuevaCliente = mInventario.inicializarCliente();
 
-		listaProformasCab = mVentas.findAllProformasCab();
-		nuevaProformaCab = mVentas.inicializarProformasCab();
+		listaProformasCab = mInventario.findAllProformasCab();
+		nuevaProformaCab = mInventario.inicializarProformasCab();
 		
-		listaOrdenes = mVentas.findAllOrdenesTrabajo();
-		nuevaOrden = mVentas.inicializarOrdenTrabajo();
+		listaOrdenes = mInventario.findAllOrdenesTrabajo();
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------
@@ -82,11 +86,11 @@ public class BeanVenVendedor implements Serializable {
 	// Agregar Cliente
 	public void actionListenerInsertarCliente() {
 		try {
-			mVentas.insertarCliente(beanSegLogin.getLoginDTO(), nuevaCliente);
+			mInventario.insertarCliente(beanSegLogin.getLoginDTO(), nuevaCliente);
 			;
 			JSFUtil.crearMensajeINFO("Cliente agregada con éxito");
-			listaClientes = mVentas.findAllClientes();
-			nuevaCliente = mVentas.inicializarCliente();
+			listaClientes = mInventario.findAllClientes();
+			nuevaCliente = mInventario.inicializarCliente();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -95,7 +99,7 @@ public class BeanVenVendedor implements Serializable {
 
 	// Cargar pagina de Agregar Clientes
 	public String actionCargarAgregarClientes() {
-		nuevaCliente = mVentas.inicializarCliente();
+		nuevaCliente = mInventario.inicializarCliente();
 		return "clientes_nuevo";
 
 	}
@@ -104,8 +108,8 @@ public class BeanVenVendedor implements Serializable {
 	// Actualizar Cliente
 	public void actionListenerActualizarEdicionCliente() {
 		try {
-			mVentas.actualizarCliente(beanSegLogin.getLoginDTO(), edicionCliente);
-			listaClientes = mVentas.findAllClientes();
+			mInventario.actualizarCliente(beanSegLogin.getLoginDTO(), edicionCliente);
+			listaClientes = mInventario.findAllClientes();
 			JSFUtil.crearMensajeINFO("Cliente actualizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -122,8 +126,8 @@ public class BeanVenVendedor implements Serializable {
 	// Activar/Desactivar Cliente
 	public void actionListenerActivarDesactivarCliente(String cliCedula) {
 		try {
-			mVentas.activarDesactivarCliente(cliCedula);
-			listaClientes = mVentas.findAllClientes();
+			mInventario.activarDesactivarCliente(cliCedula);
+			listaClientes = mInventario.findAllClientes();
 			JSFUtil.crearMensajeINFO("Cliente activado/desactivado");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -135,8 +139,8 @@ public class BeanVenVendedor implements Serializable {
 
 	public void actionListenerEliminarCliente(String cliCedula) {
 		try {
-			mVentas.eliminarCliente(cliCedula);
-			listaClientes = mVentas.findAllClientes();
+			mInventario.eliminarCliente(cliCedula);
+			listaClientes = mInventario.findAllClientes();
 			JSFUtil.crearMensajeINFO("Cliente eliminado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -149,10 +153,10 @@ public class BeanVenVendedor implements Serializable {
 	// Agregar
 	public void actionListenerInsertarProformaCab() {
 		try {
-			mVentas.insertarProformasCab(beanSegLogin.getLoginDTO(), nuevaProformaCab);
+			mInventario.insertarProformasCab(beanSegLogin.getLoginDTO(), nuevaProformaCab, clienteSeleccionado);
 			JSFUtil.crearMensajeINFO("Proforma agregada con éxito");
-			listaProformasCab = mVentas.findAllProformasCab();
-			nuevaProformaCab = mVentas.inicializarProformasCab();
+			listaProformasCab = mInventario.findAllProformasCab();
+			nuevaProformaCab = mInventario.inicializarProformasCab();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -161,7 +165,8 @@ public class BeanVenVendedor implements Serializable {
 
 	// Cargar pagina
 	public String actionCargarAgregarProformasCab() {
-		nuevaProformaCab = mVentas.inicializarProformasCab();
+		nuevaProformaCab = mInventario.inicializarProformasCab();
+		listaClientes = mInventario.findAllClientes();
 		return "proformas_nuevo";
 
 	}
@@ -170,8 +175,8 @@ public class BeanVenVendedor implements Serializable {
 	// Actualizar
 	public void actionListenerActualizarEdicionProformasCab() {
 		try {
-			mVentas.actualizarProformasCab(beanSegLogin.getLoginDTO(), edicionProformaCab);
-			listaProformasCab = mVentas.findAllProformasCab();
+			mInventario.actualizarProformasCab(beanSegLogin.getLoginDTO(), edicionProformaCab);
+			listaProformasCab = mInventario.findAllProformasCab();
 			JSFUtil.crearMensajeINFO("Proforma actualizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -189,8 +194,8 @@ public class BeanVenVendedor implements Serializable {
 
 	public void actionListenerEliminarProformasCab(int proformasCabId) {
 		try {
-			mVentas.eliminarProformasCab(proformasCabId);
-			listaProformasCab = mVentas.findAllProformasCab();
+			mInventario.eliminarProformasCab(proformasCabId);
+			listaProformasCab = mInventario.findAllProformasCab();
 			JSFUtil.crearMensajeINFO("Proforma eliminada.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -201,17 +206,16 @@ public class BeanVenVendedor implements Serializable {
 //----------------------------- PROFORMAS-DETALLE---------------------------------------------------------------------
 	// Cargar pagina de ingreso de Proformas Detalle
 
-	public String actionCargarProformasDet(ProformasCab proformaCab) {
-		listaProductos = mVentas.findAllProductos();
-		proformaCabSeleccionada = proformaCab;
-		listaProformasDet = mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
-		nuevaProformaDet = mVentas.inicializarProformasDet(proformaCabSeleccionada);
-		return "detallesProforma?faces-redirect=true";
+public String actionCargarProformasDet(int proformaCab) {
+		
+		ordenProformaSeleccionada=proformaCab;
+		listaProformasDet = mInventario.findDetalleByProforma(ordenProformaSeleccionada);
+		return "detalles?faces-redirect=true";
 	}
 
 	// Actualizar lista del boton Regresar
 	public String cargarPaginaProformas() {
-		listaProformasCab = mVentas.findAllProformasCab();
+		listaProformasCab = mInventario.findAllProformasCab();
 		return "proformas";
 	}
 
@@ -220,10 +224,10 @@ public class BeanVenVendedor implements Serializable {
 
 	public void actionListenerInsertarProformaDet() {
 		try {
-			mVentas.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet, productoSeleccionado);
+			mInventario.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet, productoSeleccionado);
 			JSFUtil.crearMensajeINFO("Detalle agregado agregada con éxito");
-			nuevaProformaDet = mVentas.inicializarProformasDet(proformaCabSeleccionada);
-			listaProformasDet = mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
+			nuevaProformaDet = mInventario.inicializarProformasDet(proformaCabSeleccionada);
+			listaProformasDet = mInventario.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -234,9 +238,9 @@ public class BeanVenVendedor implements Serializable {
 
 	//Cargamos pagina de nueva orden
 	public String actionCargarOrdenes() {
-		listaProformasCab = mVentas.findAllProformasCab();
-		listaUsuarios = mVentas.findAllUsuarios();
-		nuevaOrden = mVentas.inicializarOrdenTrabajo();
+		listaProformasCab = mInventario.findAllProformasCab();
+		listaUsuarios = mInventario.findAllUsuarios();
+		nuevaOrden = mInventario.inicializarOrdenTrabajo();
 		
 		return "ordenes_nuevo";
 	}
@@ -246,121 +250,45 @@ public class BeanVenVendedor implements Serializable {
 		try {
 			System.out.print(usuarioSeleccionado);
 			System.out.print(proformaSeleccionada);
-			mVentas.insertarOrdenTrabajo(beanSegLogin.getLoginDTO(), nuevaOrden, proformaSeleccionada, usuarioSeleccionado);
+			mInventario.insertarOrdenTrabajo(beanSegLogin.getLoginDTO(), nuevaOrden, proformaSeleccionada, usuarioSeleccionado);
 			JSFUtil.crearMensajeINFO("Orden agregada con éxito");
-			listaOrdenes= mVentas.findAllOrdenesTrabajo();
-			nuevaOrden = mVentas.inicializarOrdenTrabajo();
+			listaOrdenes= mInventario.findAllOrdenesTrabajo();
+			nuevaOrden = mInventario.inicializarOrdenTrabajo();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
-	
-	public void actionListenerEliminarOrden(int ordenId) {
+	//Actualizar Avance
+	public void actionListenerActualizarAvance(OrdenTrabajo orden) {
 		try {
-			mVentas.eliminarOrden(ordenId);
-			listaOrdenes = mVentas.findAllOrdenesTrabajo();
-			JSFUtil.crearMensajeINFO("Proforma eliminada.");
+			mInventario.actualizarAvance(orden);
+			JSFUtil.crearMensajeINFO("Avance actualizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
+	
 
-	// ----------------------------FACTURAS-CABECERA-----------------------------------------------------------
-		// ----------------Inserccion
-		// Agregar
-		public void actionListenerInsertarInsertarCab() {
-			try {
-				mVentas.insertarFacturasCab(beanSegLogin.getLoginDTO(), nuevaProformaCab, clienteSeleccionado);
-				JSFUtil.crearMensajeINFO("Proforma agregada con éxito");
-				listaProformasCab = mVentas.findAllProformasCab();
-				nuevaProformaCab = mVentas.inicializarProformasCab();
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-		// Cargar pagina
-		public String actionCargarAgregarFacturasCab() {
-			nuevaProformaCab = mVentas.inicializarFacturasCab();
-			listaClientes = mVentas.findAllClientes();
-			return "facturas_nuevo";
-
-		}
-
-		// -----------------Edicion
-		// Actualizar
-		public void actionListenerActualizarEdicionFacturasCab() {
-			try {
-				mVentas.actualizarFacturasCab(beanSegLogin.getLoginDTO(), edicionProformaCab);
-				listaProformasCab = mVentas.findAllProformasCab();
-				JSFUtil.crearMensajeINFO("Proforma actualizado.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-		// Cargar pagina de Editar
-		public String actionSeleccionarEdicionFacturasCab(ProformasCab proformasCab) {
-			edicionProformaCab = proformasCab;
-			return "facturas_edicion";
-		}
-
-		// ---------------- Borracion
-
-		public void actionListenerEliminarFacturasCab(int proformasCabId) {
-			try {
-				mVentas.eliminarFacturasCab(proformasCabId);
-				listaProformasCab = mVentas.findAllProformasCab();
-				JSFUtil.crearMensajeINFO("Proforma eliminada.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-	//----------------------------- FACTURAS-DETALLE---------------------------------------------------------------------
-		// Cargar pagina de ingreso de Proformas Detalle
-
-		public String actionCargarFacturasDet(ProformasCab proformaCab) {
-			listaProductos = mVentas.findAllProductos();
-			proformaCabSeleccionada = proformaCab;
-			listaProformasDet = mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
-			nuevaProformaDet = mVentas.inicializarProformasDet(proformaCabSeleccionada);
-			return "detallesFactura?faces-redirect=true";
-		}
-
-		// Actualizar lista del boton Regresar
-		public String cargarPaginaFacturas() {
-			listaProformasCab = mVentas.findAllProformasCab();
-			return "proformas";
-		}
-
-		// ----------------Inserccion
-		// Agregar
-
-		public void actionListenerInsertarFacturaDet() {
-			try {
-				mVentas.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet, productoSeleccionado);
-				JSFUtil.crearMensajeINFO("Detalle agregado agregada con éxito");
-				nuevaProformaDet = mVentas.inicializarProformasDet(proformaCabSeleccionada);
-				listaProformasDet = mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
+	// Clientes
+	
 	
 	
 	
 	
 	public Cliente getNuevaCliente() {
 		return nuevaCliente;
+	}
+
+	public int getOrdenProformaSeleccionada() {
+		return ordenProformaSeleccionada;
+	}
+
+	public void setOrdenProformaSeleccionada(int ordenProformaSeleccionada) {
+		this.ordenProformaSeleccionada = ordenProformaSeleccionada;
 	}
 
 	public List<SegUsuario> getListaUsuarios() {

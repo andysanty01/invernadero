@@ -21,7 +21,13 @@ public class OrdenTrabajo implements Serializable {
 	@Column(name="orden_id", unique=true, nullable=false)
 	private Integer ordenId;
 
-	@Column(name="orden_estado", nullable=false, length=20)
+	@Column(name="orden_avance", nullable=false)
+	private Integer ordenAvance;
+
+	@Column(name="orden_despacho")
+	private Boolean ordenDespacho;
+
+	@Column(name="orden_estado", length=20)
 	private String ordenEstado;
 
 	@Column(name="orden_estadopago", nullable=false, length=10)
@@ -47,6 +53,11 @@ public class OrdenTrabajo implements Serializable {
 	@JoinColumn(name="pro_cab_id")
 	private ProformasCab proformasCab;
 
+	//bi-directional many-to-one association to SegUsuario
+	@ManyToOne
+	@JoinColumn(name="id_seg_usuario")
+	private SegUsuario segUsuario;
+
 	public OrdenTrabajo() {
 	}
 
@@ -56,6 +67,22 @@ public class OrdenTrabajo implements Serializable {
 
 	public void setOrdenId(Integer ordenId) {
 		this.ordenId = ordenId;
+	}
+
+	public Integer getOrdenAvance() {
+		return this.ordenAvance;
+	}
+
+	public void setOrdenAvance(Integer ordenAvance) {
+		this.ordenAvance = ordenAvance;
+	}
+
+	public Boolean getOrdenDespacho() {
+		return this.ordenDespacho;
+	}
+
+	public void setOrdenDespacho(Boolean ordenDespacho) {
+		this.ordenDespacho = ordenDespacho;
 	}
 
 	public String getOrdenEstado() {
@@ -126,6 +153,14 @@ public class OrdenTrabajo implements Serializable {
 
 	public void setProformasCab(ProformasCab proformasCab) {
 		this.proformasCab = proformasCab;
+	}
+
+	public SegUsuario getSegUsuario() {
+		return this.segUsuario;
+	}
+
+	public void setSegUsuario(SegUsuario segUsuario) {
+		this.segUsuario = segUsuario;
 	}
 
 }

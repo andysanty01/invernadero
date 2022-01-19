@@ -12,8 +12,8 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Ordenes de Trabajo" icon="pi pi-briefcase" action="ordenes" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
@@ -26,24 +26,38 @@
 	</h:form>
 
 	<div>
+		
 		<p:staticMessage severity="info"
-			summary="ORDENES DE TRABAJO - BODEGUERO"></p:staticMessage>
-			
-		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
-				var="p">
+			summary="LISTA DE DETALLES DE PROFORMA #{beanConConstructor.ordenProformaSeleccionada } - CONSTRUCTOR"></p:staticMessage>
+
+		<h:form id="formDetalles">
+			<p:dataTable value="#{beanConConstructor.listaProformasDet}"
+				var="pd">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proveId}" />
+					<h:outputText value="#{pd.proDetId}" />
 				</p:column>
 
-				<p:column headerText="ORDEN">
-					<h:outputText value="#{p.proveRuc}" />
+				<p:column headerText="PRODUCTO">
+					<h:outputText value="#{pd.producto.producId}" />
+				</p:column>
+				
+				<p:column headerText="NOMBRE">
+					<h:outputText value="#{pd.producto.producNombre}" />
+				</p:column>
+				
+				<p:column headerText="DESCRIPCION">
+					<h:outputText value="#{pd.producto.producDescripcion}" />
+				</p:column>
+				
+				<p:column headerText="DETALLES TECNICOS">
+					<h:outputText value="#{pd.producto.producFichatecnica}" />
 				</p:column>
 
-				<p:column headerText="FECHA">
-					<h:outputText value="#{p.proveDireccion}" />
+				<p:column headerText="CANTIDAD">
+					<h:outputText value="#{pd.proDetCantidad}" />
 				</p:column>
+
 			</p:dataTable>
 		</h:form>
 	</div>

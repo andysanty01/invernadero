@@ -40,9 +40,9 @@ public class Cliente implements Serializable {
 	@Column(name="cli_telefono", nullable=false, length=10)
 	private String cliTelefono;
 
-	//bi-directional many-to-one association to ProformasCab
+	//bi-directional many-to-one association to FacturaCab
 	@OneToMany(mappedBy="cliente")
-	private List<ProformasCab> proformasCabs;
+	private List<FacturaCab> facturaCabs;
 
 	public Cliente() {
 	}
@@ -111,26 +111,26 @@ public class Cliente implements Serializable {
 		this.cliTelefono = cliTelefono;
 	}
 
-	public List<ProformasCab> getProformasCabs() {
-		return this.proformasCabs;
+	public List<FacturaCab> getFacturaCabs() {
+		return this.facturaCabs;
 	}
 
-	public void setProformasCabs(List<ProformasCab> proformasCabs) {
-		this.proformasCabs = proformasCabs;
+	public void setFacturaCabs(List<FacturaCab> facturaCabs) {
+		this.facturaCabs = facturaCabs;
 	}
 
-	public ProformasCab addProformasCab(ProformasCab proformasCab) {
-		getProformasCabs().add(proformasCab);
-		proformasCab.setCliente(this);
+	public FacturaCab addFacturaCab(FacturaCab facturaCab) {
+		getFacturaCabs().add(facturaCab);
+		facturaCab.setCliente(this);
 
-		return proformasCab;
+		return facturaCab;
 	}
 
-	public ProformasCab removeProformasCab(ProformasCab proformasCab) {
-		getProformasCabs().remove(proformasCab);
-		proformasCab.setCliente(null);
+	public FacturaCab removeFacturaCab(FacturaCab facturaCab) {
+		getFacturaCabs().remove(facturaCab);
+		facturaCab.setCliente(null);
 
-		return proformasCab;
+		return facturaCab;
 	}
 
 }
