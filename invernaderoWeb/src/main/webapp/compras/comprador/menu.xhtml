@@ -26,10 +26,13 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
-			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
-			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase"
-				action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+			<p:menuitem value="Proveedores" icon="pi pi-briefcase"
+				action="proveedores?faces-redirect=true" />
+			<p:menuitem value="Productos" icon="pi pi-briefcase"
+				action="productos?faces-redirect=true" />
+				
 			<f:facet name="options">
 
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -42,55 +45,142 @@
 		</p:menubar>
 	</h:form>
 
-	<div>
-		<p:staticMessage severity="info"
-			summary="LISTA DE PROVEEDORES - ADMINISTRADOR"></p:staticMessage>
-			
-		<h:form id="FormProveedores">
-			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
-				var="p">
 
-				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proveId}" />
-				</p:column>
 
-				<p:column headerText="RUC">
-					<h:outputText value="#{p.proveRuc}" />
-				</p:column>
 
-				<p:column headerText="NOMBRE">
-					<h:outputText value="#{p.proveNombre}" />
-				</p:column>
 
-				<p:column headerText="NOMBRE COMERCIAL">
-					<h:outputText value="#{p.proveNomcomercial}" />
-				</p:column>
 
-				<p:column headerText="DIRECCION">
-					<h:outputText value="#{p.proveDireccion}" />
-				</p:column>
+	<div class="card">
+		<p:tabView>
+			<p:tab title="COMPRAS">
+				<p class="p-m-0">
 
-				<p:column headerText="TELEFONO">
-					<h:outputText value="#{p.proveTelefono}" />
-				</p:column>
+					<p:panel header="NUEVA COMPRA" style="width:1200px"
+						toggleable="true" collapsed="false">
+						<h:form>
 
-				<p:column headerText="CIUDAD">
-					<h:outputText value="#{p.ciudad.ciuNombre}" />
-				</p:column>
+							<!-- INGRESO DE COMPRAS - CABECERA -->
+							<h:outputLabel value="Datos Principales"
+								style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+							<br />
+							<p:panelGrid columns="6" columnClasses="ui-state-hover"
+								style="width:80%; height:150%;" border="0">
 
-				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}"
-						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}"
-						styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton
-						title="Eliminar #{p.proveNomcomercial} de la lista de proveedores"
-						value="Eliminar" icon="pi pi-pencil"
-						actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}"
-						styleClass="rounded-button ui-button-danger" />
-				</p:column>
-			</p:dataTable>
-		</h:form>
+								<h:outputText value="Proveedor" />
+								<p:selectOneMenu
+									value="#{beanCompComprador.proveedorSeleccionado}"
+									panelStyle="width:150px" effect="fade" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItems value="#{beanCompComprador.listaProveedores}"
+										var="c" itemLabel="#{c.proveNomcomercial}"
+										itemValue="#{c.proveId}" />
+									<p:column style="width:20%">
+										<f:facet name="header">
+											<h:outputText value="ID" />
+										</f:facet>
+										<h:outputText value="#{c.proveId}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="PROVEEDOR" />
+										</f:facet>
+
+										<h:outputText value="#{c.proveNomcomercial}" />
+									</p:column>
+									<f:facet name="footer">
+										<h:outputText
+											value="#{beanCompComprador.listaProveedores.size()} Proveedores"
+											style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+									</f:facet>
+								</p:selectOneMenu>
+
+
+								<h:outputText value="Fecha:" />
+								<p:calendar
+									value="#{beanCompComprador.nuevaComprasCab.comCabFecha}" />
+
+								<h:outputText value="Subtotal:" />
+								<p:spinner
+									value="#{beanCompComprador.nuevaComprasCab.comCabSubtotal}"
+									min="0" max="100" stepFactor="0.01" />
+
+								<h:outputText value="Iva:" />
+								<p:selectBooleanButton onLabel="Yes" offLabel="No"
+									onIcon="pi pi-check" offIcon="pi pi-times" style="width:6rem"
+									value="#{beanCompComprador.nuevaComprasCab.comCabIva}" />
+
+								<h:outputText value="Total:" />
+								<p:spinner
+									value="#{beanCompComprador.nuevaComprasCab.comCabTotal}"
+									min="0" max="100" stepFactor="0.01" />
+
+								<p:commandButton value="Guardar" icon="pi pi-disk"
+									update="@form"
+									actionListener="#{beanCompComprador.actionListenerInsertarComprasCab()}" />
+
+							</p:panelGrid>
+						</h:form>
+					</p:panel>
+
+
+
+					<p:panel header="LISTA DE COMPRAS" style="width:1450px"
+						collapsed="false">
+						<h:form id="FormCompras">
+							<p:dataTable value="#{beanCompComprador.listaComprasCab}" var="p">
+
+								<p:column headerText="ID" style="width:40px">
+									<h:outputText value="#{p.comCabId}" />
+								</p:column>
+
+								<p:column headerText="PROVEEDOR">
+									<h:outputText value="#{p.proveedor.proveNomcomercial}" />
+								</p:column>
+
+								<p:column headerText="FECHA">
+									<h:outputText value="#{p.comCabFecha}" />
+								</p:column>
+
+								<p:column headerText="SUBTOTAL">
+									<h:outputText value="#{p.comCabSubtotal}" />
+								</p:column>
+
+								<p:column headerText="IVA">
+									<h:outputText value="#{p.comCabIva}" />
+								</p:column>
+
+								<p:column headerText="TOTAL">
+									<h:outputText value="#{p.comCabTotal}" />
+								</p:column>
+
+								<p:column headerText="OPCIONES">
+									<p:commandButton
+										title="Hacer cambios en la compra #{p.comCabId}"
+										value="Editar" icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerActualizarComprasCab(p)}"
+										styleClass="rounded-button ui-button-secondary" />
+									<p:commandButton
+										title="Eliminar #{p.comCabId} de la lista de compras"
+										value="Eliminar" icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerEliminarComprasCab(p.comCabId)}"
+										styleClass="rounded-button ui-button-danger" />
+									<p:commandButton
+										title="Listar productos de compra #{p.comCabId}"
+										value="Productos" icon="pi pi-pencil"
+										action="#{beanCompComprador.actionCargarComprasDet(p)}"
+										styleClass="rounded-button ui-button-success" />
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</p:panel>
+				</p>
+			</p:tab>
+		</p:tabView>
 	</div>
+
+
+
+
 </body>
 </html>

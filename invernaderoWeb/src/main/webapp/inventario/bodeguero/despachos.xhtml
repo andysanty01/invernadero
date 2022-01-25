@@ -8,12 +8,26 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Inventario</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+</h:head>
 <body>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
-
+			<p:menuitem value="Productos" icon="pi pi-briefcase" action="productos" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
@@ -25,12 +39,14 @@
 		</p:menubar>
 	</h:form>
 
+	
+	
 	<div>
 		<p:staticMessage severity="info"
-			summary="LISTA DE ORDENES - CONSTRUCTOR"></p:staticMessage>
+			summary="LISTA DE ORDENES DESPACHADAS - BODEGUERO"></p:staticMessage>
 
 		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanInvBodeguero.listaOrdenes}" var="p">
+			<p:dataTable value="#{beanInvBodeguero.listaOrdenesDespacho}" var="p">
 
 				<p:column headerText="ID" style="width:40px">
 					<h:outputText value="#{p.ordenId}" />
@@ -44,29 +60,55 @@
 					<h:outputText value="#{p.ordenObservaciones}" />
 				</p:column>
 
+				<p:column headerText="CLIENTE">
+					<h:outputText value="#{p.cliente.cliCorreo}" />
+				</p:column>
+
+				<p:column headerText="ASIGNADO">
+					<h:outputText value="#{p.segUsuario.correo}" />
+				</p:column>
+
+				<p:column headerText="ESTADO DE PAGO">
+					<h:outputText value="#{p.ordenEstadopago}" />
+				</p:column>
+
+				<p:column headerText="FECHA INICIO">
+					<h:outputText value="#{p.ordenFechaini}" />
+				</p:column>
+
+				<p:column headerText="FECHA FIN">
+					<h:outputText value="#{p.ordenFechafin}" />
+				</p:column>
+
 				<p:column headerText="ESTADO DE ORDEN">
 					<h:outputText value="#{p.ordenEstado}" />
 				</p:column>
 
-				<p:column headerText="DESPACHADO">
-					<h:outputText value="#{p.ordenDespacho}" />
+				<p:column headerText="AVANCE">
+					<h:outputText value="#{p.ordenAvance}%" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton
-						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
-						value="Despachar" icon="pi pi-pencil"
-						action="#{beanInvBodeguero.actionListenerActualizarAvance(p)}"
-						styleClass="ui-button-raised ui-button-success" />
-					<p:commandButton
-						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
-						value="Detalles de Proforma" icon="pi pi-pencil"
-						action="#{beanInvBodeguero.actionCargarProformasDet(p.proformasCab.proCabId)}"
-						styleClass="ui-button-raised ui-button-secondary" />
-				</p:column>
 
+					<p:commandButton title="Ver productos de #{p.proformasCab.proCabId} de la lista"
+						value="Ver Productos" icon="pi pi-pencil"
+						action="#{beanInvBodeguero.actionCargarProformasDet(p.proformasCab)}"
+						styleClass="rounded-button ui-button-success" />
+
+				</p:column>
 			</p:dataTable>
 		</h:form>
 	</div>
+	
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+		responsive="true" width="350">
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no ui-button-flat" />
+		<p:commandButton value="Sí" type="button"
+			styleClass="ui-confirmdialog-yes" />
+	</p:confirmDialog>
+	
+	
+	
 </body>
 </html>

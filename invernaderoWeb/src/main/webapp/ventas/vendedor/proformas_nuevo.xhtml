@@ -30,25 +30,49 @@
 	</h:form>
 	<p:panel>
 		<h:form>
+			<p:staticMessage severity="info"
+				summary="DATOS PROFORMA #{beanVenVendedor.proformaCabSeleccionada.proCabId}"></p:staticMessage>
 			<p:panelGrid columns="2">
-			
-					<h:outputText value="Cliente:" />
-				<p:selectOneMenu
-					value="#{beanVenVendedor.clienteSeleccionado}">
+
+				<h:outputText value="Cliente:" />
+				<p:selectOneMenu value="#{beanVenVendedor.clienteSeleccionado}">
 					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
-					<f:selectItems value="#{beanVenVendedor.listaClientes}"
-						var="c" itemLabel="#{c.cliCedula} #{c.cliApellido} #{c.cliNombre}" itemValue="#{c.cliCedula}">
+					<f:selectItems value="#{beanVenVendedor.listaClientes}" var="c"
+						itemLabel="#{c.cliCedula} #{c.cliApellido} #{c.cliNombre}"
+						itemValue="#{c.cliCedula}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 
 				<h:outputText value="Extensión:" />
-				<p:inputText value="#{beanVenVendedor.nuevaProformaCab.proCabExtension}"
-					required="true" requiredMessage="Ingrese los nombres" />
-					
-				<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
-					actionListener="#{beanVenVendedor.actionListenerInsertarProformaCab()}"></p:commandButton>
+				<p:inputText
+					value="#{beanVenVendedor.nuevaProformaCab.proCabExtension}"
+					required="true" requiredMessage="Ingrese los nombres" placeholder="Ingrese terreno en hectáreas" /> 
+
 			</p:panelGrid>
+
+			<p:staticMessage severity="info"
+				summary="AGREGAR PRODUCTO A PROFORMA #{beanVenVendedor.proformaCabSeleccionada.proCabId}"></p:staticMessage>
+			<h:form>
+				<p:panelGrid columns="2">
+
+					<h:outputText value="Producto:" />
+					<p:selectOneMenu value="#{beanVenVendedor.productoSeleccionado}">
+						<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+						<f:selectItems value="#{beanVenVendedor.listaProductos}" var="p"
+							itemLabel="#{p.producNombre}" itemValue="#{p.producId}">
+						</f:selectItems>
+					</p:selectOneMenu>
+
+					<h:outputText value="Cantidad:" />
+					<p:inputText
+						value="#{beanVenVendedor.nuevaProformaDet.proDetCantidad}" />
+
+					<p:commandButton value="Insertar" icon="pi pi-save" update="@form"
+						action="#{beanVenVendedor.actionListenerInsertarProformaDet()}"></p:commandButton>
+				</p:panelGrid>
+			</h:form>
+
 		</h:form>
 	</p:panel>
 </body>

@@ -28,10 +28,10 @@
 	<div>
 		
 		<p:staticMessage severity="info"
-			summary="LISTA DE DETALLES DE PROFORMA #{beanConConstructor.ordenProformaSeleccionada } - CONSTRUCTOR"></p:staticMessage>
+			summary="LISTA DE DETALLES DE PROFORMA #{beanInvBodeguero.proformaCabSeleccionada.proCabId}"></p:staticMessage>
 
 		<h:form id="formDetalles">
-			<p:dataTable value="#{beanConConstructor.listaProformasDet}"
+			<p:dataTable value="#{beanInvBodeguero.listaProformasDet}"
 				var="pd">
 
 				<p:column headerText="ID" style="width:40px">

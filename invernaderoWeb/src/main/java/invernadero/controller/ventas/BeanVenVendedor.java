@@ -279,7 +279,7 @@ public class BeanVenVendedor implements Serializable {
 	//Actualizar orden de trabajo
 		public void actionListenerActualizarEdicionOrden() {
 			try {
-				mVentas.actualizarOrden(beanSegLogin.getLoginDTO(), edicionOrden);
+				mVentas.actualizarOrden(beanSegLogin.getLoginDTO(), edicionOrden, proformaSeleccionada,usuarioSeleccionado, clienteSeleccionado );
 				listaOrdenes = mVentas.findAllOrdenesTrabajo();
 				JSFUtil.crearMensajeINFO("Orden actualizado.");
 			} catch (Exception e) {
@@ -291,6 +291,9 @@ public class BeanVenVendedor implements Serializable {
 	// Cargar pagina de Editar Cliente
 	public String actionSeleccionarEdicionOrden(OrdenTrabajo orden) {
 		edicionOrden = orden;
+		proformaSeleccionada=0;
+		usuarioSeleccionado=0;
+		clienteSeleccionado="";
 		listaProformasCab=mVentas.findAllProformasCab();
 		listaUsuarios=mVentas.findAllUsuarios();
 		listaClientes=mVentas.findAllClientes();
@@ -299,24 +302,35 @@ public class BeanVenVendedor implements Serializable {
 	}
 	
 	
-	public void actionListenerEliminarOrden(int ordenId) {
+	public String actionListenerEliminarOrden(int ordenId) {
+		String pagina="";
 		try {
 			mVentas.eliminarOrden(ordenId);
-			listaOrdenes = mVentas.findAllOrdenesTrabajo();
+			pagina=cargarPaginaOrdenes();
 			JSFUtil.crearMensajeINFO("Orden eliminada.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR("Mensaje prueba");
 			e.printStackTrace();
 		}
+		return pagina;
 	}
 	
+	
+	
+	public String cargarPaginaOrdenes() {
+		listaOrdenes = mVentas.findAllOrdenesTrabajo();
+		return "menu";
+	}
 
 	// ----------------------------FACTURAS-CABECERA-----------------------------------------------------------
 		// ----------------Inserccion
-		// Agregar
-		public void actionListenerInsertarFacturaCab() {
+		// 
+	
+	
+		public void actionListenerGenerarFactura(OrdenTrabajo orden) {
 			try {
-				mVentas.insertarFacturasCab(beanSegLogin.getLoginDTO(), nuevaFacturaCab, clienteSeleccionado);
+				
+				mVentas.insertarFacturasCab(beanSegLogin.getLoginDTO(), orden.getProformasCab().getProCabId(), orden.getCliente().getCliCedula());
 				JSFUtil.crearMensajeINFO("Factura agregada con éxito");
 				listaFacturasCab = mVentas.findAllFacturasCab();
 				nuevaFacturaCab = mVentas.inicializarFacturasCab();

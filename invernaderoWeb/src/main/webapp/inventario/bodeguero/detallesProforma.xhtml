@@ -12,7 +12,7 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="facturas" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -27,45 +27,37 @@
 
 	<div>
 		
-		
 		<p:staticMessage severity="info"
-			summary="DETALLES DE FACTURA #{beanVenVendedor.facturaCabSeleccionada.facCabId} - ADMINISTRADOR"></p:staticMessage>
+			summary="LISTA DE DETALLES DE PROFORMA #{beanInvBodeguero.proformaCabSeleccionada.proCabId}"></p:staticMessage>
 
 		<h:form id="formDetalles">
-			<p:dataTable value="#{beanVenVendedor.listaFacturasDet}"
+			<p:dataTable value="#{beanInvBodeguero.listaProformasDet}"
 				var="pd">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{pd.facDetId}" />
+					<h:outputText value="#{pd.proDetId}" />
 				</p:column>
 
 				<p:column headerText="PRODUCTO">
 					<h:outputText value="#{pd.producto.producId}" />
 				</p:column>
+				
+				<p:column headerText="NOMBRE">
+					<h:outputText value="#{pd.producto.producNombre}" />
+				</p:column>
+				
+				<p:column headerText="DESCRIPCION">
+					<h:outputText value="#{pd.producto.producDescripcion}" />
+				</p:column>
+				
+				<p:column headerText="DETALLES TECNICOS">
+					<h:outputText value="#{pd.producto.producFichatecnica}" />
+				</p:column>
 
 				<p:column headerText="CANTIDAD">
-					<h:outputText value="#{pd.facDetCantidad}" />
+					<h:outputText value="#{pd.proDetCantidad}" />
 				</p:column>
 
-				<p:column headerText="PRECIO UNITARIO">
-					<h:outputText value="#{pd.facDetPrecio}" />
-				</p:column>
-
-				<p:column headerText="SUBTOTAL">
-					<h:outputText value="#{pd.facDetPreciototal}" />
-				</p:column>
-
-				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de proforma #{p.proCabId}"
-						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerActualizarEdicionProformasCab(p)}"
-						styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton
-						title="Eliminar proforma #{p.proCabId} de la lista de proformas"
-						value="Eliminar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerEliminarProformasCab(p)}"
-						styleClass="rounded-button ui-button-danger" />
-				</p:column>
 			</p:dataTable>
 		</h:form>
 	</div>

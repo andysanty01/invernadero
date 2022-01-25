@@ -1,6 +1,7 @@
 package invernadero.controller.inventario;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +27,7 @@ import invernadero.model.ventas.managers.ManagerVentas;
 
 @Named
 @SessionScoped
-public class BeanInvBodeguero implements Serializable {
+public class BeanInvAdministrador implements Serializable {
 
 	@EJB
 	private ManagerSeguridades mSeg;
@@ -37,7 +38,6 @@ public class BeanInvBodeguero implements Serializable {
 	private List<ProformasDet> listaProformasDet;
 	private List<Producto> listaProductos;
 	private List<OrdenTrabajo> listaOrdenes;
-	private List<OrdenTrabajo> listaOrdenesDespacho;
 	private List<SegUsuario> listaUsuarios;
 	private List<FacturaCab> listaFacturasCab;
 	private List<FacturaDet> listaFacturasDet;
@@ -62,23 +62,31 @@ public class BeanInvBodeguero implements Serializable {
 	private OrdenTrabajo nuevaOrden;
 	private OrdenTrabajo edicionOrden;
 	private int usuarioSeleccionado;
-	
+
 	// Variables FacturasCab
-		private String clienteSeleccionado;
-		private FacturaCab nuevaFacturaCab;
-		private FacturaCab edicionFacturaCab;
+	private String clienteSeleccionado;
+	private FacturaCab nuevaFacturaCab;
+	private FacturaCab edicionFacturaCab;
 
-		// Variables FacturasDet
-		private FacturaCab facturaCabSeleccionada;
-		private int productoSeleccionadoF;
+	// Variables FacturasDet
+	private FacturaCab facturaCabSeleccionada;
+	private int productoSeleccionadoF;
 
-		private FacturaDet nuevaFacturaDet;
-		private FacturaDet edicionFacturaDet;
+	private FacturaDet nuevaFacturaDet;
+	private FacturaDet edicionFacturaDet;
 
+	//Variables de cuentas
+	private BigDecimal totalVentas;
+	private BigDecimal totalCompras;
+	private BigDecimal totalDiferencia;
+	
+	private int nroVentas;
+	private int nroCompras;
+	
 	@Inject
 	private BeanSegLogin beanSegLogin;
 
-	public BeanInvBodeguero() {
+	public BeanInvAdministrador() {
 	}
 
 	@PostConstruct
@@ -86,11 +94,17 @@ public class BeanInvBodeguero implements Serializable {
 		listaClientes = mInventario.findAllClientes();
 
 		listaProformasCab = mInventario.findAllProformasCab();
-		
+
 		listaOrdenes = mInventario.findAllOrdenesTrabajo();
 		
-		listaOrdenesDespacho = mInventario.findAllOrdenesTrabajoDespacho();
+		totalVentas=mInventario.calcularVentas();
+		nroVentas=mInventario.nroVentas();
 		
+		totalCompras=mInventario.calcularCompras();
+		nroCompras=mInventario.nroCompras();
+		
+		totalDiferencia= mInventario.calcularDiferencia();
+
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------
@@ -108,94 +122,138 @@ public class BeanInvBodeguero implements Serializable {
 	}
 
 	/// --------------------------ORDENES DE TRABAJO
-	
-	//Actualizar orden de trabajo
-		public void actionListenerActualizarDespacho( int ordenId) {
-			try {
-				mInventario.actualizarDespacho(beanSegLogin.getLoginDTO(), ordenId);
-				listaOrdenes = mInventario.findAllOrdenesTrabajo();
-				JSFUtil.crearMensajeINFO("Orden actualizado.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
+
+	// Actualizar orden de trabajo
+	public void actionListenerActualizarDespacho(int ordenId) {
+		try {
+			mInventario.actualizarDespacho(beanSegLogin.getLoginDTO(), ordenId);
+			listaOrdenes = mInventario.findAllOrdenesTrabajo();
+			JSFUtil.crearMensajeINFO("Orden actualizado.");
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
 		}
+	}
 
-	
-
-
-	
-	public List<OrdenTrabajo> getListaOrdenesDespacho() {
-			return listaOrdenesDespacho;
+//------------------------CUENTAS ALEGRES----------------
+	public void actionListenerCalcularDiferencia() {
+		try {
+			totalVentas=mInventario.calcularVentas();
+			
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	
+	
+	public int getNroVentas() {
+		return nroVentas;
+	}
 
-		public void setListaOrdenesDespacho(List<OrdenTrabajo> listaOrdenesDespacho) {
-			this.listaOrdenesDespacho = listaOrdenesDespacho;
-		}
+	public void setNroVentas(int nroVentas) {
+		this.nroVentas = nroVentas;
+	}
+
+	public int getNroCompras() {
+		return nroCompras;
+	}
+
+	public void setNroCompras(int nroCompras) {
+		this.nroCompras = nroCompras;
+	}
 
 	public List<FacturaCab> getListaFacturasCab() {
-			return listaFacturasCab;
-		}
+		return listaFacturasCab;
+	}
+	
 
-		public void setListaFacturasCab(List<FacturaCab> listaFacturasCab) {
-			this.listaFacturasCab = listaFacturasCab;
-		}
+	public BigDecimal getTotalVentas() {
+		return totalVentas;
+	}
 
-		public List<FacturaDet> getListaFacturasDet() {
-			return listaFacturasDet;
-		}
+	public void setTotalVentas(BigDecimal totalVentas) {
+		this.totalVentas = totalVentas;
+	}
 
-		public void setListaFacturasDet(List<FacturaDet> listaFacturasDet) {
-			this.listaFacturasDet = listaFacturasDet;
-		}
+	public BigDecimal getTotalCompras() {
+		return totalCompras;
+	}
 
-		public FacturaCab getNuevaFacturaCab() {
-			return nuevaFacturaCab;
-		}
+	public void setTotalCompras(BigDecimal totalCompras) {
+		this.totalCompras = totalCompras;
+	}
 
-		public void setNuevaFacturaCab(FacturaCab nuevaFacturaCab) {
-			this.nuevaFacturaCab = nuevaFacturaCab;
-		}
+	public BigDecimal getTotalDiferencia() {
+		return totalDiferencia;
+	}
 
-		public FacturaCab getEdicionFacturaCab() {
-			return edicionFacturaCab;
-		}
+	public void setTotalDiferencia(BigDecimal totalDiferencia) {
+		this.totalDiferencia = totalDiferencia;
+	}
 
-		public void setEdicionFacturaCab(FacturaCab edicionFacturaCab) {
-			this.edicionFacturaCab = edicionFacturaCab;
-		}
+	public void setListaFacturasCab(List<FacturaCab> listaFacturasCab) {
+		this.listaFacturasCab = listaFacturasCab;
+	}
 
-		public FacturaCab getFacturaCabSeleccionada() {
-			return facturaCabSeleccionada;
-		}
+	public List<FacturaDet> getListaFacturasDet() {
+		return listaFacturasDet;
+	}
 
-		public void setFacturaCabSeleccionada(FacturaCab facturaCabSeleccionada) {
-			this.facturaCabSeleccionada = facturaCabSeleccionada;
-		}
+	public void setListaFacturasDet(List<FacturaDet> listaFacturasDet) {
+		this.listaFacturasDet = listaFacturasDet;
+	}
 
-		public int getProductoSeleccionadoF() {
-			return productoSeleccionadoF;
-		}
+	public FacturaCab getNuevaFacturaCab() {
+		return nuevaFacturaCab;
+	}
 
-		public void setProductoSeleccionadoF(int productoSeleccionadoF) {
-			this.productoSeleccionadoF = productoSeleccionadoF;
-		}
+	public void setNuevaFacturaCab(FacturaCab nuevaFacturaCab) {
+		this.nuevaFacturaCab = nuevaFacturaCab;
+	}
 
-		public FacturaDet getNuevaFacturaDet() {
-			return nuevaFacturaDet;
-		}
+	public FacturaCab getEdicionFacturaCab() {
+		return edicionFacturaCab;
+	}
 
-		public void setNuevaFacturaDet(FacturaDet nuevaFacturaDet) {
-			this.nuevaFacturaDet = nuevaFacturaDet;
-		}
+	public void setEdicionFacturaCab(FacturaCab edicionFacturaCab) {
+		this.edicionFacturaCab = edicionFacturaCab;
+	}
 
-		public FacturaDet getEdicionFacturaDet() {
-			return edicionFacturaDet;
-		}
+	public FacturaCab getFacturaCabSeleccionada() {
+		return facturaCabSeleccionada;
+	}
 
-		public void setEdicionFacturaDet(FacturaDet edicionFacturaDet) {
-			this.edicionFacturaDet = edicionFacturaDet;
-		}
+	public void setFacturaCabSeleccionada(FacturaCab facturaCabSeleccionada) {
+		this.facturaCabSeleccionada = facturaCabSeleccionada;
+	}
+
+	public int getProductoSeleccionadoF() {
+		return productoSeleccionadoF;
+	}
+
+	public void setProductoSeleccionadoF(int productoSeleccionadoF) {
+		this.productoSeleccionadoF = productoSeleccionadoF;
+	}
+
+	public FacturaDet getNuevaFacturaDet() {
+		return nuevaFacturaDet;
+	}
+
+	public void setNuevaFacturaDet(FacturaDet nuevaFacturaDet) {
+		this.nuevaFacturaDet = nuevaFacturaDet;
+	}
+
+	public FacturaDet getEdicionFacturaDet() {
+		return edicionFacturaDet;
+	}
+
+	public void setEdicionFacturaDet(FacturaDet edicionFacturaDet) {
+		this.edicionFacturaDet = edicionFacturaDet;
+	}
 
 	public Cliente getNuevaCliente() {
 		return nuevaCliente;
@@ -350,8 +408,5 @@ public class BeanInvBodeguero implements Serializable {
 	public void setEdicionOrden(OrdenTrabajo edicionOrden) {
 		this.edicionOrden = edicionOrden;
 	}
-	
-	
-	
 
 }

@@ -71,137 +71,17 @@ public class BeanConConstructor implements Serializable {
 	@PostConstruct
 	public void inicializar() {
 		listaClientes = mConstruccion.findAllClientes();
-		nuevaCliente = mConstruccion.inicializarCliente();
 
 		listaProformasCab = mConstruccion.findAllProformasCab();
-		nuevaProformaCab = mConstruccion.inicializarProformasCab();
 		
 		listaOrdenes = mConstruccion.findOrdenesByUsuario(beanSegLogin.getIdSegUsuario());
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------
 
-	// ----------------Inserccion
-	// Agregar Cliente
-	public void actionListenerInsertarCliente() {
-		try {
-			mConstruccion.insertarCliente(beanSegLogin.getLoginDTO(), nuevaCliente);
-			;
-			JSFUtil.crearMensajeINFO("Cliente agregada con éxito");
-			listaClientes = mConstruccion.findAllClientes();
-			nuevaCliente = mConstruccion.inicializarCliente();
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	// Cargar pagina de Agregar Clientes
-	public String actionCargarAgregarClientes() {
-		nuevaCliente = mConstruccion.inicializarCliente();
-		return "clientes_nuevo";
-
-	}
-
-	// -----------------Edicion
-	// Actualizar Cliente
-	public void actionListenerActualizarEdicionCliente() {
-		try {
-			mConstruccion.actualizarCliente(beanSegLogin.getLoginDTO(), edicionCliente);
-			listaClientes = mConstruccion.findAllClientes();
-			JSFUtil.crearMensajeINFO("Cliente actualizado.");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	// Cargar pagina de Editar Cliente
-	public String actionSeleccionarEdicionCliente(Cliente cliente) {
-		edicionCliente = cliente;
-		return "clientes_edicion";
-	}
-
-	// Activar/Desactivar Cliente
-	public void actionListenerActivarDesactivarCliente(String cliCedula) {
-		try {
-			mConstruccion.activarDesactivarCliente(cliCedula);
-			listaClientes = mConstruccion.findAllClientes();
-			JSFUtil.crearMensajeINFO("Cliente activado/desactivado");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	// ---------------- Borracion
-
-	public void actionListenerEliminarCliente(String cliCedula) {
-		try {
-			mConstruccion.eliminarCliente(cliCedula);
-			listaClientes = mConstruccion.findAllClientes();
-			JSFUtil.crearMensajeINFO("Cliente eliminado.");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
+	
 
 	// ----------------------------PROFORMAS-CABECERA-----------------------------------------------------------
-	// ----------------Inserccion
-	// Agregar
-	public void actionListenerInsertarProformaCab() {
-		try {
-			mConstruccion.insertarProformasCab(beanSegLogin.getLoginDTO(), nuevaProformaCab, clienteSeleccionado);
-			JSFUtil.crearMensajeINFO("Proforma agregada con éxito");
-			listaProformasCab = mConstruccion.findAllProformasCab();
-			nuevaProformaCab = mConstruccion.inicializarProformasCab();
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	// Cargar pagina
-	public String actionCargarAgregarProformasCab() {
-		nuevaProformaCab = mConstruccion.inicializarProformasCab();
-		listaClientes = mConstruccion.findAllClientes();
-		return "proformas_nuevo";
-
-	}
-
-	// -----------------Edicion
-	// Actualizar
-	public void actionListenerActualizarEdicionProformasCab() {
-		try {
-			mConstruccion.actualizarProformasCab(beanSegLogin.getLoginDTO(), edicionProformaCab);
-			listaProformasCab = mConstruccion.findAllProformasCab();
-			JSFUtil.crearMensajeINFO("Proforma actualizado.");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	// Cargar pagina de Editar
-	public String actionSeleccionarEdicionProformasCab(ProformasCab proformasCab) {
-		edicionProformaCab = proformasCab;
-		return "proformasCab_edicion";
-	}
-
-	// ---------------- Borracion
-
-	public void actionListenerEliminarProformasCab(int proformasCabId) {
-		try {
-			mConstruccion.eliminarProformasCab(proformasCabId);
-			listaProformasCab = mConstruccion.findAllProformasCab();
-			JSFUtil.crearMensajeINFO("Proforma eliminada.");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
 //----------------------------- PROFORMAS-DETALLE---------------------------------------------------------------------
 	// Cargar pagina de ingreso de Proformas Detalle
 
@@ -221,48 +101,11 @@ public class BeanConConstructor implements Serializable {
 	// ----------------Inserccion
 	// Agregar
 
-	public void actionListenerInsertarProformaDet() {
-		try {
-			mConstruccion.insertarProformasDet(beanSegLogin.getLoginDTO(), nuevaProformaDet, productoSeleccionado);
-			JSFUtil.crearMensajeINFO("Detalle agregado agregada con éxito");
-			nuevaProformaDet = mConstruccion.inicializarProformasDet(proformaCabSeleccionada);
-			listaProformasDet = mConstruccion.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	/// --------------------------ORDENES DE TRABAJO
-
-	//Cargamos pagina de nueva orden
-	public String actionCargarOrdenes() {
-		listaProformasCab = mConstruccion.findAllProformasCab();
-		listaUsuarios = mConstruccion.findAllUsuarios();
-		nuevaOrden = mConstruccion.inicializarOrdenTrabajo();
-		
-		return "ordenes_nuevo";
-	}
-	
-	//Insertar orden
-	public void actionListenerInsertarOrdenes() {
-		try {
-			System.out.print(usuarioSeleccionado);
-			System.out.print(proformaSeleccionada);
-			mConstruccion.insertarOrdenTrabajo(beanSegLogin.getLoginDTO(), nuevaOrden, proformaSeleccionada, usuarioSeleccionado);
-			JSFUtil.crearMensajeINFO("Orden agregada con éxito");
-			listaOrdenes= mConstruccion.findAllOrdenesTrabajo();
-			nuevaOrden = mConstruccion.inicializarOrdenTrabajo();
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
 	
 	//Actualizar Avance
-	public void actionListenerActualizarAvance(OrdenTrabajo orden) {
+	public void actionListenerActualizarAvance(OrdenTrabajo edicionOrden) {
 		try {
-			mConstruccion.actualizarAvance(orden);
+			mConstruccion.actualizarAvance(edicionOrden);
 			JSFUtil.crearMensajeINFO("Avance actualizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());

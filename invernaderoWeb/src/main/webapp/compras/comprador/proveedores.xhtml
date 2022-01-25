@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head>
+
+
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Compras</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+
+
+
+</h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="menu?faces-redirect=true" />
+			<p:menuitem value="Ciudades" icon="pi pi-briefcase"
+				action="ciudades?faces-redirect=true" />
+			<f:facet name="options">
+
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+
+
+
+
+
+	<div class="card">
+		<p:tabView>
+			<p:tab title="PROVEEDORES">
+				<p class="p-m-0">
+
+
+
+					<p:panel header="NUEVO PROVEEDOR" style="width:1200px"
+						toggleable="true" collapsed="false">
+						<h:form>
+							<h:outputLabel value="Cabecera" style="font-weight:bold;"
+								styleClass="p-py-1 p-d-block" />
+
+							<br />
+
+							<p:panelGrid columns="6" columnClasses="ui-state-hover"
+								style="width:80%; height:150%;" border="0">
+
+								<h:outputText value="Ruc: " />
+								<p:inputText
+									value="#{beanCompComprador.nuevoProveedor.proveRuc}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+								<h:outputText value="Nombre: " />
+								<p:inputText
+									value="#{beanCompComprador.nuevoProveedor.proveNombre}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+								<h:outputText value="Nombre Comercial: " />
+								<p:inputText
+									value="#{beanCompComprador.nuevoProveedor.proveNomcomercial}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+								<h:outputText value="Dirección: " />
+								<p:inputText
+									value="#{beanCompComprador.nuevoProveedor.proveDireccion}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+								<h:outputText value="Teléfono: " />
+								<p:inputText
+									value="#{beanCompComprador.nuevoProveedor.proveTelefono}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+
+								<h:outputText value="Ciudad" />
+								<p:selectOneMenu
+									value="#{beanCompComprador.ciudadSeleccionado}"
+									panelStyle="width:150px" effect="fade" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItems value="#{beanCompComprador.listaCiudades}"
+										var="c" itemLabel="#{c.ciuNombre}" itemValue="#{c.ciuId}" />
+									<p:column style="width:20%">
+										<f:facet name="header">
+											<h:outputText value="ID" />
+										</f:facet>
+										<h:outputText value="#{c.ciuId}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="CIUDAD" />
+										</f:facet>
+
+										<h:outputText value="#{c.ciuNombre}" />
+									</p:column>
+									<f:facet name="footer">
+										<h:outputText
+											value="#{beanCompComprador.listaCiudades.size()} Ciudades"
+											style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+									</f:facet>
+								</p:selectOneMenu>
+
+								<p:commandButton value="Guardar" icon="pi pi-disk"
+									update="@form"
+									actionListener="#{beanCompComprador.actionListenerInsertarProveedor()}" />
+							</p:panelGrid>
+
+
+
+						</h:form>
+					</p:panel>
+
+
+
+					<p:panel header="LISTA DE PROVEEDORES" style="width:1450px"
+						collapsed="false">
+						<h:form id="FormProveedores">
+							<p:dataTable value="#{beanCompComprador.listaProveedores}"
+								var="p">
+
+								<p:column headerText="ID" style="width:40px">
+									<h:outputText value="#{p.proveId}" />
+								</p:column>
+
+								<p:column headerText="RUC">
+									<h:outputText value="#{p.proveRuc}" />
+								</p:column>
+
+								<p:column headerText="NOMBRE">
+									<h:outputText value="#{p.proveNombre}" />
+								</p:column>
+
+								<p:column headerText="NOMBRE COMERCIAL">
+									<h:outputText value="#{p.proveNomcomercial}" />
+								</p:column>
+
+								<p:column headerText="DIRECCION">
+									<h:outputText value="#{p.proveDireccion}" />
+								</p:column>
+
+								<p:column headerText="TELEFONO">
+									<h:outputText value="#{p.proveTelefono}" />
+								</p:column>
+
+								<p:column headerText="CIUDAD">
+									<h:outputText value="#{p.ciudad.ciuNombre}" />
+								</p:column>
+
+								<p:column headerText="OPCIONES">
+									<p:commandButton
+										title="Hacer cambios de #{p.proveNomcomercial}" value="Editar"
+										icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerActualizarProveedor(p)}"
+										styleClass="rounded-button ui-button-secondary" />
+									<p:commandButton
+										title="Eliminar #{p.proveNomcomercial} de la lista de proveedores"
+										value="Eliminar" icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerEliminarProveedor(p.proveId)}"
+										styleClass="rounded-button ui-button-danger" />
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</p:panel>
+					
+					
+					
+				</p>
+			</p:tab>
+		</p:tabView>
+	</div>
+
+
+
+
+</body>
+</html>

@@ -31,42 +31,58 @@
 	<p:panel>
 		<h:form>
 			<p:panelGrid columns="2">
-			
-					<h:outputText value="Proforma" />
-				<p:selectOneMenu
-					value="#{beanVenVendedor.proformaSeleccionada}">
+
+				<h:outputText value="Proforma" />
+				<p:selectOneMenu value="#{beanVenVendedor.proformaSeleccionada}">
 					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
-					<f:selectItems value="#{beanVenVendedor.listaProformasCab}"
-						var="c" itemLabel="#{c.proCabId}" itemValue="#{c.proCabId}">
+					<f:selectItems value="#{beanVenVendedor.listaProformasCab}" var="c"
+						itemLabel="#{c.proCabId}" itemValue="#{c.proCabId}">
 					</f:selectItems>
 				</p:selectOneMenu>
-				
-				
+
+
 				<h:outputText value="Asignado" />
-				<p:selectOneMenu
-					value="#{beanVenVendedor.usuarioSeleccionado}">
+				<p:selectOneMenu value="#{beanVenVendedor.usuarioSeleccionado}">
 					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
-					<f:selectItems value="#{beanVenVendedor.listaUsuarios}"
-						var="c" itemLabel="#{c.correo}" itemValue="#{c.idSegUsuario}">
+					<f:selectItems value="#{beanVenVendedor.listaUsuarios}" var="c"
+						itemLabel="#{c.correo}" itemValue="#{c.idSegUsuario}">
 					</f:selectItems>
 				</p:selectOneMenu>
-				
+
 
 				<h:outputText value="Observaciones:" />
-				<p:inputText value="#{beanVenVendedor.nuevaOrden.ordenObservaciones}"
+				<p:inputText
+					value="#{beanVenVendedor.nuevaOrden.ordenObservaciones}"
 					required="true" requiredMessage="Ingrese los nombres" />
-					
-					
+
+
 				<h:outputText value="Cliente" />
-				<p:selectOneMenu
-					value="#{beanVenVendedor.clienteSeleccionado}">
-					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
-					<f:selectItems value="#{beanVenVendedor.listaClientes}"
-						var="c" itemLabel="#{c.cliNombre} #{c.cliApellido}" itemValue="#{c.cliCedula}">
-					</f:selectItems>
+				<p:selectOneMenu value="#{beanVenVendedor.clienteSeleccionado}"
+					panelStyle="width:180px" effect="fade" filter="true"
+					filterMatchMode="startsWith">>
+					<f:selectItems value="#{beanVenVendedor.listaClientes}" var="c"
+						itemLabel="#{c.cliNombre} #{c.cliApellido}"
+						itemValue="#{c.cliCedula}" />
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="Cédula" />
+						</f:facet>
+						<h:outputText value="#{c.cliCedula}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+
+						<h:outputText value="#{c.cliNombre} #{c.cliApellido}" />
+					</p:column>
+					<f:facet name="footer">
+						<h:outputText value="#{beanVenVendedor.listaClientes.size()} Clientes"
+							style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+					</f:facet>
 				</p:selectOneMenu>
-				
-					
+
+
 				<h:outputText value="Estado de Pago: " />
 				<p:selectOneMenu
 					value="#{beanVenVendedor.nuevaOrden.ordenEstadopago}">
@@ -74,13 +90,13 @@
 					<f:selectItem itemLabel="50%" itemValue="50%" />
 					<f:selectItem itemLabel="PAGADO" itemValue="PAGADO" />
 				</p:selectOneMenu>
-				
+
 				<h:outputText value="Fecha fin:" />
 				<p:calendar value="#{beanVenVendedor.nuevaOrden.ordenFechafin}"
 					mindate="#{beanVenVendedor.nuevaOrden.ordenFechaini}" />
-				
-				
-					
+
+
+
 				<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
 					actionListener="#{beanVenVendedor.actionListenerInsertarOrdenes()}"></p:commandButton>
 			</p:panelGrid>
