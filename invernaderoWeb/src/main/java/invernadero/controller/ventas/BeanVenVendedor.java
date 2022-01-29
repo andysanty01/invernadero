@@ -92,6 +92,8 @@ public class BeanVenVendedor implements Serializable {
 		
 		listaFacturasCab = mVentas.findAllFacturasCab();
 		nuevaFacturaCab = mVentas.inicializarFacturasCab();
+		
+		listaUsuarios = mVentas.findAllUsuarios();
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------

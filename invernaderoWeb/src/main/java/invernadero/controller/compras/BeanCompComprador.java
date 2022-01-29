@@ -1,7 +1,8 @@
 package invernadero.controller.compras;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -52,15 +53,26 @@ public class BeanCompComprador implements Serializable {
 	private Producto edicionProducto;
 
 	// Variables ComprasCab
-	private ComprasCab nuevaComprasCab;
+
 	private ComprasCab edicionComprasCab;
-	private int proveedorSeleccionado;
-	private Date fechaMinima;
 
 	// Variables ComprasDet
 	private ComprasCab compraCabSeleccionada;
-	private ComprasDet nuevaComprasDet;
 	private int productoSeleccionado;
+
+	// ComprasDetalle
+	private ComprasDet nuevoDetalle;
+	private List<ComprasDet> listaDetalle;
+	private int productoIngreso;
+	private int cantidadIngreso;
+	private double precioIngreso;
+	private double totalDetalle;
+	// ComprasCabecera
+	private ComprasCab nuevaCompra;
+	private int proveedorIngreso;
+	private Date fechaMinima;
+	private boolean ivaIngreso;
+	private Date fechaIngreso;
 
 	private int idSegUsuarioSeleccionado;
 	@Inject
@@ -79,8 +91,6 @@ public class BeanCompComprador implements Serializable {
 		nuevaCiudad = mCompras.inicializarCiudad();
 		nuevoProveedor = mCompras.inicializarProveedor();
 		nuevoProducto = mCompras.inicializarProducto();
-		nuevaComprasCab = mCompras.inicializarComprasCab();
-
 	}
 
 	// -------------------------------------CIUDADES--------------------------------------
@@ -143,61 +153,14 @@ public class BeanCompComprador implements Serializable {
 		}
 	}
 
-	
-	
 	// -----------------------------------PRODUCTOS-------------------------------------------------
-		// Insertar
-		public void actionListenerInsertarProducto() {
-			try {
-				mCompras.insertarProducto(beanSegLogin.getLoginDTO(), nuevoProducto);
-				JSFUtil.crearMensajeINFO("Producto creado");
-				listaProductos = mCompras.findAllProductos();
-				nuevoProducto = mCompras.inicializarProducto();
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-		// Cargar pagina de Actualizar
-		public String actionSeleccionarEdicionProducto(Producto producto) {
-			edicionProducto = producto;
-			return "producto_edicion";
-		}
-
-		// Actualizar
-		public void actionListenerActualizarProducto() {
-			try {
-				mCompras.actualizarProducto(beanSegLogin.getLoginDTO(), edicionProducto);
-				listaProductos = mCompras.findAllProductos();
-				JSFUtil.crearMensajeINFO("Producto actualizado.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-
-		// Eliminar
-		public void actionListenerEliminarProducto(int idProducto) {
-			try {
-				mCompras.eliminarProducto(beanSegLogin.getLoginDTO(), idProducto);
-				listaProductos = mCompras.findAllProductos();
-				JSFUtil.crearMensajeINFO("Producto eliminado.");
-			} catch (Exception e) {
-				JSFUtil.crearMensajeERROR(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-	
-	
-	// --------------------------------COMPRAS-CABECERA----------------------------------------------------
 	// Insertar
-	public void actionListenerInsertarComprasCab() {
+	public void actionListenerInsertarProducto() {
 		try {
-			mCompras.insertarComprasCab(beanSegLogin.getLoginDTO(), nuevaComprasCab, proveedorSeleccionado);
-			JSFUtil.crearMensajeINFO("Compra agregada con éxito");
-			listaComprasCab = mCompras.findAllComprasCab();
-			nuevaComprasCab = mCompras.inicializarComprasCab();
+			mCompras.insertarProducto(beanSegLogin.getLoginDTO(), nuevoProducto);
+			JSFUtil.crearMensajeINFO("Producto creado");
+			listaProductos = mCompras.findAllProductos();
+			nuevoProducto = mCompras.inicializarProducto();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -205,17 +168,17 @@ public class BeanCompComprador implements Serializable {
 	}
 
 	// Cargar pagina de Actualizar
-	public String actionSeleccionarEdicionComprasCab(ComprasCab comprasCab) {
-		edicionComprasCab = comprasCab;
-		return "comprascab_edicion";
+	public String actionSeleccionarEdicionProducto(Producto producto) {
+		edicionProducto = producto;
+		return "producto_edicion";
 	}
 
 	// Actualizar
-	public void actionListenerActualizarComprasCab() {
+	public void actionListenerActualizarProducto() {
 		try {
-			mCompras.actualizarComprasCab(beanSegLogin.getLoginDTO(), edicionComprasCab);
-			listaComprasCab = mCompras.findAllComprasCab();
-			JSFUtil.crearMensajeINFO("Compra actualizado.");
+			mCompras.actualizarProducto(beanSegLogin.getLoginDTO(), edicionProducto);
+			listaProductos = mCompras.findAllProductos();
+			JSFUtil.crearMensajeINFO("Producto actualizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -223,52 +186,140 @@ public class BeanCompComprador implements Serializable {
 	}
 
 	// Eliminar
-	public void actionListenerEliminarComprasCab(int idComprasCab) {
+	public void actionListenerEliminarProducto(int idProducto) {
 		try {
-			mCompras.eliminarComprasCab(beanSegLogin.getLoginDTO(), idComprasCab);
+			mCompras.eliminarProducto(beanSegLogin.getLoginDTO(), idProducto);
+			listaProductos = mCompras.findAllProductos();
+			JSFUtil.crearMensajeINFO("Producto eliminado.");
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// ---------------------------COMPRAS MULTIPLE----------------------------
+
+	// Capturar detalles de compra
+	public void actionListenerAgregarDetalleCompra() throws Exception {
+
+		//double stockDisponible = mCompras.calcularStockInicial(productoIngreso);
+		//double resta = stockDisponible - cantidadIngreso;
+
+		//if (resta > 0) {
+			nuevaCompra = mCompras.crearDetalleCompra(nuevaCompra, productoIngreso, cantidadIngreso, precioIngreso);
+			totalDetalle = mCompras.ComCabSubtotal(nuevaCompra);
+			listaDetalle = nuevaCompra.getComprasDets();
+		//} else {
+			//JSFUtil.crearMensajeERROR("No existe suficientes productos");
+		//}
+	}
+
+	// Guardar compra
+	public void actionListenerGuardarCompra(){
+		try {
+			mCompras.registrarCompra(nuevaCompra, proveedorIngreso, fechaIngreso, totalDetalle, ivaIngreso);
+			JSFUtil.crearMensajeINFO("Se guardó la compra exitosamente");
+			nuevaCompra = new ComprasCab();
+			listaProductos = mCompras.findAllProductos();
 			listaComprasCab = mCompras.findAllComprasCab();
-			JSFUtil.crearMensajeINFO("Compra eliminado.");
 		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
-	}
-
-	// ------------------------------COMPRAS-DETALLE----------------------------------------------
-
-	// Cargar pagina detalles
-	public String actionCargarComprasDet(ComprasCab comprasCab) {
-		listaProductos = mCompras.findAllProductos();
-		compraCabSeleccionada = comprasCab;
-		listaComprasDet = mCompras.findDetalleByCompra(compraCabSeleccionada.getComCabId());
-		nuevaComprasDet = mCompras.inicializarComprasDet(compraCabSeleccionada);
-		return "detalleCompras?faces-redirect=true";
-	}
-
-	// Actualizar lista del boton Regresar
-	public String cargarPaginaCompras() {
-		listaComprasCab = mCompras.findAllComprasCab();
-		return "menu";
-	}
-
-	// Insertar
-	public void actionListenerInsertarComprasDet() {
-		try {
-			mCompras.insertarComprasDet(beanSegLogin.getLoginDTO(), nuevaComprasDet, productoSeleccionado);
-			JSFUtil.crearMensajeINFO("Detalle agregado con éxito");
-			nuevaComprasDet = mCompras.inicializarComprasDet(compraCabSeleccionada);
-			listaComprasDet = mCompras.findDetalleByCompra(compraCabSeleccionada.getComCabId());
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
+		totalDetalle = 0;
+		proveedorIngreso=0;
+		fechaIngreso = new Date();
+		totalDetalle=0;
+		
 	}
 
 	// ACCESORES
-
 	
+	
+	
+	
+
 	public List<Ciudad> getListaCiudades() {
 		return listaCiudades;
+	}
+
+	public ComprasDet getNuevoDetalle() {
+		return nuevoDetalle;
+	}
+
+	public void setNuevoDetalle(ComprasDet nuevoDetalle) {
+		this.nuevoDetalle = nuevoDetalle;
+	}
+
+	public List<ComprasDet> getListaDetalle() {
+		return listaDetalle;
+	}
+
+	public void setListaDetalle(List<ComprasDet> listaDetalle) {
+		this.listaDetalle = listaDetalle;
+	}
+
+	public int getProductoIngreso() {
+		return productoIngreso;
+	}
+
+	public void setProductoIngreso(int productoIngreso) {
+		this.productoIngreso = productoIngreso;
+	}
+
+	public ComprasCab getNuevaCompra() {
+		return nuevaCompra;
+	}
+
+	public void setNuevaCompra(ComprasCab nuevaCompra) {
+		this.nuevaCompra = nuevaCompra;
+	}
+
+	public int getProveedorIngreso() {
+		return proveedorIngreso;
+	}
+
+	public void setProveedorIngreso(int proveedorIngreso) {
+		this.proveedorIngreso = proveedorIngreso;
+	}
+
+	public boolean isIvaIngreso() {
+		return ivaIngreso;
+	}
+
+	public void setIvaIngreso(boolean ivaIngreso) {
+		this.ivaIngreso = ivaIngreso;
+	}
+
+	public Date getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public void setFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
+	public int getCantidadIngreso() {
+		return cantidadIngreso;
+	}
+
+	public void setCantidadIngreso(int cantidadIngreso) {
+		this.cantidadIngreso = cantidadIngreso;
+	}
+
+	public double getPrecioIngreso() {
+		return precioIngreso;
+	}
+
+	public void setPrecioIngreso(double precioIngreso) {
+		this.precioIngreso = precioIngreso;
+	}
+
+	public double getTotalDetalle() {
+		return totalDetalle;
+	}
+
+	public void setTotalDetalle(double totalDetalle) {
+		this.totalDetalle = totalDetalle;
 	}
 
 	public Ciudad getEdicionCiudad() {
@@ -309,14 +360,6 @@ public class BeanCompComprador implements Serializable {
 
 	public void setEdicionProducto(Producto edicionProducto) {
 		this.edicionProducto = edicionProducto;
-	}
-
-	public ComprasDet getNuevaComprasDet() {
-		return nuevaComprasDet;
-	}
-
-	public void setNuevaComprasDet(ComprasDet nuevaComprasDet) {
-		this.nuevaComprasDet = nuevaComprasDet;
 	}
 
 	public List<ComprasDet> getListaComprasDet() {
@@ -373,22 +416,6 @@ public class BeanCompComprador implements Serializable {
 
 	public void setListaComprasCab(List<ComprasCab> listaComprasCab) {
 		this.listaComprasCab = listaComprasCab;
-	}
-
-	public ComprasCab getNuevaComprasCab() {
-		return nuevaComprasCab;
-	}
-
-	public void setNuevaComprasCab(ComprasCab nuevaComprasCab) {
-		this.nuevaComprasCab = nuevaComprasCab;
-	}
-
-	public int getProveedorSeleccionado() {
-		return proveedorSeleccionado;
-	}
-
-	public void setProveedorSeleccionado(int proveedorSeleccionado) {
-		this.proveedorSeleccionado = proveedorSeleccionado;
 	}
 
 	public void setListaCiudades(List<Ciudad> listaCiudades) {

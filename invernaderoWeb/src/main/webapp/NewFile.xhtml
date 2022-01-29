@@ -1,0 +1,603 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Facturación</title>
+	<link href="../../public/css/dashboard.css" rel="stylesheet"
+		type="text/css" />
+	<link href="./style-ventas.css" rel="stylesheet" type="text/css" />
+
+	<f:metadata>
+		<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+			type="preRenderView"></f:event>
+	</f:metadata>
+</h:head>
+
+<body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+
+	<!-- Dashboard -->
+	<div class="wrapper">
+		<article class="manager">
+		<div id="open-perfil">
+			<img src="../../public/img/user.jpg"
+				style="background-color: red; border-radius: 50%;" />
+		</div>
+		</article>
+
+		<div class="sidebar">
+			<div class="regresar">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i> <span>
+					<h:form>
+						<h:commandLink value="back" action="menu" styleClass="linkBack" />
+					</h:form>
+				</span>
+			</div>
+
+			<div class="sidebar-menu">
+				<div class="profile">
+					<img src="../../public/img/user.jpg" />
+					<p>
+						<h:outputText value="#{beanSegLogin.loginDTO.correo}" />
+					</p>
+				</div>
+
+				<ul>
+					<div class="item">
+						<a id="identificador1" class="sub-btn"> <i
+							class="fa fa-floppy-o" aria-hidden="true"></i><span>Registrar
+								Factura</span></a>
+					</div>
+					<div class="item">
+						<a id="identificador2" class="sub-btn"> <i
+							class="fa fa-file-text-o"></i><span>Ver Facturas</span></a>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal Perfil -->
+	<div class="perfil-content">
+		<div id="perfil" title="close">
+			<div class="perfil-superior">
+				<div>Ferretería KYM'S</div>
+				<div id="close">
+					<h:form>
+						<h:commandLink value="Cerrar Sesión"
+							action="#{beanSegLogin.actionCerrarSesion()}"
+							styleClass="loginClose" />
+					</h:form>
+				</div>
+			</div>
+
+			<div class="perfil-inferior">
+				<img src="../../public/img/user.jpg"
+					style="background-color: white; border-radius: 50%;" />
+				<div class="datos">
+					<b><span><h:outputText
+								value="#{beanSegLogin.loginDTO.nombre} #{beanSegLogin.loginDTO.apellido}" /></span></b>
+					<span><h:outputText value="#{beanSegLogin.loginDTO.correo}" /></span>
+					<span>0985601235</span>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- CONTENEDORES -->
+	<div id="contenedorx" class="contenedor">
+		<span class="numFactura"><b>Num Factura :</b> <h:outputText
+				value="  #{beanKymsVentas.numFactura}" /></span>
+
+		<h:commandButton value="+" styleClass="addCliente" type="button"
+			onclick="PF('dlg2').show();" />
+		<p:dialog header="Nuevo Cliente" widgetVar="dlg2" modal="true"
+			height="430" width="450">
+			<h:form styleClass="formCliente">
+				<span>
+					<p>Identificación</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.identificacion}"
+						validatorMessage="Invalid format to to cédula"
+						requiredMessage="Ingrese la cédula" required="true">
+						<f:validateRegex pattern="^\d+$" />
+					</p:inputText>
+				</span>
+				<span>
+					<p>Nombre</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.nombre}"
+						requiredMessage="Ingrese el nombre"
+						validatorMessage="Invalid format to name" required="true">
+						<f:validateRegex pattern="[a-zA-Z ]{2,254}" />
+					</p:inputText>
+				</span>
+				<span>
+					<p>Apellido</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.apellido}"
+						requiredMessage="Ingrese el apellido"
+						validatorMessage="Invalid format to apellido" required="true">
+						<f:validateRegex pattern="[a-zA-Z ]{2,254}" />
+					</p:inputText>
+				</span>
+				<span>
+					<p>Ciudad</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.ciudad}"
+						requiredMessage="Ingrese la ciudad "
+						validatorMessage="Invalid format to ciudad" required="true">
+						<f:validateRegex pattern="[a-zA-Z ]{2,254}" />
+					</p:inputText>
+				</span>
+				<span>
+					<p>Dirección</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.direccion}" required="true"
+						requiredMessage="Ingrese la dirección" />
+				</span>
+				<span>
+					<p>Teléfono</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.telefono}"
+						requiredMessage="Ingrese el teléfono"
+						validatorMessage="Invalid format to telephone" required="true">
+						<f:validateRegex pattern="^\d+$" />
+					</p:inputText>
+				</span>
+				<span>
+					<p>Correo</p> <p:inputText
+						value="#{beanKymsVentas.nuevoCliente.correo}"
+						validatorMessage="Invalid format to email"
+						requiredMessage="Ingrese el correo" required="true">
+						<f:validateRegex
+							pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+					</p:inputText>
+				</span>
+
+				<h:commandButton value="Guardar"
+					actionListener="#{beanKymsVentas.actionListenerInsertarCliente()}"
+					styleClass="btnGuardarCliente" update="@form" />
+			</h:form>
+		</p:dialog>
+
+
+		<article class="headerFactura"> 
+		<h:form>
+			<section class="cliente">
+			<div class="buscarCliente">
+				<label class="labelF1">Cliente</label>
+				<p:autoComplete id="dd" dropdown="true"
+					value="#{beanKymsVentas.identificacionCliente}"
+					completeMethod="#{beanKymsVentas.completeTextCliente}"
+					scrollHeight="250" style="width:300px">
+					<f:ajax event="change" execute="dd" render="client"
+						listener="#{beanKymsVentas.obtenerInformacionCliente}" />
+				</p:autoComplete>
+			</div>
+
+			<h:outputLabel class="informacionCliente" id="client">
+				<article> <span> <b>Identifición:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.identificacion}" />
+				</span> <span> <b>Nombre:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.nombre} 
+										#{beanKymsVentas.informacionCliente.apellido}" />
+				</span> </article>
+
+				<article> <span> <b>Teléfono:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.telefono}" />
+				</span> <span> <b>Ciudad:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.ciudad}" />
+				</span> </article>
+
+				<article> <span> <b>Dirección:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.direccion}" />
+				</span> <span> <b>Correo:</b> <h:outputText
+						value=" #{beanKymsVentas.informacionCliente.correo}" /></span> </article>
+			</h:outputLabel> </section>
+
+			<section class="pagos"> <article>
+			<div>
+				<label class="labelF1" style="display: block;">Tipo de Pago</label>
+				<p:selectOneMenu value="#{beanKymsVentas.idPago}" required="true"
+					id="selectFecha" styleClass="select"
+					requiredMessage="Seleccione un pago...">
+					<f:selectItems value="#{beanKymsVentas.listaPagos}" var="p"
+						itemLabel="#{p.descripcion}" itemValue="#{p.idTipoPago}"></f:selectItems>
+					<f:ajax event="change" render="calendar" execute="selectFecha"
+						listener="#{beanKymsVentas.handleChange}" />
+				</p:selectOneMenu>
+			</div>
+
+			<div>
+				<label class="labelF1" style="display: block;">Fecha para
+					Pago</label>
+				<p:calendar required="true" value="#{beanKymsVentas.fechPago}"
+					disabled="#{beanKymsVentas.pagoSeleccionado}" id="calendar" />
+			</div>
+			</article> <article>
+			<div>
+				<label class="labelF1" style="display: block;">Método de
+					Pago</label>
+				<p:selectOneMenu value="#{beanKymsVentas.idMetodoPago}"
+					required="true" requiredMessage="Seleccione un pago..."
+					style="width:90%;">
+					<f:selectItems value="#{beanKymsVentas.listaMetodoPagos}" var="p"
+						itemLabel="#{p.descripcion}" itemValue="#{p.idMetodoPago}"></f:selectItems>
+				</p:selectOneMenu>
+			</div>
+			<div class="grupo">
+				<h:inputText value="#{beanKymsVentas.descuentoFactura}"
+					requiredMessage="Descuento a la factura"
+					validatorMessage="Invalid format Decimal" styleClass="input"
+					required="true">
+					<f:validateRegex pattern="^[0-9]+([.][0-9]+)?$" />
+				</h:inputText>
+				<p>%</p>
+				<span class="barra"></span> <label class="labelF1"
+					style="color: #000; font-size: 15px">Porcentaje de
+					descuento</label>
+			</div>
+			</article> 
+			<article> 
+			<h:commandButton value="Registrar Factura"
+				actionListener="#{beanKymsVentas.actionListenerRegistrarFactura()}"
+				update="@form,:formFactura,:totales,:tablaProductos,:form1, :facturasPoraDevolver"
+				styleClass="btnRegistrarFactura" /> </article> </section>
+		</h:form> <h:form id="totales" styleClass="totales">
+			<span><b>Subtotal :</b> <h:outputText
+					value=" #{beanKymsVentas.subtotalFactura}" /></span>
+			<span><b>Iva :</b> <h:outputText
+					value=" #{beanKymsVentas.IVAFactura}" /></span>
+			<span><b style="color: red;">TOTAL :</b> <h:outputText
+					value=" #{beanKymsVentas.totalFactura}" /></span>
+		</h:form> <section class="detalle">
+		<p>Seleccione los productos</p>
+		<h:form styleClass="FormularioDetalle" style="background-color:white">
+			<div class="form">
+				<div class="grupo">
+					<label class="labelF1">Seleccione un Producto</label>
+					<p:autoComplete id="ddProducto" dropdown="true"
+						value="#{beanKymsVentas.descripcionProducto}"
+						completeMethod="#{beanKymsVentas.completeTextProducto}"
+						scrollHeight="250" style="width:400px">
+						<f:ajax event="change" render="mostrarStock" execute="ddProducto"
+							listener="#{beanKymsVentas.MostrarStock}" />
+					</p:autoComplete>
+				</div>
+
+				<div class="grupo">
+					<span style="display: flex"> <label class="labelF1">Stock
+							actual : </label> <h:outputText id="mostrarStock"
+							style="margin-left:10%; color=#000"
+							value="#{beanKymsVentas.mostrarStock}" />
+					</span>
+				</div>
+
+				<div class="grupo">
+					<label class="labelF1">Cantidad</label>
+					<p:spinner value="#{beanKymsVentas.cantidad}" required="true"
+						requiredMessage="Ingrese la cantidad de de producto" min="1" />
+				</div>
+
+				<div class="btnAdicionarProducto">
+					<p:commandButton
+						actionListener="#{beanKymsVentas.actionListenerAdicionarProducto}"
+						value="Adicionar" update="@form,:totales,:tablaProductos">
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form> <h:form id="tablaProductos" styleClass="ListaDetalles">
+			<p:dataTable value="#{beanKymsVentas.factura.detalleVentas}"
+				var="det" rowIndexVar="row" emptyMessage="Agregue los productos">
+				<p:column headerText="PRODUCTO">
+					<h:outputText value="#{det.producto.descripcion}" />
+				</p:column>
+				<p:column headerText="CANTIDAD">
+					<h:outputText value="#{det.cantidad}" />
+				</p:column>
+				<p:column headerText="PRECIO">
+					<h:outputText value="#{det.producto.precio}" />
+				</p:column>
+				<p:column headerText="TOTAL">
+					<h:outputText value="#{det.precio}" />
+				</p:column>
+				<p:column headerText="OPCIONES">
+					<p:commandButton
+						actionListener="#{beanKymsVentas.actionListenerEliminarDetalle(row)}"
+						icon="pi pi-times" title="Eliminar" update="@form ,:totales"
+						id="btnEliminar" styleClass="ui-button-danger">
+						<p:confirm header="Confirmación"
+							message="¿Desea eliminar el producto?" icon="pi pi-info-circle" />
+					</p:commandButton>
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+						responsive="true" width="350">
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no ui-button-flat" />
+						<p:commandButton value="Sí" type="button"
+							styleClass="ui-confirmdialog-yes" />
+					</p:confirmDialog>
+				</p:column>
+			</p:dataTable>
+		</h:form> </section> </article>
+	</div>
+
+
+	<div id="contenedory" class="contenedor">
+		<article class="menuListaFacturas">
+		<ul>
+			<li id="lista1">Todas las facturas</li>
+			<li id="lista2">Facturas Pendiente</li>
+			<li id="lista3">Facturas por Fechas</li>
+			<li id="lista4">Facturas por Cliente</li>
+		</ul>
+		</article>
+
+		<div class="tablaListar" id="facturasTodas">
+			<h:form id="form1">
+				<p:dataTable value="#{beanKymsVentas.listaFacturas}" var="fac"
+					rowIndexVar="row" emptyMessage="No hay facturas que mostrar">
+					<p:column headerText="Nº DE FACTURA">
+						<h:outputText value="#{fac.numFactura}" />
+					</p:column>
+					<p:column headerText="FECHA">
+						<h:outputText value="#{fac.fecha}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{fac.cliente.nombre}" />
+					</p:column>
+					<p:column headerText="ESTADO">
+						<h:outputText value="#{fac.estadoVenta}" />
+					</p:column>
+					<p:column headerText="TOTAL">
+						<h:outputText value="#{fac.total}" />
+					</p:column>
+					<p:column headerText="OPCIONES" style="width:200px;">
+						<p:commandButton value="ANULAR" update="@form"
+							style="width:86px; font-size:14px; margin-right:10px;text-align:left;">
+							<f:ajax event="click" render="form1"
+								listener="#{beanKymsVentas.actionListenerAnularFactura(fac)}" />
+							<p:confirm header="Confirmación"
+								message="¿Desea eliminar el producto?" icon="pi pi-info-circle" />
+						</p:commandButton>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Sí" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<h:commandButton value="VER" update="@form"
+							action="#{beanKymsVentas.actionCargarFactura(fac)}"
+							styleClass="btnVerFactura" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+
+		<div class="tablaListar" id="facturasPorEstado">
+			<h:form styleClass="selectFacturaCliente">
+				<label class="labelF1" style="color: #2196F3">Seleccione un
+					estado</label>
+				<p:selectOneMenu id="selectFacturaPorEstado" required="true"
+					requiredMessage="Seleccione una fecha...">
+					<f:selectItem itemLabel="Seleccione la opción" itemValue="true" />
+					<f:selectItem itemLabel="Pendiente" itemValue="false" />
+					<f:ajax event="change" render="form2"
+						execute="selectFacturaPorEstado"
+						listener="#{beanKymsVentas.actionListarFacturasByEstado}" />
+				</p:selectOneMenu>
+			</h:form>
+
+			<h:form id="form2">
+				<p:dataTable value="#{beanKymsVentas.listaFacturasPorEstado}"
+					var="fac" rowIndexVar="row"
+					emptyMessage="No hay facturas que mostrar">
+					<p:column headerText="Nº DE FACTURA">
+						<h:outputText value="#{fac.numFactura}" />
+					</p:column>
+					<p:column headerText="FECHA">
+						<h:outputText value="#{fac.fecha}" />
+					</p:column>
+					<p:column headerText="FECHA CRÉDITO">
+						<h:outputText value="#{fac.fechaPago}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{fac.cliente.nombre}" />
+					</p:column>
+					<p:column headerText="ESTADO">
+						<h:outputText value="#{fac.estadoVenta}" />
+					</p:column>
+					<p:column headerText="DEUDA">
+						<h:outputText value="#{fac.deudaParcial}" />
+					</p:column>
+					<p:column headerText="OPCION">
+						<p:commandButton id="cmdPagarFactura" value="Cancelar"
+							actionListener="#{beanKymsVentas.actionCargarFacturaPagar(fac)}"
+							styleClass="ui-button-secondary" />
+						<p:overlayPanel for="cmdPagarFactura" dynamic="true"
+							styleClass="modalPagarFactura" showCloseIcon="true">
+							<p:panel header="Pagar Deuda" style="text-align:center;">
+								<h:outputText
+									value="Valor de deuda: #{beanKymsVentas.facturaPagar.deudaParcial}"
+									id="salida" />
+								<p:panelGrid columns="2">
+									<h:outputText value="Valor:" />
+									<p:inputText value="#{beanKymsVentas.valorPagarFactura}"
+										style="width:100%" />
+								</p:panelGrid>
+								<p:commandButton value="Guardar"
+									actionListener="#{beanKymsVentas.actionListenerPagarFactura()}"
+									update="@form, :form4" style="margin-top:15px;" />
+							</p:panel>
+						</p:overlayPanel>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+
+		<div class="tablaListar" id="facturasPorFechas">
+			<h:form styleClass="selectFacturaFechas" style="padding:20px;">
+				<label class="labelF1" style="color: #2196F3; margin: 20px 20px;">Fecha
+					Inicio</label>
+				<p:calendar required="true" value="#{beanKymsVentas.fechaInicio}" />
+				<label class="labelF1" style="color: #2196F3; margin: 20px 20px;">Fecha
+					Fin</label>
+				<p:calendar required="true" value="#{beanKymsVentas.fechaFin}" />
+				<p:commandButton value="Buscar" style="margin:0 30px;"
+					id="btnCalendar">
+					<f:ajax event="click" render="form3" execute="btnCalendar"
+						listener="#{beanKymsVentas.actionListarFacturasByFechas}" />
+				</p:commandButton>
+
+			</h:form>
+
+			<h:form id="form3">
+				<p:dataTable value="#{beanKymsVentas.listaFacturasPorFecha}"
+					var="fac" rowIndexVar="row"
+					emptyMessage="No hay facturas que mostrar">
+					<p:column headerText="Nº DE FACTURA">
+						<h:outputText value="#{fac.numFactura}" />
+					</p:column>
+					<p:column headerText="FECHA">
+						<h:outputText value="#{fac.fecha}" />
+					</p:column>
+					<p:column headerText="FECHA CRÉDITO">
+						<h:outputText value="#{fac.fechaPago}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{fac.cliente.nombre}" />
+					</p:column>
+					<p:column headerText="ESTADO">
+						<h:outputText value="#{fac.estadoVenta}" />
+					</p:column>
+					<p:column headerText="TOTAL">
+						<h:outputText value="#{fac.total}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+
+		<div class="tablaListar" id="facturasPorCliente">
+			<h:form styleClass="selectFacturaCliente">
+				<label class="labelF1" style="color: #2196F3">Seleccione un
+					Cliente</label>
+				<p:selectOneMenu value="#{beanKymsVentas.buscarCliente}"
+					id="selectFacturaCliente">
+					<f:selectItem itemLabel="Seleccione la opción" itemValue="true" />
+					<f:selectItems value="#{beanKymsVentas.listaClientes}" var="c"
+						itemLabel="#{c.nombre}" itemValue="#{c.idCliente}"></f:selectItems>
+					<f:ajax event="change" render="form4"
+						execute="selectFacturaCliente"
+						listener="#{beanKymsVentas.actionListarFacturasByCliente}" />
+				</p:selectOneMenu>
+
+			</h:form>
+
+			<h:form id="form4">
+				<p:dataTable value="#{beanKymsVentas.listaFacturasPorCliente}"
+					var="fac" rowIndexVar="row"
+					emptyMessage="No hay facturas que mostrar">
+					<p:column headerText="Nº DE FACTURA">
+						<h:outputText value="#{fac.numFactura}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{fac.cliente.nombre}" />
+					</p:column>
+					<p:column headerText="ESTADO">
+						<h:outputText value="#{fac.estadoVenta}" />
+					</p:column>
+					<p:column headerText="FECHA">
+						<h:outputText value="#{fac.fechaPago}" />
+					</p:column>
+					<p:column headerText="DEUDA">
+						<h:outputText value="#{fac.deudaParcial}" />
+					</p:column>
+					<p:column headerText="TOTAL">
+						<h:outputText value="#{fac.total}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+
+	</div>
+
+	<script>
+    let modalPerfil = document.getElementById("perfil");
+    window.onload=iniciar;
+
+    function iniciar(){
+    	document.getElementById("contenedorx").style.display = "block";
+        document.getElementById("contenedory").style.display = "none";
+
+	    //Lista de facturas
+	    document.getElementById("facturasTodas").style.display = "block";
+	    document.getElementById("facturasPorEstado").style.display = "none";
+	    document.getElementById("facturasPorFechas").style.display = "none";
+	    document.getElementById("facturasPorCliente").style.display = "none";
+        }
+    
+
+
+    //==========CONTENEDORES =================
+		document.getElementById("identificador1").addEventListener("click", function () {
+		    document.getElementById("contenedorx").style.display = "block";
+		    document.getElementById("contenedory").style.display = "none";
+		}, null);
+
+		document.getElementById("identificador2").addEventListener("click", function () {
+		    document.getElementById("contenedorx").style.display = "none";
+		    document.getElementById("contenedory").style.display = "block";
+		}, null);	
+
+					
+		/*========perfil=========*/
+		document.getElementById("open-perfil").addEventListener("click",function(){
+		    if(modalPerfil.title=="close"){
+		    	  modalPerfil.style.display="block";
+		          modalPerfil.title="open";
+		     }else{
+		        modalPerfil.style.display="none";
+		        modalPerfil.title="close";
+		     }
+		});
+
+		//================= LISTA DE FACTURAS ===============
+		document.getElementById("lista1").addEventListener("click", function (e) {
+			e.preventDefault();
+		    document.getElementById("facturasTodas").style.display = "block";
+		    document.getElementById("facturasPorEstado").style.display = "none";
+		    document.getElementById("facturasPorFechas").style.display = "none";
+		    document.getElementById("facturasPorCliente").style.display = "none";
+		});	
+		document.getElementById("lista2").addEventListener("click", function (e) {
+			e.preventDefault();
+		    document.getElementById("facturasTodas").style.display = "none";
+		    document.getElementById("facturasPorEstado").style.display = "block";
+		    document.getElementById("facturasPorFechas").style.display = "none";
+		    document.getElementById("facturasPorCliente").style.display = "none";
+		});	
+		document.getElementById("lista3").addEventListener("click", function (e) {
+			e.preventDefault();
+		    document.getElementById("facturasTodas").style.display = "none";
+		    document.getElementById("facturasPorEstado").style.display = "none";
+		    document.getElementById("facturasPorFechas").style.display = "block";
+		    document.getElementById("facturasPorCliente").style.display = "none";
+		});	
+		document.getElementById("lista4").addEventListener("click", function (e) {
+			e.preventDefault();
+		    document.getElementById("facturasTodas").style.display = "none";
+		    document.getElementById("facturasPorEstado").style.display = "none";
+		    document.getElementById("facturasPorFechas").style.display = "none";
+		    document.getElementById("facturasPorCliente").style.display = "block";
+		});	
+		
+	</script>
+
+</body>
+</html>
+
+
