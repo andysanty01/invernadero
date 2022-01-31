@@ -21,15 +21,58 @@
 .ui-dashboard-column {
 	width: 220px;
 }
+
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.wrapperListDetalles {
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.wrapperTab {
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.one {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.two {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+.three {
+	grid-column: 3;
+	grid-row: 1;
+}
 </style>
 </h:head>
 <body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
-			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
-			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase"
-				action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+			<p:menuitem value="Proveedores" icon="pi pi-briefcase"
+				action="proveedores?faces-redirect=true" />
+			<p:menuitem value="Productos" icon="pi pi-briefcase"
+				action="productos?faces-redirect=true" />
+
 			<f:facet name="options">
 
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -42,55 +85,228 @@
 		</p:menubar>
 	</h:form>
 
-	<div>
-		<p:staticMessage severity="info"
-			summary="LISTA DE PROVEEDORES - ADMINISTRADOR"></p:staticMessage>
-			
-		<h:form id="FormProveedores">
-			<p:dataTable value="#{beanCompAdministrador.listaProveedores}"
-				var="p">
 
-				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proveId}" />
-				</p:column>
+	<h:panelGroup>
+		<div>
+			<div>
 
-				<p:column headerText="RUC">
-					<h:outputText value="#{p.proveRuc}" />
-				</p:column>
 
-				<p:column headerText="NOMBRE">
-					<h:outputText value="#{p.proveNombre}" />
-				</p:column>
 
-				<p:column headerText="NOMBRE COMERCIAL">
-					<h:outputText value="#{p.proveNomcomercial}" />
-				</p:column>
+				<p:tabView>
+					<p:tab title="LISTA DE COMPRAS">
 
-				<p:column headerText="DIRECCION">
-					<h:outputText value="#{p.proveDireccion}" />
-				</p:column>
+						<p class="p-m-0">
+							<p:panel header="LISTA DE COMPRAS" style="width:1450px"
+								collapsed="false">
+								<h:form id="FormCompras">
+									<p:dataTable value="#{beanCompComprador.listaComprasCab}"
+										var="p">
 
-				<p:column headerText="TELEFONO">
-					<h:outputText value="#{p.proveTelefono}" />
-				</p:column>
+										<p:column headerText="ID" style="width:40px">
+											<h:outputText value="#{p.comCabId}" />
+										</p:column>
 
-				<p:column headerText="CIUDAD">
-					<h:outputText value="#{p.ciudad.ciuNombre}" />
-				</p:column>
+										<p:column headerText="PROVEEDOR">
+											<h:outputText value="#{p.proveedor.proveNomcomercial}" />
+										</p:column>
 
-				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}"
-						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}"
-						styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton
-						title="Eliminar #{p.proveNomcomercial} de la lista de proveedores"
-						value="Eliminar" icon="pi pi-pencil"
-						actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}"
-						styleClass="rounded-button ui-button-danger" />
-				</p:column>
-			</p:dataTable>
-		</h:form>
-	</div>
+										<p:column headerText="FECHA">
+											<h:outputText value="#{p.comCabFecha}" />
+										</p:column>
+
+										<p:column headerText="SUBTOTAL">
+											<h:outputText value="#{p.comCabSubtotal}" />
+										</p:column>
+
+										<p:column headerText="IVA">
+											<h:outputText value="#{p.comCabIva}" />
+										</p:column>
+
+										<p:column headerText="TOTAL">
+											<h:outputText value="#{p.comCabTotal}" />
+										</p:column>
+
+										<p:column headerText="OPCIONES">
+											<p:commandButton
+												title="Eliminar #{p.comCabId} de la lista de compras"
+												value="Eliminar" icon="pi pi-pencil"
+												actionListener="#{beanCompComprador.actionListenerEliminarComprasCab(p.comCabId)}"
+												styleClass="rounded-button ui-button-danger" />
+											<p:commandButton
+												title="Listar productos de compra #{p.comCabId}"
+												value="Productos" icon="pi pi-pencil"
+												action="#{beanCompComprador.actionCargarComprasDet(p)}"
+												styleClass="rounded-button ui-button-success" />
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:panel>
+						</p>
+					</p:tab>
+
+
+
+
+
+
+					<!-- INGRESO DE NUEVAS COMPRAS -->
+
+
+
+					<p:tab title="NUEVA COMPRA">
+						<!--  
+								<p:panel header="AGREGAR FACTURA" style="width:700px"
+									toggleable="true" collapsed="false">-->
+
+
+						<h:form>
+							<h:panelGrid columns="2">
+
+								<h:panelGrid columns="2">
+
+									<h:panelGrid columns="1">
+
+										<h3 align="center">DATOS PRINCIPALES</h3>
+										<p:panelGrid columns="2" columnClasses="ui-state-hover"
+											style="width:30px; height:20px; " border="0">
+
+											<h:outputText value="Proveedor"
+												styleClass="p-text-bold p-d-block" />
+											<p:selectOneMenu
+												value="#{beanCompComprador.proveedorIngreso}"
+												panelStyle="width:150px" effect="fade" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{beanCompComprador.listaProveedores}"
+													var="c" itemLabel="#{c.proveNomcomercial}"
+													itemValue="#{c.proveId}" />
+												<p:column style="width:20%">
+													<f:facet name="header">
+														<h:outputText value="ID" />
+													</f:facet>
+													<h:outputText value="#{c.proveId}" />
+												</p:column>
+
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="PROVEEDOR" />
+													</f:facet>
+
+													<h:outputText value="#{c.proveNomcomercial}" />
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{beanCompComprador.listaProveedores.size()} Proveedores"
+														style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+												</f:facet>
+											</p:selectOneMenu>
+
+
+											<h:outputText value="Fecha:" />
+											<p:calendar
+												value="#{beanCompComprador.fechaIngreso}"
+												style="width:30px; height:20px; " />
+
+											<h:outputText value="Iva:" />
+											<p:selectBooleanButton onLabel="Si" offLabel="No"
+												onIcon="pi pi-check" offIcon="pi pi-times"
+												style="width:6rem"
+												value="#{beanCompComprador.ivaIngreso}" />
+										</p:panelGrid>
+									</h:panelGrid>
+
+
+									<h:panelGrid columns="1" columnClasses="centered">
+										<h3 align="center">DETALLE</h3>
+										<p:panelGrid columns="2" columnClasses="ui-state-hover"
+											style="width:30px; height:20px; " border="0">
+
+											<h:outputText value="Producto" />
+
+											<p:selectOneMenu style="width:150px; height:40px;"
+												value="#{beanCompComprador.productoIngreso}"
+												panelStyle="width:150px" effect="fade" filter="true"
+												filterMatchMode="startsWith">
+												<f:selectItems value="#{beanCompComprador.listaProductos}"
+													var="pr" itemLabel="#{pr.producNombre}"
+													itemValue="#{pr.producId}" />
+												<p:column style="width:20%">
+													<f:facet name="header">
+														<h:outputText value="ID" />
+													</f:facet>
+													<h:outputText value="#{pr.producId}" />
+												</p:column>
+
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="PRODUCTO" />
+													</f:facet>
+
+													<h:outputText value="#{pr.producNombre}" />
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{beanCompComprador.listaProductos.size()} Producto(s)"
+														style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+												</f:facet>
+											</p:selectOneMenu>
+
+											<h:outputText value="Cantidad:" />
+											<p:spinner value="#{beanCompComprador.cantidadIngreso}"
+												min="0" />
+
+											<h:outputText value="Precio" />
+											<p:spinner value="#{beanCompComprador.precioIngreso}" min="0"
+												stepFactor="0.01" placeholder="0,00" />
+
+										</p:panelGrid>
+									</h:panelGrid>
+									<br />
+									<p:commandButton title="Agregar producto al detalle"
+										style="width:200px; height:50px;" value="Agregar Producto"
+										icon="pi pi-shopping-cart" update="@form"
+										actionListener="#{beanCompComprador.actionListenerAgregarDetalleCompra()}" />
+
+
+
+								</h:panelGrid>
+								
+								<p:panelGrid columns="1">
+
+									<p:dataTable value="#{beanCompComprador.listaDetalle}"
+										var="d"
+										style="width:700px; height:40px;">
+
+										<p:column headerText="PRODUCTO">
+											<h:outputText value="#{d.producto.producNombre}" />
+										</p:column>
+										<p:column headerText="CANTIDAD">
+											<h:outputText value="#{d.comDetCantidad}" />
+										</p:column>
+										<p:column headerText="PRECIO">
+											<h:outputText value="#{d.comDetPrecio}" />
+										</p:column>
+										<p:column headerText="SUBTOTAL">
+											<h:outputText value="#{d.comDetPreciototal}" />
+											<f:facet name="footer">
+												<h:outputText value="#{beanCompComprador.totalDetalle}" />
+											</f:facet>
+										</p:column>
+									</p:dataTable>
+								</p:panelGrid>
+								<br />
+								<p:commandButton title="Guardar compra" value="Guardar Compra"
+									style="width:200px; height:50px;" icon="pi pi-save"
+									update="@form" styleClass="ui-button-raised ui-button-success"
+									actionListener="#{beanCompComprador.actionListenerGuardarCompra()}" />
+
+							</h:panelGrid>
+						</h:form>
+
+
+					</p:tab>
+				</p:tabView>
+			</div>
+		</div>
+	</h:panelGroup>
 </body>
 </html>

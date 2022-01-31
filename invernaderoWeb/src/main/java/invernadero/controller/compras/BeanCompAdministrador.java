@@ -65,7 +65,7 @@ public class BeanCompAdministrador implements Serializable {
 	//Proveedores
 	public void actionListenerInsertarProveedor() {
 		try {
-			mCompras.insertarProveedor(nuevoProveedor, CiuIdSeleccionado);
+			mCompras.insertarProveedor(null, nuevoProveedor, CiuIdSeleccionado);
 			JSFUtil.crearMensajeINFO("Proveedor creado");
 			listaProveedores = mCompras.findAllProveedores();
 			nuevoProveedor = mCompras.inicializarProveedor();

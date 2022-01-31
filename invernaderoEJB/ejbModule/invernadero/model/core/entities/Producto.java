@@ -46,6 +46,10 @@ public class Producto implements Serializable {
 	@OneToMany(mappedBy="producto")
 	private List<ComprasDet> comprasDets;
 
+	//bi-directional many-to-one association to FacturaDet
+	@OneToMany(mappedBy="producto")
+	private List<FacturaDet> facturaDets;
+
 	//bi-directional many-to-one association to ProformasDet
 	@OneToMany(mappedBy="producto")
 	private List<ProformasDet> proformasDets;
@@ -137,6 +141,28 @@ public class Producto implements Serializable {
 		comprasDet.setProducto(null);
 
 		return comprasDet;
+	}
+
+	public List<FacturaDet> getFacturaDets() {
+		return this.facturaDets;
+	}
+
+	public void setFacturaDets(List<FacturaDet> facturaDets) {
+		this.facturaDets = facturaDets;
+	}
+
+	public FacturaDet addFacturaDet(FacturaDet facturaDet) {
+		getFacturaDets().add(facturaDet);
+		facturaDet.setProducto(this);
+
+		return facturaDet;
+	}
+
+	public FacturaDet removeFacturaDet(FacturaDet facturaDet) {
+		getFacturaDets().remove(facturaDet);
+		facturaDet.setProducto(null);
+
+		return facturaDet;
 	}
 
 	public List<ProformasDet> getProformasDets() {

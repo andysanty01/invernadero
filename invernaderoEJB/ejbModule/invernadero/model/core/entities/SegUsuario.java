@@ -42,6 +42,10 @@ public class SegUsuario implements Serializable {
 	@OneToMany(mappedBy="segUsuario")
 	private List<Despacho> despachos;
 
+	//bi-directional many-to-one association to OrdenTrabajo
+	@OneToMany(mappedBy="segUsuario")
+	private List<OrdenTrabajo> ordenTrabajos;
+
 	//bi-directional many-to-one association to SegAsignacion
 	@OneToMany(mappedBy="segUsuario")
 	private List<SegAsignacion> segAsignacions;
@@ -129,6 +133,28 @@ public class SegUsuario implements Serializable {
 		despacho.setSegUsuario(null);
 
 		return despacho;
+	}
+
+	public List<OrdenTrabajo> getOrdenTrabajos() {
+		return this.ordenTrabajos;
+	}
+
+	public void setOrdenTrabajos(List<OrdenTrabajo> ordenTrabajos) {
+		this.ordenTrabajos = ordenTrabajos;
+	}
+
+	public OrdenTrabajo addOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+		getOrdenTrabajos().add(ordenTrabajo);
+		ordenTrabajo.setSegUsuario(this);
+
+		return ordenTrabajo;
+	}
+
+	public OrdenTrabajo removeOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+		getOrdenTrabajos().remove(ordenTrabajo);
+		ordenTrabajo.setSegUsuario(null);
+
+		return ordenTrabajo;
 	}
 
 	public List<SegAsignacion> getSegAsignacions() {

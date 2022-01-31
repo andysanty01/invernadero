@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Compras</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+</h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+			<f:facet name="options">
+
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+
+
+
+
+
+	<div class="card">
+		<p:tabView>
+			<p:tab title="PRODUCTOS">
+				<p class="p-m-0">
+
+					<p:panel header="NUEVO DETALLE" style="width:1200px"
+						toggleable="true" collapsed="false">
+						<h:form>
+
+							<!-- INGRESO DE COMPRAS - DETALLE -->
+							<h:outputLabel value="Producto" style="font-weight:bold;"
+								styleClass="p-py-1 p-d-block" />
+							<br />
+
+							<p:panelGrid columns="6" columnClasses="ui-state-hover"
+								style="width:80%; height:150%;" border="0">
+
+
+								<h:outputText value="Producto" />
+								<p:selectOneMenu
+									value="#{beanCompComprador.productoSeleccionado}">
+									<f:selectItem itemLabel="Seleccione..."
+										noSelectionOption="true" />
+									<f:selectItems value="#{beanCompComprador.listaProductos}"
+										var="pr" itemLabel="#{pr.producNombre}" itemValue="#{pr.producId}">
+									</f:selectItems>
+								</p:selectOneMenu>
+								
+								
+
+								<h:outputText value="Cantidad:" />
+								<p:spinner
+									value="#{beanCompComprador.nuevaComprasDet.comDetCantidad}"
+									min="0" />
+
+								<h:outputText value="Precio" />
+								<p:spinner
+									value="#{beanCompComprador.nuevaComprasDet.comDetPrecio}"
+									min="0" max="100" stepFactor="0.01" placeholder="0,00"/>
+
+								<p:commandButton value="Guardar" icon="pi pi-disk"
+									update="@form"
+									actionListener="#{beanCompComprador.actionListenerInsertarComprasDet()}" />
+							</p:panelGrid>
+
+
+
+						</h:form>
+					</p:panel>
+
+
+
+					<p:panel header="PRODUCTOS DE LA COMPRA " style="width:1450px"
+						collapsed="false">
+						<h:form id="FormCompras">
+							<p:dataTable value="#{beanCompComprador.listaComprasDet}" var="p">
+
+								<p:column headerText="ID" style="width:40px">
+									<h:outputText value="#{p.comDetId}" />
+								</p:column>
+
+								<p:column headerText="PRODUCTO">
+									<h:outputText value="#{p.producto.producNombre}" />
+								</p:column>
+
+								<p:column headerText="CANTIDAD">
+									<h:outputText value="#{p.comDetCantidad}" />
+								</p:column>
+
+								<p:column headerText="PRECIO">
+									<h:outputText value="#{p.comDetPrecio}" />
+								</p:column>
+
+								<p:column headerText="TOTAL">
+									<h:outputText value="#{p.comDetPreciototal}" />
+								</p:column>
+
+								<p:column headerText="OPCIONES">
+									<p:commandButton
+										title="Hacer cambios del producto #{p.producto.producNombre}"
+										value="Editar" icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerActualizarComprasCab(p)}"
+										styleClass="rounded-button ui-button-secondary" />
+									<p:commandButton
+										title="Eliminar #{p.producto.producNombre} de la compra"
+										value="Eliminar" icon="pi pi-pencil"
+										actionListener="#{beanCompComprador.actionListenerEliminarComprasDet(p.producto.producId)}"
+										styleClass="rounded-button ui-button-danger" />
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</p:panel>
+				</p>
+			</p:tab>
+		</p:tabView>
+	</div>
+</body>
+</html>

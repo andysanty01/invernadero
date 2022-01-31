@@ -12,7 +12,7 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="proveedores?faces-redirect=true" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu?faces-redirect=true" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -28,38 +28,41 @@
 
 
 	<div>
-		<p:staticMessage severity="info" summary="NUEVA CIUDAD"></p:staticMessage>
-		<h:form>
-			<p:panelGrid columns="2">
-				<h:outputText value="Nombre de Ciudad: " />
-				<p:inputText value="#{beanCompComprador.nuevaCiudad.ciuNombre}"
-					required="true" requiredMessage="Debe poner un nombre" />
-				<p:commandButton value="Guardar" icon="pi pi-disk"
-					update="@form,:FormCiudades"
-					actionListener="#{beanCompComprador.actionListenerInsertarCiudad()}" />
-			</p:panelGrid>
-		</h:form>
-
-
-
+		
 		<p:staticMessage severity="info"
-			summary="LISTA DE CIUDADES - ADMINISTRADOR">
+			summary="LISTA DE PRODUCTOS">
 		</p:staticMessage>
-		<h:form id="FormCiudades" style="width:700px">
-			<p:dataTable value="#{beanCompComprador.listaCiudades}" var="c">
+		<h:form id="FormProductos" style="width:1500px">
+			<p:dataTable value="#{beanCompComprador.listaProductos}" var="c">
 
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{c.ciuId}" />
+					<h:outputText value="#{c.producId}" />
 				</p:column>
 
-				<p:column headerText="CIUDAD">
-					<h:outputText value="#{c.ciuNombre}" />
+				<p:column headerText="NOMBRE" style="width:100px">
+					<h:outputText value="#{c.producNombre}" />
+				</p:column>
+				
+				<p:column headerText="DESCRIPCION" style="width:250px">
+					<h:outputText value="#{c.producDescripcion}" />
+				</p:column>
+				
+				<p:column headerText="FICHA TECNICA" style="width:500px">
+					<h:outputText value="#{c.producFichatecnica}" />
+				</p:column>
+				
+				<p:column headerText="STOCK" style="width:100px">
+					<h:outputText value="#{c.producStock}" />
+				</p:column>
+				
+				<p:column headerText="PRECIO UNITARIO" style="width:80px">
+					<h:outputText value="#{c.producPreciou}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Actualizar" value="Actualizar"
+					<p:commandButton title="Actualizar producto #{c.producId}" value="Actualizar"
 						icon="pi pi-pencil"
-						actionListener="#{beanCompComprador.actionListenerActualizarCiudad(c)}" />
+						actionListener="#{beanCompComprador.actionListenerActualizarProducto(c)}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

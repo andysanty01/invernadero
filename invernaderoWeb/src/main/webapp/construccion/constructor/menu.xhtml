@@ -26,11 +26,9 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
-			<p:menuitem value="Ciudades" icon="pi pi-briefcase" action="ciudades" />
-			<p:menuitem value="Nuevo Proveedor" icon="pi pi-briefcase" action="#{beanCompAdministrador.actionCargarAgregarProveedores()}" />
+
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
 			<f:facet name="options">
-			
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
 					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
@@ -39,47 +37,64 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info"
-			summary="LISTA DE PROVEEDORES - ADMINISTRADOR"></p:staticMessage>
 	</h:form>
 
-
 	<div>
-		<h:form id="FormProveedores">
-			<p:dataTable value="#{beanCompAdministrador.listaProveedores}" var="p">
-			
+		<p:staticMessage severity="info"
+			summary="LISTA DE ORDENES - CONSTRUCTOR"></p:staticMessage>
+
+		<h:form id="FormOrdenes">
+			<p:dataTable value="#{beanConConstructor.listaOrdenes}" var="p">
+
 				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proveId}" />
+					<h:outputText value="#{p.ordenId}" />
+				</p:column>
+
+				<p:column headerText="PROFORMA">
+					<h:outputText value="#{p.proformasCab.proCabId}" />
+				</p:column>
+
+				<p:column headerText="OBSERVACIONES">
+					<h:outputText value="#{p.ordenObservaciones}" />
+				</p:column>
+
+				<p:column headerText="ESTADO DE PAGO">
+					<h:outputText value="#{p.ordenEstadopago}" />
+				</p:column>
+
+				<p:column headerText="FECHA INICIO">
+					<h:outputText value="#{p.ordenFechaini}" />
+				</p:column>
+
+				<p:column headerText="FECHA FIN">
+					<h:outputText value="#{p.ordenFechafin}" />
+				</p:column>
+
+				<p:column headerText="ESTADO DE ORDEN">
+					<h:outputText value="#{p.ordenEstado}" />
 				</p:column>
 				
-				<p:column headerText="RUC">
-					<h:outputText value="#{p.proveRuc}"/>
+				<p:column headerText="AVANCE">
+					<p:spinner value="#{p.ordenAvance}" min="0" max="100" />
 				</p:column>
-				
-				<p:column headerText="NOMBRE">
-					<h:outputText value="#{p.proveNombre}"/>
-				</p:column>
-				
-				<p:column headerText="NOMBRE COMERCIAL">
-					<h:outputText value="#{p.proveNomcomercial}"/>
-				</p:column>
-				
-				<p:column headerText="DIRECCION">
-					<h:outputText value="#{p.proveDireccion}"/>
-				</p:column>
-				
-				<p:column headerText="TELEFONO">
-					<h:outputText value="#{p.proveTelefono}"/>
-				</p:column>
-				
-				<p:column headerText="CIUDAD">
-					<h:outputText value="#{p.ciudad.ciuNombre}"/>
+
+				<p:column headerText="DESPACHADO">
+					<h:outputText value="#{p.ordenDespacho}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de #{p.proveNomcomercial}" value="Editar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerActualizarProveedor(p)}" styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton title="Eliminar #{p.proveNomcomercial} de la lista de proveedores" value="Eliminar" icon="pi pi-pencil" actionListener="#{beanCompAdministrador.actionListenerEliminarProveedor(p)}" styleClass="rounded-button ui-button-danger" />
+					<p:commandButton
+						title="Actualizar avance de orden #{p.ordenId}"
+						value="Actualizar Avance" icon="pi pi-pencil"
+						action="#{beanConConstructor.actionListenerActualizarAvance(p)}"
+						styleClass="ui-button-raised ui-button-success" />
+					<p:commandButton
+						title="Ver Detalles de proforma #{p.proformasCab.proCabId}"
+						value="Detalles de Proforma" icon="pi pi-pencil"
+						action="#{beanConConstructor.actionCargarProformasDet(p.proformasCab.proCabId)}"
+						styleClass="ui-button-raised ui-button-secondary" />
 				</p:column>
+
 			</p:dataTable>
 		</h:form>
 	</div>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head>
+	<title>Ordenes</title>
+</h:head>
+<body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+	<p:panel>
+		<h:form>
+			<p:panelGrid columns="2">
+
+				<h:outputText value="Proforma" />
+				<p:selectOneMenu value="#{beanVenVendedor.proformaSeleccionada}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaProformasCab}" var="c"
+						itemLabel="#{c.proCabId}" itemValue="#{c.proCabId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+
+				<h:outputText value="Asignado" />
+				<p:selectOneMenu value="#{beanVenVendedor.usuarioSeleccionado}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaUsuarios}" var="c"
+						itemLabel="#{c.correo}" itemValue="#{c.idSegUsuario}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				
+				<h:outputText value="Observaciones: " />
+				<p:inplace editor="true">
+					<p:inputText value="#{beanVenVendedor.edicionOrden.ordenObservaciones}" required="true"
+						label="text" />
+				</p:inplace>
+
+				<h:outputText value="Observaciones: " />
+				<p:inputText
+					value="#{beanVenVendedor.edicionOrden.ordenObservaciones}"
+					required="true" requiredMessage="Ingrese los nombres" />
+
+
+				<h:outputText value="Cliente" />
+				<p:selectOneMenu value="#{beanVenVendedor.clienteSeleccionado}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItems value="#{beanVenVendedor.listaClientes}" var="c"
+						itemLabel="#{c.cliNombre} #{c.cliApellido}"
+						itemValue="#{c.cliCedula}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<h:outputText value="Estado de Pago: " />
+				<p:selectOneMenu
+					value="#{beanVenVendedor.edicionOrden.ordenEstadopago}">
+					<f:selectItem itemLabel="Seleccione..." noSelectionOption="true" />
+					<f:selectItem itemLabel="50%" itemValue="50%" />
+					<f:selectItem itemLabel="PAGADO" itemValue="PAGADO" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Actualizar" icon="pi pi-save" update="@form"
+					actionListener="#{beanVenVendedor.actionListenerActualizarEdicionOrden()}"></p:commandButton>
+
+
+			</p:panelGrid>
+		</h:form>
+	</p:panel>
+</body>
+</html>

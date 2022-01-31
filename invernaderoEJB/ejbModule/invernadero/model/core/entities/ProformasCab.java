@@ -41,11 +41,6 @@ public class ProformasCab implements Serializable {
 	@OneToMany(mappedBy="proformasCab")
 	private List<OrdenTrabajo> ordenTrabajos;
 
-	//bi-directional many-to-one association to Cliente
-	@ManyToOne
-	@JoinColumn(name="cli_cedula", nullable=false)
-	private Cliente cliente;
-
 	//bi-directional many-to-one association to ProformasDet
 	@OneToMany(mappedBy="proformasCab")
 	private List<ProformasDet> proformasDets;
@@ -121,14 +116,6 @@ public class ProformasCab implements Serializable {
 		ordenTrabajo.setProformasCab(null);
 
 		return ordenTrabajo;
-	}
-
-	public Cliente getCliente() {
-		return this.cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 
 	public List<ProformasDet> getProformasDets() {

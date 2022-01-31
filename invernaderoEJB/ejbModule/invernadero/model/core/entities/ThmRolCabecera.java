@@ -51,7 +51,7 @@ public class ThmRolCabecera implements Serializable {
 	private ThmEmpleado thmEmpleado;
 
 	//bi-directional many-to-one association to ThmRolDetalle
-	@OneToMany(mappedBy="thmRolCabecera",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="thmRolCabecera")
 	private List<ThmRolDetalle> thmRolDetalles;
 
 	public ThmRolCabecera() {

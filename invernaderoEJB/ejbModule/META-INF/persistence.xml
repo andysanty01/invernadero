@@ -2,12 +2,15 @@
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="aslescanobDS" transaction-type="JTA">
 		<jta-data-source>java:/aslescanobDS</jta-data-source>
+		<class>invernadero.model.core.entities.VwThmConsultaRol</class>
 		<class>invernadero.model.core.entities.AudBitacora</class>
 		<class>invernadero.model.core.entities.Ciudad</class>
 		<class>invernadero.model.core.entities.Cliente</class>
 		<class>invernadero.model.core.entities.ComprasCab</class>
 		<class>invernadero.model.core.entities.ComprasDet</class>
 		<class>invernadero.model.core.entities.Despacho</class>
+		<class>invernadero.model.core.entities.FacturaCab</class>
+		<class>invernadero.model.core.entities.FacturaDet</class>
 		<class>invernadero.model.core.entities.OrdenTrabajo</class>
 		<class>invernadero.model.core.entities.Producto</class>
 		<class>invernadero.model.core.entities.ProformasCab</class>

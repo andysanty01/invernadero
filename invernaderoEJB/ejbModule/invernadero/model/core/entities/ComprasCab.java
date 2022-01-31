@@ -41,7 +41,7 @@ public class ComprasCab implements Serializable {
 	private Proveedor proveedor;
 
 	//bi-directional many-to-one association to ComprasDet
-	@OneToMany(mappedBy="comprasCab")
+	@OneToMany(mappedBy="comprasCab",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<ComprasDet> comprasDets;
 
 	public ComprasCab() {

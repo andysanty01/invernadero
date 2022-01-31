@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Compras</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+</style>
+</h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+			<p:menuitem value="Proveedores" icon="pi pi-briefcase"
+				action="proveedores?faces-redirect=true" />
+			<p:menuitem value="Productos" icon="pi pi-briefcase"
+				action="productos?faces-redirect=true" />
+
+			<f:facet name="options">
+
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+
+
+
+
+
+	<div class="card">
+		<p:tabView>
+			<p:tab title="CUENTAS">
+				<p class="p-m-0">
+
+					<p:panel header="CUENTAS ALEGRES" style="width:1200px" collapsed="false">
+
+
+
+						<h:form>
+
+							<!-- CUENTAS ALEGRES DE ENTRADAS -->
+
+							<p:panelGrid columns="6" columnClasses="ui-state-hover"
+								style="width:80%; height:150%;" border="0">
+
+								<h:outputText value="Total Ventas:" />
+								<h:outputText
+									value="#{beanInvAdministrador.totalVentas}$"
+									required="true" requiredMessage="Debe poner un nombre" />
+									
+								<h:outputText value="Total Compras:" />
+								<h:outputText
+									value="#{beanInvAdministrador.totalCompras}$"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+
+								<h:outputText value="Fecha Minima:" />
+								<p:calendar
+									value="#{beanCompComprador.nuevaComprasCab.comCabFecha}" />
+									
+								
+								<h:outputText value="Nro Ventas:" />
+								<h:outputText
+									value="#{beanInvAdministrador.nroVentas}"
+									required="true" requiredMessage="Debe poner un nombre" />
+
+								<h:outputText value="Nro Compras:" />
+								<h:outputText
+									value="#{beanInvAdministrador.nroCompras}"
+									required="true" requiredMessage="Debe poner un nombre" />
+									
+								
+									
+									
+								<p:commandButton value="Consultar" icon="pi pi-disk"
+									update="@form"
+									actionListener="#{beanCompComprador.actionListenerConsultarCuentas()}" />
+
+							</p:panelGrid>
+							
+							<p:panelGrid columns="2" columnClasses="ui-state-hover"
+								style="width:80%; height:150%;" border="0">
+
+								<h:outputText value="DIFERENCIA:" />
+								<h:outputText
+									value="#{beanInvAdministrador.totalDiferencia}$"
+									required="true" requiredMessage="Debe poner un nombre" />
+									
+
+							</p:panelGrid>
+							
+						</h:form>
+
+					</p:panel>
+				</p>
+			</p:tab>
+		</p:tabView>
+	</div>
+
+
+
+
+</body>
+</html>
