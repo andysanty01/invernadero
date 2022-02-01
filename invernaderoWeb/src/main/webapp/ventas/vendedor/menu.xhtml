@@ -42,6 +42,8 @@
 			</f:facet>
 		</p:menubar>
 	</h:form>
+	
+	
 
 
 
@@ -50,7 +52,7 @@
 			<p:tab title="ORDENES DE TRABAJO">
 				<p class="p-m-0">
 
-					<p:panel header="NUEVA ORDEN" style="width:1200px"
+					<p:panel header="NUEVA ORDEN" style="width:100%"
 						toggleable="true" collapsed="false">
 						<h:form>
 
@@ -142,7 +144,7 @@
 
 
 
-					<p:panel header="LISTA DE ORDENES" style="width:1450px"
+					<p:panel header="LISTA DE ORDENES" style="width:100%"
 						collapsed="false">
 
 
@@ -150,9 +152,7 @@
 						<h:form id="FormOrdenes">
 							<p:dataTable value="#{beanVenVendedor.listaOrdenes}" var="p">
 
-								<p:column headerText="ID" style="width:40px">
-									<h:outputText value="#{p.ordenId}" />
-								</p:column>
+								
 
 								<p:column headerText="PROFORMA">
 									<h:outputText value="#{p.proformasCab.proCabId}" />

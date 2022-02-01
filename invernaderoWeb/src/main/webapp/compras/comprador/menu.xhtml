@@ -29,6 +29,10 @@
 	grid-auto-rows: minmax(120px, auto);
 }
 
+.centered {
+	text-align: center;
+}
+
 .wrapperListDetalles {
 	display: grid;
 	grid-template-columns: repeat(1, 1fr);
@@ -68,7 +72,7 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home"
 				action="/menu?faces-redirect=true" />
-			<p:menuitem value="Proveedores" icon="pi pi-briefcase"
+			<p:menuitem value="Proveedores" icon="pi pi-users"
 				action="proveedores?faces-redirect=true" />
 			<p:menuitem value="Productos" icon="pi pi-briefcase"
 				action="productos?faces-redirect=true" />
@@ -96,7 +100,7 @@
 					<p:tab title="LISTA DE COMPRAS">
 
 						<p class="p-m-0">
-							<p:panel header="LISTA DE COMPRAS" style="width:1450px"
+							<p:panel header="LISTA DE COMPRAS" style="width:100%"
 								collapsed="false">
 								<h:form id="FormCompras">
 									<p:dataTable value="#{beanCompComprador.listaComprasCab}"
@@ -126,17 +130,18 @@
 											<h:outputText value="#{p.comCabTotal}" />
 										</p:column>
 
-										<p:column headerText="OPCIONES">
-											<p:commandButton
-												title="Eliminar #{p.comCabId} de la lista de compras"
-												value="Eliminar" icon="pi pi-pencil"
-												actionListener="#{beanCompComprador.actionListenerEliminarComprasCab(p.comCabId)}"
-												styleClass="rounded-button ui-button-danger" />
+										<p:column headerText="ACCIONES">
 											<p:commandButton
 												title="Listar productos de compra #{p.comCabId}"
-												value="Productos" icon="pi pi-pencil"
+												icon="pi pi-list"
 												action="#{beanCompComprador.actionCargarComprasDet(p)}"
 												styleClass="rounded-button ui-button-success" />
+											<p:commandButton
+												title="Eliminar #{p.comCabId} de la lista de compras"
+												icon="pi pi-trash"
+												actionListener="#{beanCompComprador.actionListenerEliminarComprasCab(p.comCabId)}"
+												styleClass="rounded-button ui-button-danger" />
+
 										</p:column>
 									</p:dataTable>
 								</h:form>
@@ -154,152 +159,182 @@
 
 
 					<p:tab title="NUEVA COMPRA">
-						<!--  
-								<p:panel header="AGREGAR FACTURA" style="width:700px"
-									toggleable="true" collapsed="false">-->
+
+						<h:form style="text-align: center;">
 
 
-						<h:form>
-							<h:panelGrid columns="2">
 
-								<h:panelGrid columns="2">
 
-									<h:panelGrid columns="1">
+							<div class="ui-g">
+								<div class="ui-g-6" style="text-align: center;">
+									<h3 align="center">DATOS PRINCIPALES</h3>
+									<p:panelGrid columns="2" columnClasses="ui-state-hover"
+										style="width:70%; height:20px; text-align: center; "
+										border="0">
 
-										<h3 align="center">DATOS PRINCIPALES</h3>
-										<p:panelGrid columns="2" columnClasses="ui-state-hover"
-											style="width:30px; height:20px; " border="0">
-
-											<h:outputText value="Proveedor"
-												styleClass="p-text-bold p-d-block" />
-											<p:selectOneMenu
-												value="#{beanCompComprador.proveedorIngreso}"
-												panelStyle="width:150px" effect="fade" filter="true"
-												filterMatchMode="startsWith">
-												<f:selectItems value="#{beanCompComprador.listaProveedores}"
-													var="c" itemLabel="#{c.proveNomcomercial}"
-													itemValue="#{c.proveId}" />
-												<p:column style="width:20%">
-													<f:facet name="header">
-														<h:outputText value="ID" />
-													</f:facet>
-													<h:outputText value="#{c.proveId}" />
-												</p:column>
-
-												<p:column>
-													<f:facet name="header">
-														<h:outputText value="PROVEEDOR" />
-													</f:facet>
-
-													<h:outputText value="#{c.proveNomcomercial}" />
-												</p:column>
-												<f:facet name="footer">
-													<h:outputText
-														value="#{beanCompComprador.listaProveedores.size()} Proveedores"
-														style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+										<h:outputText value="Proveedor"
+											styleClass="p-text-bold p-d-block" />
+										<p:selectOneMenu style="width:150px; height:40px;"
+											value="#{beanCompComprador.proveedorIngreso}"
+											panelStyle="width:30%" effect="fade" filter="true"
+											filterMatchMode="startsWith">
+											<f:selectItems value="#{beanCompComprador.listaProveedores}"
+												var="c" itemLabel="#{c.proveNomcomercial}"
+												itemValue="#{c.proveId}" />
+											<p:column style="width:30%">
+												<f:facet name="header">
+													<h:outputText value="ID" />
 												</f:facet>
-											</p:selectOneMenu>
+												<h:outputText value="#{c.proveId}" />
+											</p:column>
 
-
-											<h:outputText value="Fecha:" />
-											<p:calendar
-												value="#{beanCompComprador.fechaIngreso}"
-												style="width:30px; height:20px; " />
-
-											<h:outputText value="Iva:" />
-											<p:selectBooleanButton onLabel="Si" offLabel="No"
-												onIcon="pi pi-check" offIcon="pi pi-times"
-												style="width:6rem"
-												value="#{beanCompComprador.ivaIngreso}" />
-										</p:panelGrid>
-									</h:panelGrid>
-
-
-									<h:panelGrid columns="1" columnClasses="centered">
-										<h3 align="center">DETALLE</h3>
-										<p:panelGrid columns="2" columnClasses="ui-state-hover"
-											style="width:30px; height:20px; " border="0">
-
-											<h:outputText value="Producto" />
-
-											<p:selectOneMenu style="width:150px; height:40px;"
-												value="#{beanCompComprador.productoIngreso}"
-												panelStyle="width:150px" effect="fade" filter="true"
-												filterMatchMode="startsWith">
-												<f:selectItems value="#{beanCompComprador.listaProductos}"
-													var="pr" itemLabel="#{pr.producNombre}"
-													itemValue="#{pr.producId}" />
-												<p:column style="width:20%">
-													<f:facet name="header">
-														<h:outputText value="ID" />
-													</f:facet>
-													<h:outputText value="#{pr.producId}" />
-												</p:column>
-
-												<p:column>
-													<f:facet name="header">
-														<h:outputText value="PRODUCTO" />
-													</f:facet>
-
-													<h:outputText value="#{pr.producNombre}" />
-												</p:column>
-												<f:facet name="footer">
-													<h:outputText
-														value="#{beanCompComprador.listaProductos.size()} Producto(s)"
-														style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="PROVEEDOR" />
 												</f:facet>
-											</p:selectOneMenu>
 
-											<h:outputText value="Cantidad:" />
-											<p:spinner value="#{beanCompComprador.cantidadIngreso}"
-												min="0" />
+												<h:outputText value="#{c.proveNomcomercial}" />
+											</p:column>
+											<f:facet name="footer">
+												<h:outputText
+													value="#{beanCompComprador.listaProveedores.size()} Proveedores"
+													style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+											</f:facet>
+										</p:selectOneMenu>
 
-											<h:outputText value="Precio" />
-											<p:spinner value="#{beanCompComprador.precioIngreso}" min="0"
-												stepFactor="0.01" placeholder="0,00" />
 
-										</p:panelGrid>
-									</h:panelGrid>
+										<h:outputText value="Fecha:" />
+										<p:calendar value="#{beanCompComprador.fechaIngreso}"
+											style="width:30px; height:20px; " />
+
+										<h:outputText value="Iva:" />
+										<p:selectBooleanButton onLabel="Si" offLabel="No"
+											onIcon="pi pi-check" offIcon="pi pi-times" style="width:6rem"
+											value="#{beanCompComprador.ivaIngreso}" />
+									</p:panelGrid>
+
+								</div>
+								<div class="ui-g-6" style="text-align: center;">
+									<h3 align="center">SELECCIONAR PRODUCTO</h3>
+									<p:panelGrid columns="2"
+										columnClasses="ui-state-hover centered"
+										style="width:70%; height:20px; text-align: center; "
+										border="0">
+
+										<h:outputText value="Producto" />
+
+										<p:selectOneMenu style="width:150px; height:40px;"
+											value="#{beanCompComprador.productoIngreso}"
+											panelStyle="width:30%" effect="fade" filter="true"
+											filterMatchMode="startsWith">
+											<f:selectItems value="#{beanCompComprador.listaProductos}"
+												var="pr" itemLabel="#{pr.producNombre}"
+												itemValue="#{pr.producId}" />
+											<p:column style="width:30%">
+												<f:facet name="header">
+													<h:outputText value="ID" />
+												</f:facet>
+												<h:outputText value="#{pr.producId}" />
+											</p:column>
+
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="PRODUCTO" />
+												</f:facet>
+
+												<h:outputText value="#{pr.producNombre}" />
+											</p:column>
+											<f:facet name="footer">
+												<h:outputText
+													value="#{beanCompComprador.listaProductos.size()} Producto(s)"
+													style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+											</f:facet>
+										</p:selectOneMenu>
+
+										<h:outputText value="Cantidad:" />
+										<p:spinner value="#{beanCompComprador.cantidadIngreso}"
+											min="0" />
+
+										<h:outputText value="Precio" />
+										<p:spinner value="#{beanCompComprador.precioIngreso}" min="0"
+											stepFactor="0.01" placeholder="0,00" />
+
+									</p:panelGrid>
 									<br />
 									<p:commandButton title="Agregar producto al detalle"
 										style="width:200px; height:50px;" value="Agregar Producto"
 										icon="pi pi-shopping-cart" update="@form"
 										actionListener="#{beanCompComprador.actionListenerAgregarDetalleCompra()}" />
+									<p:commandButton title="Guardar compra" value="Guardar Compra"
+										style="width:200px; height:50px;" icon="pi pi-save"
+										update="@form" styleClass="ui-button-raised ui-button-success"
+										actionListener="#{beanCompComprador.actionListenerGuardarCompra()}" />
 
 
 
-								</h:panelGrid>
-								
-								<p:panelGrid columns="1">
 
-									<p:dataTable value="#{beanCompComprador.listaDetalle}"
-										var="d"
-										style="width:700px; height:40px;">
+								</div>
 
-										<p:column headerText="PRODUCTO">
-											<h:outputText value="#{d.producto.producNombre}" />
-										</p:column>
-										<p:column headerText="CANTIDAD">
-											<h:outputText value="#{d.comDetCantidad}" />
-										</p:column>
-										<p:column headerText="PRECIO">
-											<h:outputText value="#{d.comDetPrecio}" />
-										</p:column>
-										<p:column headerText="SUBTOTAL">
-											<h:outputText value="#{d.comDetPreciototal}" />
-											<f:facet name="footer">
-												<h:outputText value="#{beanCompComprador.totalDetalle}" />
-											</f:facet>
-										</p:column>
-									</p:dataTable>
-								</p:panelGrid>
-								<br />
-								<p:commandButton title="Guardar compra" value="Guardar Compra"
-									style="width:200px; height:50px;" icon="pi pi-save"
-									update="@form" styleClass="ui-button-raised ui-button-success"
-									actionListener="#{beanCompComprador.actionListenerGuardarCompra()}" />
 
-							</h:panelGrid>
+
+
+								<div class="ui-g">
+									<div class="ui-g-12">
+
+
+
+
+
+
+
+
+										<p class="p-m-0">
+											<p:panel header="LISTA DE COMPRAS" style="width:100%"
+												collapsed="false">
+												<h:form id="FormCompras">
+													<p:dataTable value="#{beanCompComprador.listaDetalle}"
+														var="d" style="text-align: center;">
+
+														<p:column style="text-align: center;"
+															headerText="PRODUCTO">
+															<h:outputText value="#{d.producto.producNombre}" />
+														</p:column>
+														<p:column style="text-align: center;"
+															headerText="CANTIDAD">
+															<h:outputText value="#{d.comDetCantidad}" />
+														</p:column>
+														<p:column style="text-align: center;" headerText="PRECIO">
+															<h:outputText value="#{d.comDetPrecio}" />
+														</p:column>
+														<p:column style="text-align: center;"
+															headerText="SUBTOTAL">
+															<h:outputText value="#{d.comDetPreciototal}" />
+															<f:facet name="footer">
+																<h:outputText value="#{beanCompComprador.totalDetalle}" />
+															</f:facet>
+														</p:column>
+
+													</p:dataTable>
+												</h:form>
+											</p:panel>
+										</p>
+
+
+
+
+
+
+
+
+									</div>
+								</div>
+
+
+
+
+
+							</div>
+
 						</h:form>
 
 

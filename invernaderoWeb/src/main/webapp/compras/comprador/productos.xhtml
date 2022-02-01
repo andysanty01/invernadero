@@ -12,10 +12,17 @@
 <body>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="menu?faces-redirect=true" />
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+			<p:menuitem value="Compras" icon="pi pi-shopping-cart"
+				action="menu?faces-redirect=true" />
+			<p:menuitem value="Proveedores" icon="pi pi-users"
+				action="proveedores?faces-redirect=true" />
+
 			<f:facet name="options">
+
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
-					icon="pi pi-user">
+					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
 					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
 					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
 						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
@@ -31,21 +38,30 @@
 		<p:staticMessage severity="info" summary="Nuevo Producto"></p:staticMessage>
 		<h:form>
 			<p:panelGrid columns="2">
-			
-			
+
+
 				<h:outputText value="Nombre: " />
 				<p:inputText value="#{beanCompComprador.nuevoProducto.producNombre}"
 					required="true" requiredMessage="Debe poner un nombre" />
-					
+
 				<h:outputText value="Descripción: " />
-				<p:inputText value="#{beanCompComprador.nuevoProducto.producDescripcion}"
+				<p:inputText
+					value="#{beanCompComprador.nuevoProducto.producDescripcion}"
 					required="true" requiredMessage="Debe poner un nombre" />
-					
+
 				<h:outputText value="Ficha Técnica: " />
-				<p:inputText value="#{beanCompComprador.nuevoProducto.producFichatecnica}"
+				<p:inputText
+					value="#{beanCompComprador.nuevoProducto.producFichatecnica}"
 					required="true" requiredMessage="Debe poner un nombre" />
-					
-				<p:commandButton value="Guardar" icon="pi pi-disk"
+
+				<h:outputText value="Stock" />
+				<p:spinner value="#{beanCompComprador.nuevoProducto.producStock}" min="1" />
+				
+				<h:outputText value="Precio Unitario" />
+										<p:spinner value="#{beanCompComprador.nuevoProducto.producPreciou}" min="0"
+											stepFactor="0.01" placeholder="0,00" />
+
+				<p:commandButton value="Guardar" icon="pi pi-save"
 					update="@form,:FormProductos"
 					actionListener="#{beanCompComprador.actionListenerInsertarProducto()}" />
 			</p:panelGrid>
@@ -53,39 +69,38 @@
 
 
 
-		<p:staticMessage severity="info"
-			summary="LISTA DE PRODUCTOS">
+		<p:staticMessage severity="info" summary="LISTA DE PRODUCTOS">
 		</p:staticMessage>
-		<h:form id="FormProductos" style="width:1500px">
+		<h:form id="FormProductos" style="width:100%">
 			<p:dataTable value="#{beanCompComprador.listaProductos}" var="c">
 
-				<p:column headerText="ID" style="width:40px">
+				<p:column headerText="ID">
 					<h:outputText value="#{c.producId}" />
 				</p:column>
 
-				<p:column headerText="NOMBRE" style="width:100px">
+				<p:column headerText="NOMBRE">
 					<h:outputText value="#{c.producNombre}" />
 				</p:column>
-				
-				<p:column headerText="DESCRIPCION" style="width:250px">
+
+				<p:column headerText="DESCRIPCION">
 					<h:outputText value="#{c.producDescripcion}" />
 				</p:column>
-				
-				<p:column headerText="FICHA TECNICA" style="width:500px">
+
+				<p:column headerText="FICHA TECNICA">
 					<h:outputText value="#{c.producFichatecnica}" />
 				</p:column>
-				
-				<p:column headerText="STOCK" style="width:100px">
+
+				<p:column headerText="STOCK">
 					<h:outputText value="#{c.producStock}" />
 				</p:column>
-				
-				<p:column headerText="PRECIO UNITARIO" style="width:80px">
+
+				<p:column headerText="PRECIO UNITARIO">
 					<h:outputText value="#{c.producPreciou}" />
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton title="Actualizar producto #{c.producId}" value="Actualizar"
-						icon="pi pi-pencil"
+					<p:commandButton title="Actualizar producto #{c.producId}"
+						value="Actualizar" icon="pi pi-pencil"
 						actionListener="#{beanCompComprador.actionListenerActualizarProducto(c)}" />
 				</p:column>
 			</p:dataTable>
