@@ -42,7 +42,7 @@ public class ProformasCab implements Serializable {
 	private List<OrdenTrabajo> ordenTrabajos;
 
 	//bi-directional many-to-one association to ProformasDet
-	@OneToMany(mappedBy="proformasCab", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="proformasCab",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<ProformasDet> proformasDets;
 
 	public ProformasCab() {

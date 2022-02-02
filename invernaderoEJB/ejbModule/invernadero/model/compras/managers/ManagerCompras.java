@@ -26,7 +26,6 @@ import invernadero.model.core.entities.SegUsuario;
 import invernadero.model.core.managers.ManagerDAO;
 import invernadero.model.seguridades.dtos.LoginDTO;
 import invernadero.model.seguridades.managers.ManagerSeguridades;
-
 /**
  * Session Bean implementation class ManagerProyectos
  */
@@ -36,7 +35,7 @@ public class ManagerCompras {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@EJB
 	private ManagerAuditoria mAuditoria;
 
@@ -327,29 +326,42 @@ public class ManagerCompras {
 	// ------------------COMPRAS MULTIPLE-------------------------------------
 
 	// Detalles
-	public ComprasCab crearDetalleCompra(ComprasCab nuevaCompra,int productoIngreso, int cantidadIngreso, double precioIngreso) throws Exception {
+	public ComprasCab crearDetalleCompra(ComprasCab nuevaCompra, int productoIngreso, int cantidadIngreso,
+			double precioIngreso) throws Exception {
 
-		if(nuevaCompra == null) {
+		if (nuevaCompra == null) {
 			nuevaCompra = new ComprasCab();
 			nuevaCompra.setComprasDets(new ArrayList<ComprasDet>());
 			nuevaCompra.setComCabFecha(new Date());
 			nuevaCompra.setComCabSubtotal(new BigDecimal(0));
 			nuevaCompra.setComCabTotal(new BigDecimal(0));
 		}
-		
+
 		Producto producto = (Producto) mDAO.findById(Producto.class, productoIngreso);
 
 		ComprasDet nuevoDetalle = new ComprasDet();
 		nuevoDetalle.setProducto(producto);
 		nuevoDetalle.setComDetCantidad(cantidadIngreso);
 		nuevoDetalle.setComDetPrecio(new BigDecimal(precioIngreso));
-		nuevoDetalle.setComDetPreciototal(new BigDecimal(cantidadIngreso*precioIngreso).setScale(2, RoundingMode.HALF_UP));
+		nuevoDetalle.setComDetPreciototal(
+				new BigDecimal(cantidadIngreso * precioIngreso).setScale(2, RoundingMode.HALF_UP));
 		nuevoDetalle.setComprasCab(nuevaCompra);
 		nuevaCompra.getComprasDets().add(nuevoDetalle);
 		return nuevaCompra;
 	}
-	
-	
+
+	public ComprasCab quitarDetalleCompra(ComprasCab nuevaCompra, ComprasDet detalleEliminar) throws Exception {
+
+		List<ComprasDet> listaDetalleCompra = nuevaCompra.getComprasDets();
+
+		for (int i = 0; i < listaDetalleCompra.size(); i++) {
+			if (detalleEliminar == listaDetalleCompra.get(i)) {
+				nuevaCompra.getComprasDets().remove(detalleEliminar);
+			}
+		}
+		return nuevaCompra;
+	}
+
 	public double ComCabSubtotal(ComprasCab comprita) {
 		List<ComprasDet> listaDetalleCompra = comprita.getComprasDets();
 		double total = 0;
@@ -357,44 +369,53 @@ public class ManagerCompras {
 			total += d.getComDetPreciototal().doubleValue();
 		return total;
 	}
-	
-	//Cabecera
-	public void registrarCompra(ComprasCab nuevaCompra, int proveedorIngreso, Date fechaIngreso,double totalLista, boolean ivaIngreso ) throws Exception {
+
+	// Cabecera
+	public void registrarCompra(ComprasCab nuevaCompra, int proveedorIngreso, Date fechaIngreso, double totalLista,
+			boolean ivaIngreso) throws Exception {
 		if (nuevaCompra == null || nuevaCompra.getComprasDets() == null || nuevaCompra.getComprasDets().size() == 0)
 			throw new Exception("Debe seleccionar al menos un producto");
 
 		Proveedor proveedor = (Proveedor) mDAO.findById(Proveedor.class, proveedorIngreso);
-			
+
 		nuevaCompra.setProveedor(proveedor);
 		nuevaCompra.setComCabFecha(fechaIngreso);
 		nuevaCompra.setComCabIva(ivaIngreso);
 		nuevaCompra.setComCabSubtotal(new BigDecimal(totalLista).setScale(2, RoundingMode.HALF_UP));
-		if(ivaIngreso==true) {
-    		double ivaT = totalLista*0.12;
-    		BigDecimal total = new BigDecimal(totalLista + ivaT);
-    		nuevaCompra.setComCabTotal(total.setScale(2, RoundingMode.HALF_UP));
-    	}else {
-    		nuevaCompra.setComCabTotal(new BigDecimal(totalLista).setScale(2, RoundingMode.HALF_UP));
+		if (ivaIngreso == true) {
+			double ivaT = totalLista * 0.12;
+			BigDecimal total = new BigDecimal(totalLista + ivaT);
+			nuevaCompra.setComCabTotal(total.setScale(2, RoundingMode.HALF_UP));
+		} else {
+			nuevaCompra.setComCabTotal(new BigDecimal(totalLista).setScale(2, RoundingMode.HALF_UP));
 		}
-		
 
-		//Actualizar productos
-    	for (int i = 0; i < nuevaCompra.getComprasDets().size(); i++) {
+		// Actualizar productos
+		for (int i = 0; i < nuevaCompra.getComprasDets().size(); i++) {
+
 			int idProducto = nuevaCompra.getComprasDets().get(i).getProducto().getProducId();
-	        Producto producto = (Producto)mDAO.findById(Producto.class, idProducto);
-			int cantidad= nuevaCompra.getComprasDets().get(i).getComDetCantidad();
+			Producto producto = (Producto) mDAO.findById(Producto.class, idProducto);
+			int cantidad = nuevaCompra.getComprasDets().get(i).getComDetCantidad();
 			int stock = producto.getProducStock();
-			producto.setProducStock((stock+cantidad));
-		    mDAO.actualizar(producto);
-    	}
+			double preciou = nuevaCompra.getComprasDets().get(i).getComDetPrecio().doubleValue();
+			double precioc = preciou * 0.10;
+			producto.setProducPreciou(new BigDecimal(preciou));
+			producto.setProducPrecioc(new BigDecimal(precioc));
+			producto.setProducStock((stock + cantidad));
+			mDAO.actualizar(producto);
+		}
 
 		mDAO.insertar(nuevaCompra);
 	}
-	
-	
-	
+
 	public int calcularStockInicial(int productoSeleccionado) throws Exception {
-		Producto producto = (Producto)mDAO.findById(Producto.class, productoSeleccionado);
+		Producto producto = (Producto) mDAO.findById(Producto.class, productoSeleccionado);
 		return producto.getProducStock();
 	}
+
+	// ------------------------LISTAR DETALLES---------------
+	public List<ComprasDet> findDetallesByCompras(int idCompra){
+    	return mDAO.findWhere(ComprasDet.class, "o.comprasCab.comCabId="+idCompra, "o.comDetId");
+    }
+	
 }

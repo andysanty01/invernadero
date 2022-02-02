@@ -1,6 +1,8 @@
 package invernadero.controller.ventas;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +14,8 @@ import javax.inject.Named;
 import invernadero.controller.JSFUtil;
 import invernadero.controller.seguridades.BeanSegLogin;
 import invernadero.model.core.entities.Cliente;
+import invernadero.model.core.entities.ComprasCab;
+import invernadero.model.core.entities.ComprasDet;
 import invernadero.model.core.entities.FacturaCab;
 import invernadero.model.core.entities.FacturaDet;
 import invernadero.model.core.entities.OrdenTrabajo;
@@ -72,6 +76,18 @@ public class BeanVenVendedor implements Serializable {
 
 		private FacturaDet nuevaFacturaDet;
 		private FacturaDet edicionFacturaDet;
+		
+		// Proformas - Detalle
+		// ComprasDetalle
+		private ComprasDet nuevoDetalle;
+		private List<ProformasDet> listaDetalle;
+		private int productoIngreso;
+		private int cantidadIngreso;
+		private double precioIngreso;
+		private double totalDetalle;
+		// ComprasCabecera
+		private ComprasCab nuevaCompra;
+		private double extensionIngreso;
 
 	@Inject
 	private BeanSegLogin beanSegLogin;
@@ -85,7 +101,6 @@ public class BeanVenVendedor implements Serializable {
 		nuevaCliente = mVentas.inicializarCliente();
 
 		listaProformasCab = mVentas.findAllProformasCab();
-		nuevaProformaCab = mVentas.inicializarProformasCab();
 		
 		listaOrdenes = mVentas.findAllOrdenesTrabajo();
 		nuevaOrden = mVentas.inicializarOrdenTrabajo();
@@ -94,6 +109,8 @@ public class BeanVenVendedor implements Serializable {
 		nuevaFacturaCab = mVentas.inicializarFacturasCab();
 		
 		listaUsuarios = mVentas.findAllUsuarios();
+		
+		listaProductos = mVentas.findAllProductos();
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------
@@ -415,11 +432,100 @@ public class BeanVenVendedor implements Serializable {
 			}
 		}
 	
-	
+	// --------------------------- PROFORMAS  MULITPLE
+		// Capturar detalles de compra
+		public void actionListenerAgregarDetalleProforma() throws Exception {
+
+			double stockDisponible = mVentas.calcularStockInicial(productoIngreso);
+			double resta = stockDisponible - cantidadIngreso;
+
+			if (resta >= 0) {
+				nuevaProformaCab = mVentas.crearDetalleProforma(nuevaProformaCab, productoIngreso, cantidadIngreso);
+				totalDetalle = mVentas.ProCabSubtotal(nuevaProformaCab);
+				listaDetalle = nuevaProformaCab.getProformasDets();
+				JSFUtil.crearMensajeINFO("Se agregó un producto");
+			} else {
+				JSFUtil.crearMensajeERROR("No existe suficientes productos");
+			}
+			
+		}
+
+		// Guardar compra
+		public void actionListenerGuardarProforma(){
+			try {
+				mVentas.registrarProforma(nuevaProformaCab, extensionIngreso, totalDetalle);
+				JSFUtil.crearMensajeINFO("Se guardó la compra exitosamente");
+				nuevaCompra = new ComprasCab();
+				listaProductos = mVentas.findAllProductos();
+				listaProformasCab = mVentas.findAllProformasCab();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			listaDetalle = new ArrayList<ProformasDet>();
+			totalDetalle = 0;
+			
+		}
+		
+		public String actionListarDetalles(ProformasCab proforma) {
+			proformaCabSeleccionada=proforma;
+			listaProformasDet=mVentas.findDetalleByProforma(proformaCabSeleccionada.getProCabId());
+			return "detallesProforma?faces-redirect=true";
+		}
 	
 		
 	
 	
+		
+		
+	public List<ProformasDet> getListaDetalle() {
+			return listaDetalle;
+		}
+
+		public void setListaDetalle(List<ProformasDet> listaDetalle) {
+			this.listaDetalle = listaDetalle;
+		}
+
+		public int getProductoIngreso() {
+			return productoIngreso;
+		}
+
+		public void setProductoIngreso(int productoIngreso) {
+			this.productoIngreso = productoIngreso;
+		}
+
+		public int getCantidadIngreso() {
+			return cantidadIngreso;
+		}
+
+		public void setCantidadIngreso(int cantidadIngreso) {
+			this.cantidadIngreso = cantidadIngreso;
+		}
+
+		public double getPrecioIngreso() {
+			return precioIngreso;
+		}
+
+		public void setPrecioIngreso(double precioIngreso) {
+			this.precioIngreso = precioIngreso;
+		}
+
+		public double getTotalDetalle() {
+			return totalDetalle;
+		}
+
+		public void setTotalDetalle(double totalDetalle) {
+			this.totalDetalle = totalDetalle;
+		}
+
+		public double getExtensionIngreso() {
+			return extensionIngreso;
+		}
+
+		public void setExtensionIngreso(double extensionIngreso) {
+			this.extensionIngreso = extensionIngreso;
+		}
+
 	public List<FacturaCab> getListaFacturasCab() {
 			return listaFacturasCab;
 		}

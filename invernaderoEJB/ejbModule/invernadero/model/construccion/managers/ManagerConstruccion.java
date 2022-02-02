@@ -85,7 +85,11 @@ public class ManagerConstruccion {
 		}
 		
 		 public List<OrdenTrabajo> findOrdenesByUsuario(int idSegUsuario){
-		    	return mDAO.findWhere(OrdenTrabajo.class, "o.segUsuario.idSegUsuario="+idSegUsuario, null);
+		    	return mDAO.findWhere(OrdenTrabajo.class, "o.ordenEstado<>'TERMINADO' AND o.segUsuario.idSegUsuario="+idSegUsuario, "o.ordenAvance");
+		    }
+		 
+		 public List<OrdenTrabajo> findOrdenesTerminadasByUsuario(int idSegUsuario){
+		    	return mDAO.findWhere(OrdenTrabajo.class, "o.ordenEstado='TERMINADO' AND o.segUsuario.idSegUsuario="+idSegUsuario, "o.ordenAvance");
 		    }
 		
 		

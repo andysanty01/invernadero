@@ -8,18 +8,71 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="../../static/css/menu.css"></link>
+	<title>Menu Proformas</title>
+	<style type="text/css">
+.ui-panel, div.ui-state-hover {
+	margin: 10px;
+	width: 200px;
+}
+
+.ui-dashboard-column {
+	width: 220px;
+}
+
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.centered {
+	text-align: center;
+}
+
+.wrapperListDetalles {
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.wrapperTab {
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 0.10px;
+	grid-auto-rows: minmax(120px, auto);
+}
+
+.one {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.two {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+.three {
+	grid-column: 3;
+	grid-row: 1;
+}
+</style>
+</h:head>
 <body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
-			<p:menuitem value="Productos" icon="pi pi-home" action="productos" />
-			<p:menuitem value="Nueva Proforma" icon="pi pi-briefcase"
-				action="#{beanVenVendedor.actionCargarAgregarProformasCab()}" />
-
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
-					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
+					icon="pi pi-user">
 					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
 					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
 						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
@@ -28,56 +81,200 @@
 		</p:menubar>
 	</h:form>
 
-	<div>
-		<p:staticMessage severity="info"
-			summary="LISTA DE PROFORMAS - ADMINISTRADOR"></p:staticMessage>
 
-		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanVenVendedor.listaProformasCab}"
-				var="p">
+	<h:panelGroup>
+		<div>
+			<div>
 
-				<p:column headerText="ID" style="width:40px">
-					<h:outputText value="#{p.proCabId}" />
-				</p:column>
+				<p:tabView>
+					<p:tab title="LISTA DE PROFORMAS">
 
-				<p:column headerText="FECHA">
-					<h:outputText value="#{p.proCabFecha}" />
-				</p:column>
+						<p class="p-m-0">
+							<p:panel header="PROFORMAS" style="width:100%" collapsed="false">
+								<h:form id="FormProformas">
+									<p:dataTable value="#{beanVenVendedor.listaProformasCab}"
+										var="p">
 
-				<p:column headerText="EXTENSIÓN">
-					<h:outputText value="#{p.proCabExtension}" />
-				</p:column>
+										<p:column headerText="ID" style="width:40px">
+											<h:outputText value="#{p.proCabId}" />
+										</p:column>
 
-				<p:column headerText="SUBTOTAL">
-					<h:outputText value="#{p.proCabSubtotal}" />
-				</p:column>
+										<p:column headerText="FECHA">
+											<h:outputText value="#{p.proCabFecha}" />
+										</p:column>
 
-				<p:column headerText="IVA">
-					<h:outputText value="#{p.proCabIva}" />
-				</p:column>
+										<p:column headerText="EXTENSION">
+											<h:outputText value="#{p.proCabExtension}" />
+										</p:column>
 
-				<p:column headerText="TOTAL">
-					<h:outputText value="#{p.proCabTotal}" />
-				</p:column>
+										<p:column headerText="SUBTOTAL">
+											<h:outputText value="#{p.proCabSubtotal}" />
+										</p:column>
 
-				<p:column headerText="OPCIONES">
-					<p:commandButton title="Hacer cambios de proforma #{p.proCabId}"
-						value="Editar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerActualizarEdicionProformasCab(p)}"
-						styleClass="rounded-button ui-button-secondary" />
-					<p:commandButton
-						title="Eliminar proforma #{p.proCabId} de la lista de proformas"
-						value="Eliminar" icon="pi pi-pencil"
-						actionListener="#{beanVenVendedor.actionListenerEliminarProformasCab(p)}"
-						styleClass="rounded-button ui-button-danger" />
-					<p:commandButton
-						title="Listar productos de Proforma #{p.proCabId}"
-						value="Productos" icon="pi pi-pencil"
-						action="#{beanVenVendedor.actionCargarProformasDet(p)}"
-						styleClass="rounded-button ui-button-success" />
-				</p:column>
-			</p:dataTable>
-		</h:form>
-	</div>
+										<p:column headerText="IVA">
+											<h:outputText value="#{p.proCabIva}" />
+										</p:column>
+
+										<p:column headerText="TOTAL">
+											<h:outputText value="#{p.proCabTotal}" />
+										</p:column>
+
+										<p:column headerText="ACCIONES">
+											<p:commandButton value="PRODUCTOS"
+												title="Listar productos de proforma #{p.proCabId}"
+												icon="pi pi-list"
+												action="#{beanVenVendedor.actionListarDetalles(p)}"
+												styleClass="rounded-button ui-button-success" />
+
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</p:panel>
+						</p>
+					</p:tab>
+
+
+
+
+
+
+					<!-- INGRESO DE NUEVAS COMPRAS -->
+
+
+
+					<p:tab title="NUEVA PROFORMA">
+
+						<h:form style="text-align: center;">
+
+
+
+
+							<div class="ui-g">
+								<div class="ui-g-6" style="text-align: center;">
+									<h3 align="center">DATOS PRINCIPALES</h3>
+									<p:panelGrid columns="2" columnClasses="ui-state-hover"
+										style="width:70%; height:20px; text-align: center; "
+										border="0">
+
+										<h:outputText value="Extensión (ha)" />
+										<p:spinner value="#{beanVenVendedor.extensionIngreso}" min="0" stepFactor="0.1" />
+
+									</p:panelGrid>
+
+								</div>
+								<div class="ui-g-6" style="text-align: center;">
+									<h3 align="center">SELECCIONAR PRODUCTO</h3>
+									<p:panelGrid columns="2"
+										columnClasses="ui-state-hover centered"
+										style="width:70%; height:20px; text-align: center; "
+										border="0">
+
+										<h:outputText value="Producto" />
+
+										<p:selectOneMenu style="width:200px; height:40px;"
+											value="#{beanVenVendedor.productoIngreso}"
+											panelStyle="width:30%" effect="fade" filter="true"
+											filterMatchMode="startsWith">
+											<f:selectItems value="#{beanVenVendedor.listaProductos}"
+												var="pr"
+												itemLabel="#{pr.producNombre}  / Stock: #{pr.producStock}"
+												itemValue="#{pr.producId}" />
+											<p:column style="width:30%">
+												<f:facet name="header">
+													<h:outputText value="ID" />
+												</f:facet>
+												<h:outputText value="#{pr.producId}" />
+											</p:column>
+
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="PRODUCTO" />
+												</f:facet>
+
+												<h:outputText value="#{pr.producNombre}" />
+											</p:column>
+											<f:facet name="footer">
+												<h:outputText
+													value="#{beanVenVendedor.listaProductos.size()} Producto(s)"
+													style="font-weight:bold;" styleClass="p-py-1 p-d-block" />
+											</f:facet>
+										</p:selectOneMenu>
+
+										<h:outputText value="Cantidad:" />
+										<p:spinner value="#{beanVenVendedor.cantidadIngreso}" min="0" />
+
+									</p:panelGrid>
+									<br />
+									<p:commandButton title="Agregar producto al detalle"
+										style="width:200px; height:50px;" value="Agregar Producto"
+										icon="pi pi-shopping-cart" update="@form"
+										actionListener="#{beanVenVendedor.actionListenerAgregarDetalleProforma()}" />
+									&nbsp;&nbsp;
+									<p:commandButton title="Guardar compra" value="Guardar Compra"
+										style="width:200px; height:50px;" icon="pi pi-save"
+										update="@form" styleClass="ui-button-raised ui-button-success"
+										actionListener="#{beanVenVendedor.actionListenerGuardarProforma()}" />
+
+
+
+
+								</div>
+
+
+
+
+								<div class="ui-g">
+									<div class="ui-g-12">
+
+
+
+
+
+
+
+
+										<p class="p-m-0">
+											<p:panel header="DETALLES DE PROFORMA" style="width:100%"
+												collapsed="false">
+												<h:form id="FormDetalles">
+													<p:dataTable value="#{beanVenVendedor.listaDetalle}"
+														var="d" style="text-align: center;">
+
+														<p:column style="text-align: center;"
+															headerText="PRODUCTO">
+															<h:outputText value="#{d.producto.producNombre}" />
+														</p:column>
+														<p:column style="text-align: center;"
+															headerText="CANTIDAD">
+															<h:outputText value="#{d.proDetCantidad}" />
+														</p:column>
+														<p:column style="text-align: center;"
+															headerText="PRECIO COMPRA">
+															<h:outputText value="#{d.proDetPrecio}" />
+														</p:column>
+
+
+
+														<p:column style="text-align: center;"
+															headerText="SUBTOTAL">
+															<h:outputText value="#{d.proDetPreciototal}" />
+															<f:facet name="footer">
+																<h:outputText value="#{beanVenVendedor.totalDetalle}" />
+															</f:facet>
+														</p:column>
+
+													</p:dataTable>
+												</h:form>
+											</p:panel>
+										</p>
+									</div>
+								</div>
+							</div>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+			</div>
+		</div>
+	</h:panelGroup>
 </body>
 </html>

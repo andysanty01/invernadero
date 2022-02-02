@@ -24,10 +24,10 @@ public class Producto implements Serializable {
 	@Column(name="produc_descripcion", nullable=false, length=100)
 	private String producDescripcion;
 
-	@Column(name="produc_descuento")
+	@Column(name="produc_descuento", nullable=false)
 	private Boolean producDescuento;
 
-	@Column(name="produc_estado")
+	@Column(name="produc_estado", nullable=false)
 	private Boolean producEstado;
 
 	@Column(name="produc_fichatecnica", nullable=false, length=200)
@@ -35,6 +35,9 @@ public class Producto implements Serializable {
 
 	@Column(name="produc_nombre", nullable=false, length=100)
 	private String producNombre;
+
+	@Column(name="produc_precioc", precision=7, scale=2)
+	private BigDecimal producPrecioc;
 
 	@Column(name="produc_preciou", nullable=false, precision=7, scale=2)
 	private BigDecimal producPreciou;
@@ -103,6 +106,14 @@ public class Producto implements Serializable {
 
 	public void setProducNombre(String producNombre) {
 		this.producNombre = producNombre;
+	}
+
+	public BigDecimal getProducPrecioc() {
+		return this.producPrecioc;
+	}
+
+	public void setProducPrecioc(BigDecimal producPrecioc) {
+		this.producPrecioc = producPrecioc;
 	}
 
 	public BigDecimal getProducPreciou() {

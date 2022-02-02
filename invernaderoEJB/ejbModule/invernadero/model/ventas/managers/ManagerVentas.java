@@ -1,7 +1,9 @@
 package invernadero.model.ventas.managers;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import javax.ejb.Stateless;
 
 import invernadero.model.auditoria.managers.ManagerAuditoria;
 import invernadero.model.core.entities.Cliente;
+import invernadero.model.core.entities.ComprasCab;
+import invernadero.model.core.entities.ComprasDet;
 import invernadero.model.core.entities.FacturaCab;
 import invernadero.model.core.entities.FacturaDet;
 import invernadero.model.core.entities.OrdenTrabajo;
@@ -255,7 +259,7 @@ public class ManagerVentas {
 
 	// Lista de usuarios
 	public List<SegUsuario> findAllUsuarios() {
-		return mDAO.findAll(SegUsuario.class);
+		return mDAO.findWhere(SegUsuario.class);
 	}
 
 	// Inicializar
@@ -489,5 +493,81 @@ public class ManagerVentas {
 		producto.setProducStock(stock);
 		mDAO.actualizar(producto);
 	}
+	
+	// ---------------------- PROFORMAS MULTIPLE -----------------------------------
+	// Detalles
+		public ProformasCab crearDetalleProforma(ProformasCab nuevaProforma, int productoIngreso, int cantidadIngreso) throws Exception {
+
+			if (nuevaProforma == null) {
+				nuevaProforma = new ProformasCab();
+				nuevaProforma.setProformasDets(new ArrayList<ProformasDet>());
+				nuevaProforma.setProCabFecha(new Timestamp(System.currentTimeMillis()));
+				nuevaProforma.setProCabExtension(new BigDecimal(0));
+				nuevaProforma.setProCabSubtotal(new BigDecimal(0));
+				nuevaProforma.setProCabTotal(new BigDecimal(0));
+			}
+
+			Producto producto = (Producto) mDAO.findById(Producto.class, productoIngreso);
+
+			ProformasDet nuevoDetalle = new ProformasDet();
+			nuevoDetalle.setProducto(producto);
+			nuevoDetalle.setProDetCantidad(cantidadIngreso);
+			nuevoDetalle.setProDetPrecio(producto.getProducPreciou());
+			
+			double precioT= cantidadIngreso * producto.getProducPreciou().doubleValue();
+			nuevoDetalle.setProDetPreciototal(
+					new BigDecimal(precioT).setScale(2, RoundingMode.HALF_UP));
+			nuevoDetalle.setProformasCab(nuevaProforma);
+			nuevaProforma.getProformasDets().add(nuevoDetalle);
+			return nuevaProforma;
+		}
+
+		public ProformasCab quitarDetalleProforma(ProformasCab nuevaProforma, ProformasDet detalleEliminar) throws Exception {
+
+			List<ProformasDet> listaDetalleProforma = nuevaProforma.getProformasDets();
+
+			for (int i = 0; i < listaDetalleProforma.size(); i++) {
+				if (detalleEliminar == listaDetalleProforma.get(i)) {
+					nuevaProforma.getProformasDets().remove(detalleEliminar);
+				}
+			}
+			return nuevaProforma;
+		}
+
+		public double ProCabSubtotal(ProformasCab proformita) {
+			List<ProformasDet> listaDetalleProforma = proformita.getProformasDets();
+			double total = 0;
+			for (ProformasDet d : listaDetalleProforma)
+				total += d.getProDetPreciototal().doubleValue();
+			return total;
+		}
+
+		// Cabecera
+		public void registrarProforma(ProformasCab nuevaProforma, double extension, double totalLista) throws Exception {
+			if (nuevaProforma == null || nuevaProforma.getProformasDets() == null || nuevaProforma.getProformasDets().size() == 0)
+				throw new Exception("Debe seleccionar al menos un producto");
+
+
+			nuevaProforma.setProCabExtension(new BigDecimal(extension));
+			double iva = totalLista * 0.12;
+			double total = totalLista+iva;
+			nuevaProforma.setProCabIva(new BigDecimal(iva).setScale(2, RoundingMode.HALF_UP));
+			nuevaProforma.setProCabSubtotal(new BigDecimal(totalLista).setScale(2, RoundingMode.HALF_UP));
+			nuevaProforma.setProCabTotal(new BigDecimal(total).setScale(2, RoundingMode.HALF_UP));
+
+			
+
+			mDAO.insertar(nuevaProforma);
+		}
+
+		public int calcularStockInicial(int productoSeleccionado) throws Exception {
+			Producto producto = (Producto) mDAO.findById(Producto.class, productoSeleccionado);
+			return producto.getProducStock();
+		}
+
+		// ------------------------LISTAR DETALLES---------------
+		public List<ProformasDet> findDetallesByProformas(int idProforma){
+	    	return mDAO.findWhere(ProformasDet.class, "o.proformasCab.proCabId="+idProforma, "o.proDetId");
+	    }
 
 }

@@ -36,6 +36,7 @@ public class BeanConConstructor implements Serializable {
 	private List<ProformasDet> listaProformasDet;
 	private List<Producto> listaProductos;
 	private List<OrdenTrabajo> listaOrdenes;
+	private List<OrdenTrabajo> listaOrdenesTerminadas;
 	private List<SegUsuario> listaUsuarios;
 
 	// Variables Cliente
@@ -75,10 +76,11 @@ public class BeanConConstructor implements Serializable {
 		listaProformasCab = mConstruccion.findAllProformasCab();
 		
 		listaOrdenes = mConstruccion.findOrdenesByUsuario(beanSegLogin.getIdSegUsuario());
+		listaOrdenesTerminadas = mConstruccion.findOrdenesTerminadasByUsuario(beanSegLogin.getIdSegUsuario());
 	}
 
 	// ------------------CLIENTES--------------------------------------------------------------------------------------
-
+	
 	
 
 	// ----------------------------PROFORMAS-CABECERA-----------------------------------------------------------
@@ -123,6 +125,14 @@ public class BeanConConstructor implements Serializable {
 	
 	public Cliente getNuevaCliente() {
 		return nuevaCliente;
+	}
+
+	public List<OrdenTrabajo> getListaOrdenesTerminadas() {
+		return listaOrdenesTerminadas;
+	}
+
+	public void setListaOrdenesTerminadas(List<OrdenTrabajo> listaOrdenesTerminadas) {
+		this.listaOrdenesTerminadas = listaOrdenesTerminadas;
 	}
 
 	public int getOrdenProformaSeleccionada() {

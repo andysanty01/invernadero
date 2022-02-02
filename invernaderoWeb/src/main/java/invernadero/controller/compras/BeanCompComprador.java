@@ -202,16 +202,24 @@ public class BeanCompComprador implements Serializable {
 	// Capturar detalles de compra
 	public void actionListenerAgregarDetalleCompra() throws Exception {
 
-		//double stockDisponible = mCompras.calcularStockInicial(productoIngreso);
-		//double resta = stockDisponible - cantidadIngreso;
+		double stockDisponible = mCompras.calcularStockInicial(productoIngreso);
+		double resta = stockDisponible - cantidadIngreso;
 
-		//if (resta > 0) {
+		if (resta > 0) {
 			nuevaCompra = mCompras.crearDetalleCompra(nuevaCompra, productoIngreso, cantidadIngreso, precioIngreso);
 			totalDetalle = mCompras.ComCabSubtotal(nuevaCompra);
 			listaDetalle = nuevaCompra.getComprasDets();
-		//} else {
-			//JSFUtil.crearMensajeERROR("No existe suficientes productos");
-		//}
+		} else {
+			JSFUtil.crearMensajeERROR("No existe suficientes productos");
+		}
+	}
+	
+	//Quitar detalle de compra
+	public void actionListenerQuitarDetalleCompra(ComprasDet quitarDetalle) throws Exception {
+			nuevaCompra = mCompras.quitarDetalleCompra(nuevaCompra, quitarDetalle);
+			System.out.println("LISTA: "+nuevaCompra.getComprasDets());
+			totalDetalle = mCompras.ComCabSubtotal(nuevaCompra);
+			listaDetalle = nuevaCompra.getComprasDets();
 	}
 
 	// Guardar compra
@@ -222,15 +230,26 @@ public class BeanCompComprador implements Serializable {
 			nuevaCompra = new ComprasCab();
 			listaProductos = mCompras.findAllProductos();
 			listaComprasCab = mCompras.findAllComprasCab();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		listaDetalle = new ArrayList<ComprasDet>();
 		totalDetalle = 0;
 		proveedorIngreso=0;
 		fechaIngreso = new Date();
 		totalDetalle=0;
 		
 	}
+	
+	public String actionListarDetalles(ComprasCab compras) {
+		compraCabSeleccionada=compras;
+		listaComprasDet=mCompras.findDetallesByCompras(compraCabSeleccionada.getComCabId());
+		return "detalleCompras?faces-redirect=true";
+	}
+	
+	
+	
 
 	// ACCESORES
 	

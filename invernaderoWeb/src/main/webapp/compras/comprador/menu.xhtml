@@ -94,8 +94,6 @@
 		<div>
 			<div>
 
-
-
 				<p:tabView>
 					<p:tab title="LISTA DE COMPRAS">
 
@@ -131,16 +129,11 @@
 										</p:column>
 
 										<p:column headerText="ACCIONES">
-											<p:commandButton
+											<p:commandButton value="PRODUCTOS"
 												title="Listar productos de compra #{p.comCabId}"
 												icon="pi pi-list"
-												action="#{beanCompComprador.actionCargarComprasDet(p)}"
+												action="#{beanCompComprador.actionListarDetalles(p)}"
 												styleClass="rounded-button ui-button-success" />
-											<p:commandButton
-												title="Eliminar #{p.comCabId} de la lista de compras"
-												icon="pi pi-trash"
-												actionListener="#{beanCompComprador.actionListenerEliminarComprasCab(p.comCabId)}"
-												styleClass="rounded-button ui-button-danger" />
 
 										</p:column>
 									</p:dataTable>
@@ -223,12 +216,13 @@
 
 										<h:outputText value="Producto" />
 
-										<p:selectOneMenu style="width:150px; height:40px;"
+										<p:selectOneMenu style="width:200px; height:40px;"
 											value="#{beanCompComprador.productoIngreso}"
 											panelStyle="width:30%" effect="fade" filter="true"
 											filterMatchMode="startsWith">
 											<f:selectItems value="#{beanCompComprador.listaProductos}"
-												var="pr" itemLabel="#{pr.producNombre}"
+												var="pr"
+												itemLabel="#{pr.producNombre}  / Stock: #{pr.producStock}"
 												itemValue="#{pr.producId}" />
 											<p:column style="width:30%">
 												<f:facet name="header">
@@ -265,6 +259,7 @@
 										style="width:200px; height:50px;" value="Agregar Producto"
 										icon="pi pi-shopping-cart" update="@form"
 										actionListener="#{beanCompComprador.actionListenerAgregarDetalleCompra()}" />
+									&nbsp;&nbsp;
 									<p:commandButton title="Guardar compra" value="Guardar Compra"
 										style="width:200px; height:50px;" icon="pi pi-save"
 										update="@form" styleClass="ui-button-raised ui-button-success"
@@ -303,9 +298,13 @@
 															headerText="CANTIDAD">
 															<h:outputText value="#{d.comDetCantidad}" />
 														</p:column>
-														<p:column style="text-align: center;" headerText="PRECIO">
+														<p:column style="text-align: center;"
+															headerText="PRECIO COMPRA">
 															<h:outputText value="#{d.comDetPrecio}" />
 														</p:column>
+
+
+
 														<p:column style="text-align: center;"
 															headerText="SUBTOTAL">
 															<h:outputText value="#{d.comDetPreciototal}" />
@@ -314,30 +313,22 @@
 															</f:facet>
 														</p:column>
 
+														<p:column style="text-align: center;" headerText="QUITAR">
+															<p:commandButton title="Listar detalle #{d.comDetId}"
+																icon="pi pi-trash"
+																actionListener="#{beanCompComprador.actionListenerQuitarDetalleCompra(d)}"
+																styleClass="rounded-button ui-button-danger"
+																update="@form" />
+														</p:column>
+
 													</p:dataTable>
 												</h:form>
 											</p:panel>
 										</p>
-
-
-
-
-
-
-
-
 									</div>
 								</div>
-
-
-
-
-
 							</div>
-
 						</h:form>
-
-
 					</p:tab>
 				</p:tabView>
 			</div>

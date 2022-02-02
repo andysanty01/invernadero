@@ -27,8 +27,7 @@
 	<h:form>
 		<p:menubar>
 
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Trabajos Realizados" icon="pi pi-home" action="trabajos" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user" buttonStyleClass="ui-button-outlined">
@@ -42,10 +41,9 @@
 
 	<div>
 		<p:staticMessage severity="info"
-			summary="LISTA DE TRABAJOS - CONSTRUCTOR"></p:staticMessage>
-
+			summary="TRABAJOS TERMINADOS"></p:staticMessage>
 		<h:form id="FormOrdenes">
-			<p:dataTable value="#{beanConConstructor.listaOrdenes}" var="p">
+			<p:dataTable value="#{beanConConstructor.listaOrdenesTerminadas}" var="p">
 
 				<p:column headerText="ID" style="width:40px">
 					<h:outputText value="#{p.ordenId}" />
@@ -74,7 +72,7 @@
 				<p:column headerText="ESTADO DE ORDEN">
 					<h:outputText value="#{p.ordenEstado}" />
 				</p:column>
-				
+
 				<p:column headerText="AVANCE">
 					<p:spinner value="#{p.ordenAvance}" min="0" max="100" />
 				</p:column>
@@ -84,8 +82,7 @@
 				</p:column>
 
 				<p:column headerText="OPCIONES">
-					<p:commandButton
-						title="Actualizar avance de orden #{p.ordenId}"
+					<p:commandButton title="Actualizar avance de orden #{p.ordenId}"
 						value="Actualizar Avance" icon="pi pi-pencil"
 						action="#{beanConConstructor.actionListenerActualizarAvance(p)}"
 						styleClass="ui-button-raised ui-button-success" />
