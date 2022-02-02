@@ -259,7 +259,7 @@ public class ManagerVentas {
 
 	// Lista de usuarios
 	public List<SegUsuario> findAllUsuarios() {
-		return mDAO.findWhere(SegUsuario.class);
+		return mDAO.findAll(SegUsuario.class);
 	}
 
 	// Inicializar

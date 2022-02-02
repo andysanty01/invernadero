@@ -31,36 +31,51 @@
 	<p:panel>
 		<h:form>
 			<p:panelGrid columns="2">
-			
-			
+
+
 				<h:outputText value="Cédula" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliCedula}"
-					required="true" requiredMessage="Ingrese los apellidos" />
+					required="true" requiredMessage="Ingrese los apellidos" validatorMessage="Cédula incorrecta">
+					<f:validateRegex pattern="^(([0][1-9])|([1][0-9])|([2][0-4]))([0-9]{8})"/>
+
+				</p:inputText>
 
 				<h:outputText value="Apellidos:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliApellido}"
-					required="true" requiredMessage="Ingrese los apellidos" />
+					required="true" requiredMessage="Ingrese los apellidos" validatorMessage="Apellido invalido">
+					<f:validateRegex pattern="[A-Z]([a-z]|[á-ú])+" />
+				</p:inputText>
 
 				<h:outputText value="Nombres:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliNombre}"
-					required="true" requiredMessage="Ingrese los nombres" />
+					required="true" requiredMessage="Ingrese los nombres" validatorMessage="Nombre invalido">
+					<f:validateRegex pattern="[A-Z]([a-z]|[á-ú])+" />
+				</p:inputText>
 
 				<h:outputText value="Correo:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliCorreo}"
-					required="true" requiredMessage="Ingrese el correo" />
-					
+					required="true" requiredMessage="Ingrese el correo"
+					validatorMessage="correo invalido">
+					<f:validateRegex
+						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+				</p:inputText>
+
 				<h:outputText value="Teléfono:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliTelefono}"
-					required="true" requiredMessage="Ingrese el correo" />
-					
+					required="true" requiredMessage="Ingrese el correo" validatorMessage="Teléfono invalido" >
+					<f:validateRegex pattern="(([0][9]))([0-9]{8})"/>
+				</p:inputText>
+
 				<h:outputText value="Dirección:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliDireccion}"
-					required="true" requiredMessage="Ingrese el correo" />
-					
+					required="true" requiredMessage="Ingrese el correo" validatorMessage="Dirección invalido">
+					<f:validateRegex pattern="[A-Z]([a-z]|[á-ú])+" />
+				</p:inputText>
+
 				<h:outputText value="Categoría:" />
 				<p:inputText value="#{beanVenVendedor.nuevaCliente.cliCategoria}"
 					required="true" requiredMessage="Ingrese el correo" />
-					
+
 				<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
 					actionListener="#{beanVenVendedor.actionListenerInsertarCliente()}"></p:commandButton>
 			</p:panelGrid>
