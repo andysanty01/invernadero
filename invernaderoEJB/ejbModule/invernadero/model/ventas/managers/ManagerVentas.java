@@ -260,6 +260,8 @@ public class ManagerVentas {
 	// Lista de usuarios
 	public List<SegUsuario> findAllUsuarios() {
 		return mDAO.findAll(SegUsuario.class);
+		
+		
 	}
 
 	// Inicializar

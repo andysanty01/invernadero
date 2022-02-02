@@ -179,6 +179,19 @@ public class ManagerDAO {
 		listado = q.getResultList();
 		return listado;
 	}
+	
+	public List findTrabajadores() {
+		Query q;
+		List listado;
+		String sentenciaJQL;
+		sentenciaJQL= "SELECT su.idSegUsuario, su.correo FROM SegUsuario su, SegAsignacion sa, SegPerfil sp\r\n"
+				+ "		WHERE su.idSegUsuario=sa.segAsignacion.segUsuario.idSegUsuario AND\r\n"
+				+ "		sa.segAsignacion.segPerfil.idSegPerfil=4 group by su.idSegUsuario";
+		q= em.createQuery(sentenciaJQL);
+		listado= q.getResultList();
+		return listado;
+	}
+	
 
 	/**
 	 * Almacena un objeto (persistencia).

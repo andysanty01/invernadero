@@ -107,8 +107,15 @@ public class BeanConConstructor implements Serializable {
 	//Actualizar Avance
 	public void actionListenerActualizarAvance(OrdenTrabajo edicionOrden) {
 		try {
-			mConstruccion.actualizarAvance(edicionOrden);
-			JSFUtil.crearMensajeINFO("Avance actualizado.");
+			boolean despacho=edicionOrden.getOrdenDespacho();
+			if(despacho==false) {
+				mConstruccion.actualizarAvance(edicionOrden);
+				JSFUtil.crearMensajeINFO("Avance actualizado.");
+			}
+			else {
+				JSFUtil.crearMensajeINFO("La orden aún no ha sido despachada.");
+			}
+			
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
